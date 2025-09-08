@@ -3,7 +3,7 @@
  * 功能：访问商品页面 -> 抓 _wpnonce -> 加入购物车 -> 提示结算页
  * 注意：不跳过付款！仍需手动支付
  */
-
+  
 const productPage = "https://www.thebestcenter.com/143884/"; // 商品页 URL
 const checkoutPage = "https://www.thebestcenter.com/checkout/";
 
