@@ -4,7 +4,7 @@
 #!homepage=https://github.com/89996462/Quantumult-X
 
 [Script]
-http-response ^https:\/\/oxfordx\.cp\.com\.cn\/api\/pay\/apple_notify script-path=https://raw.githubusercontent.com/89996462/Quantumult-X/main/ycdz/ljgjcd.js requires-body=true tag=OxfordVIP
+http-response ^https:\/\/oxfordx\.cp\.com\.cn\/api\/pay\/apple_notify script-path=https://ghproxy.net/https://raw.githubusercontent.com/89996462/Quantumult-X/main/ycdz/ljgjcd.js requires-body=true tag=OxfordVIP
 
 [Rewrite]
 ^https:\/\/oxadmin\.cp\.com\.cn\/api\/hot\/index reject-dict
