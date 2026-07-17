@@ -1,5 +1,5 @@
 #!name=PingMe Cookie获取
-#!desc=PingMe Cookie抓取脚本
+#!desc=PingMe Cookie抓取脚本 
 
 [rewrite_local]
 ^https:\/\/api\.pingmeapp\.net\/app\/queryBalanceAndBonus url script-request-header https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/cookie/get_cookie.js
