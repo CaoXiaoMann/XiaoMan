@@ -1,5 +1,5 @@
 /**
- * @name Reven
+ * @name StudyThailand
  * @desc RevenueCat Crack - 破解内购验证
  * @category 通杀脚本
  * @platform Egern / Surge / Loon
