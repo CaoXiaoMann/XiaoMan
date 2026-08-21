@@ -1,0 +1,11 @@
+#!name=NoReels
+#!desc=屏蔽Facebook Reels（短视频）
+#!tag=去广告
+
+[Rewrite]
+^https?:\/\/(www\.)?(facebook|fb)\.com\/reel(s)?(\/|$) reject
+^https?:\/\/(www\.)?(facebook|fb)\.com\/async\/reel(s)?(\/|$) reject
+^https?:\/\/graph\.facebook\.com\/[^\/]*reel(s)?(\/|$) reject
+
+[MITM]
+hostname = %APPEND% www.facebook.com, facebook.com, fb.com, graph.facebook.com
