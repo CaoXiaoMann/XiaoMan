@@ -229,6 +229,11 @@ function randHex(n) {
   return s.toUpperCase();
 }
 
+function getRandomIP() {
+  const range = () => Math.floor(Math.random() * 254) + 1;
+  return `${range()}.${range()}.${range()}.${range()}`;
+}
+
 function genFakeDeviceId() {
   return `${randHex(8)}-${randHex(4)}-${randHex(4)}-${randHex(4)}-${randHex(12)}WeTalkIOS`;
 }
@@ -239,7 +244,7 @@ function cloneHeaders(headers) {
   return out;
 }
 
-function buildHeaders(capture, ua) {
+function buildHeaders(capture, ua, fakeIp) {
   const headers = cloneHeaders(capture.headers || {});
   delete headers['Content-Length']; delete headers['content-length'];
   delete headers[':authority']; delete headers[':method']; delete headers[':path']; delete headers[':scheme'];
@@ -251,6 +256,10 @@ function buildHeaders(capture, ua) {
   });
   headers['User-Agent'] = ua;
   headers['Connection'] = 'close';
+  headers['X-Forwarded-For'] = fakeIp;
+  headers['X-Real-IP'] = fakeIp;
+  headers['Client-IP'] = fakeIp;
+  headers['True-Client-IP'] = fakeIp;
   return headers;
 }
 
@@ -262,7 +271,8 @@ function notify(title, body) {
 function runAccount(acc, index, total) {
   const tag = `[账号${index+1}/${total} ${(acc.alias && !/@/.test(acc.alias)) ? acc.alias : '用户' + (index+1)}]`;
   const ua = buildUA(acc.baseUA, acc.uaSeed);
-  const headers = buildHeaders(acc.capture, ua);
+  const fakeIp = getRandomIP();
+  const headers = buildHeaders(acc.capture, ua, fakeIp);
   const fakeDeviceId = genFakeDeviceId();
   const msgs = [tag];
 
@@ -273,7 +283,7 @@ function runAccount(acc, index, total) {
 
   // 借助 Env.js 的 $.http.get 抹平底层抓取差异
   const RETRY_DELAY = 3000;
-  msgs.push(`▶️ 开始执行... (伪装IP: ${fakeDeviceId})`);
+  msgs.push(`▶️ 开始执行... (伪装IP: ${fakeIp})`);
 
   function fetchApi(path, useFakeId, retry) {
     retry = (retry === undefined) ? 3 : retry;
