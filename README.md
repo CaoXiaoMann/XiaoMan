@@ -74,6 +74,19 @@ hostname = api.pingmeapp.net
 - 🔄 网络异常自动重试
 - 📊 PingMe 风格汇总通知
 
+### Reven（RevenueCat 破解）
+破解 RevenueCat 内购验证，支持 Egern / Surge / Loon。
+
+**Egern 配置：**
+```
+# 脚本类型：http-request
+# 匹配 URL：^https:\/\/(api\.revenuecat\.com|api\.rc-backup\.com|rc\.visionarytech\.ltd|revenue\.cuto\.app)\/
+# 脚本 URL：https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/Reven.js
+# MITM hostname：api.revenuecat.com, api.rc-backup.com, rc.visionarytech.ltd, revenue.cuto.app
+```
+
+> 来源：[Yu9191/Reven.sgmodule](https://gist.githubusercontent.com/Yu9191/45d3784ba323e9d2eac25aa3e0acf3e6/raw/Reven.sgmodule)
+
 ### 今日油价
 查询全国各省市今日油价（默认陕西，可自行修改地区拼因）。
 
