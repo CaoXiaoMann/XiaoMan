@@ -74,16 +74,19 @@ hostname = api.pingmeapp.net
 - 🔄 网络异常自动重试
 - 📊 PingMe 风格汇总通知
 
-### Study Thailand（RevenueCat 破解）
-破解 RevenueCat 内购验证，支持 Egern / Surge / Loon。
+### StudyThailand（RevenueCat 破解）
+破解 RevenueCat 内购验证，Loon 插件格式，兼容 Egern / Surge / Loon。
 
-**Egern 配置：**
+**插件链接：**
 ```
-# 脚本类型：http-request
-# 匹配 URL：^https:\/\/(api\.revenuecat\.com|api\.rc-backup\.com|rc\.visionarytech\.ltd|revenue\.cuto\.app)\/
-# 脚本 URL：https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/StudyThailand.js
-# MITM hostname：api.revenuecat.com, api.rc-backup.com, rc.visionarytech.ltd, revenue.cuto.app
+https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/StudyThailand.plugin
 ```
+
+**Egern 导入方法：**
+在 Scripts 标签页 → 右上角 + → 选择 "Import from URL" → 粘贴插件链接
+
+**Loon 导入方法：**
+在插件标签页 → 点击 + → 粘贴插件链接
 
 > 来源：[Yu9191/Reven.sgmodule](https://gist.githubusercontent.com/Yu9191/45d3784ba323e9d2eac25aa3e0acf3e6/raw/Reven.sgmodule)
 
