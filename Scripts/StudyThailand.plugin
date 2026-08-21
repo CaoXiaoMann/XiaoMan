@@ -1,0 +1,13 @@
+#!name=StudyThailand
+#!desc=RevenueCat Crack
+#!icon=https://github.com/Toperlock/Quantumult/raw/main/icon/Doraemon/Doraemon-1052.png
+#!tag=通杀脚本
+
+[Argument]
+Mock=input,https://reven.lovebabyforever.workers.dev/reven,tag=Mock, desc=Mock
+
+[Rewrite]
+^https:\/\/(api\.revenuecat\.com|api\.rc-backup\.com|rc\.visionarytech\.ltd|revenue\.cuto\.app)\/(.+\/(?:receipts|subscribers\/[^/]+(?:\/attributes)?))$ {Mock}/$1/$2 header
+
+[MITM]
+hostname = api.revenuecat.com, api.rc-backup.com, rc.visionarytech.ltd, revenue.cuto.app
