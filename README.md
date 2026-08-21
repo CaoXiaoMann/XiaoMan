@@ -19,11 +19,11 @@ XiaoMan/
 
 ## 🛠 脚本列表
 
-| 脚本 | 说明 | 脚本文件 | 说明文档 |
-|------|------|---------|---------|
-| WeTalk | WeTalk 签到 + 视频奖励 | [WeTalk.js](Scripts/WeTalk/WeTalk.js) | [说明](Scripts/WeTalk/README.md) |
-| PingMe | PingMe 签到 + 视频奖励 | [PingMe.js](Scripts/PingMe/PingMe.js) | [说明](Scripts/PingMe/README.md) |
-| 今日油价 | 全国各省市油价查询 | [今日油价.js](Scripts/今日油价/今日油价.js) | [说明](Scripts/今日油价/README.md) |
+| 脚本 | 说明 | 说明文档 |
+|------|------|---------|
+| [WeTalk](Scripts/WeTalk/WeTalk.js) | WeTalk 签到 + 视频奖励 | [说明](Scripts/WeTalk/README.md) |
+| [PingMe](Scripts/PingMe/PingMe.js) | PingMe 签到 + 视频奖励 | [说明](Scripts/PingMe/README.md) |
+| [今日油价](Scripts/今日油价/今日油价.js) | 全国各省市油价查询 | [说明](Scripts/今日油价/README.md) |
 
 ## 📌 使用说明
 
