@@ -1,8 +1,8 @@
 # XiaoMan
 
-个人自动化脚本仓库（Surge / Quantumult X / Loon 通用）
+个人自动化脚本仓库（Quantumult X / Egern 通用）
 
-主要收集日常签到、自动任务、生活类脚本，适配主流 iOS 代理工具。
+主要收集日常签到、自动任务、生活类脚本。
 
 ## 📁 目录结构
 
@@ -19,19 +19,23 @@ XiaoMan/
 ### WeTalk 签到 + 视频奖励
 自动化签到、看视频赚 Coins，支持多账号、随机 UA / IP 伪装、断线自动重试。
 
-**定时任务配置：**
-```
+**Quantumult X 配置：**
+```conf
 [task_local]
-20 8,20 * * * https://raw.githubusercontent.com/caoxiaoman999/XiaoMan/main/Scripts/WeTalk.js, tag=WeTalk签到, enabled=true
-```
+20 8,20 * * * https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/WeTalk.js, tag=WeTalk签到, enabled=true
 
-**重写抓包：**
-```
 [rewrite_local]
-^https:\/\/api\.wetalkapp\.com\/app\/queryBalanceAndBonus url script-request-header https://raw.githubusercontent.com/caoxiaoman999/XiaoMan/main/Scripts/WeTalk.js
+^https:\/\/api\.wetalkapp\.com\/app\/queryBalanceAndBonus url script-request-header WeTalk.js
 
 [MITM]
 hostname = api.wetalkapp.com
+```
+
+**Egern 配置：**
+```
+# 在 Scripts 标签页添加脚本，URL 填入：
+# https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/WeTalk.js
+# Script 类型选择 'cron'，设置 cron 表达式：20 8,20 * * *
 ```
 
 **功能特性：**
@@ -44,19 +48,23 @@ hostname = api.wetalkapp.com
 ### PingMe 签到 + 视频奖励
 自动化签到、看视频赚 Coins，支持多账号、随机 IP 伪装、断线自动重试、每日统计。
 
-**定时任务配置：**
-```
+**Quantumult X 配置：**
+```conf
 [task_local]
-20 8,20 * * * https://raw.githubusercontent.com/caoxiaoman999/XiaoMan/main/Scripts/PingMe.js, tag=PingMe签到, enabled=true
-```
+20 8,20 * * * https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/PingMe.js, tag=PingMe签到, enabled=true
 
-**重写抓包：**
-```
 [rewrite_local]
-^https:\/\/api\.pingmeapp\.net\/app\/queryBalanceAndBonus url script-request-header https://raw.githubusercontent.com/caoxiaoman999/XiaoMan/main/Scripts/PingMe.js
+^https:\/\/api\.pingmeapp\.net\/app\/queryBalanceAndBonus url script-request-header PingMe.js
 
 [MITM]
 hostname = api.pingmeapp.net
+```
+
+**Egern 配置：**
+```
+# 在 Scripts 标签页添加脚本，URL 填入：
+# https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/PingMe.js
+# Script 类型选择 'cron'，设置 cron 表达式：20 8,20 * * *
 ```
 
 **功能特性：**
@@ -69,10 +77,10 @@ hostname = api.pingmeapp.net
 ### 今日油价
 查询全国各省市今日油价（默认陕西，可自行修改地区拼因）。
 
-**定时任务配置：**
-```
+**Quantumult X 配置：**
+```conf
 [task_local]
-0 8 * * * https://raw.githubusercontent.com/caoxiaoman999/XiaoMan/main/Scripts/今日油价.js, tag=今日油价, enabled=true
+0 8 * * * https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/今日油价.js, tag=今日油价, enabled=true
 ```
 
 > 来源：[RS0485/network-rules](https://raw.githubusercontent.com/RS0485/network-rules/main/scripts/gas-price.js)
