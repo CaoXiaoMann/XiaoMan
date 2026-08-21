@@ -75,21 +75,22 @@ hostname = api.pingmeapp.net
 - 📊 PingMe 风格汇总通知
 
 ### qunaer（去哪儿旅行广告屏蔽）
-屏蔽去哪儿旅行 App 的开屏广告、百度统计、个推推送、运营弹窗等，不影响正常查票订票功能。
+屏蔽去哪儿旅行 App 的开屏广告、百度统计、个推推送、运营弹窗等，不影响正常查票订票。Loon 插件格式，兼容 Egern。
 
-**Egern 配置：**
+**插件链接：**
 ```
-# Scripts → 添加脚本 → 类型 http-request
-# 匹配 URL：^https:\/\/[^/]+\.(qunar\.com|qunarzz\.com|baidu\.com|gepush\.com)(\/|$)
-# 脚本 URL：https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/qunaer.js
+https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/qunaer.plugin
 ```
 
-**屏蔽域名：**
-- homefront.qunar.com（开屏广告）
-- sofire.baidu.com（百度统计）
-- ido.gepush.com（个推推送）
-- qbi / qde.qunar.com（运营弹窗）
-- 其他追踪域名
+**Egern / Loon 导入：**
+```
+# 插件标签页 → 添加 → 粘贴插件链接
+```
+
+**纯脚本版（可选）：**
+```
+https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/qunaer.js
+```
 
 ### StudyThailand（RevenueCat 破解）
 破解 RevenueCat 内购验证，Loon 插件格式，兼容 Egern / Surge / Loon。

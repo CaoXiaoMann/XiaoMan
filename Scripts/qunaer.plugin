@@ -1,0 +1,15 @@
+#!name=qunaer-去广告
+#!desc=去哪儿旅行广告屏蔽：开屏广告/百度统计/个推推送/运营弹窗，不影响正常查票订票
+#!icon=https://raw.githubusercontent.com/Toperlock/Quantumult/main/icon/surge/02-05.jpg
+#!tag=去广告
+
+[Rewrite]
+^https?:\/\/(homefront|qde|qbi)\.qunar\.com\/(.*) reject
+^https?:\/\/sofire\.baidu\.com\/(.*) reject
+^https?:\/\/ido\.gepush\.com(\/|$)(.*) reject
+^https?:\/\/diplomat\.qunar\.com\/(.*) reject
+^https?:\/\/hotfix\.qunar\.com\/(.*) reject
+^https?:\/\/log2\.cmpassport\.com(\/|$)(.*) reject
+
+[MITM]
+hostname = %APPEND% homefront.qunar.com, qde.qunar.com, qbi.qunar.com, sofire.baidu.com, ido.gepush.com, diplomat.qunar.com, hotfix.qunar.com, log2.cmpassport.com
