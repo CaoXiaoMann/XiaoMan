@@ -74,14 +74,14 @@ hostname = api.pingmeapp.net
 - 🔄 网络异常自动重试
 - 📊 PingMe 风格汇总通知
 
-### Reven（RevenueCat 破解）
+### Study Thailand（RevenueCat 破解）
 破解 RevenueCat 内购验证，支持 Egern / Surge / Loon。
 
 **Egern 配置：**
 ```
 # 脚本类型：http-request
 # 匹配 URL：^https:\/\/(api\.revenuecat\.com|api\.rc-backup\.com|rc\.visionarytech\.ltd|revenue\.cuto\.app)\/
-# 脚本 URL：https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/Reven.js
+# 脚本 URL：https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/Study Thailand.js
 # MITM hostname：api.revenuecat.com, api.rc-backup.com, rc.visionarytech.ltd, revenue.cuto.app
 ```
 
