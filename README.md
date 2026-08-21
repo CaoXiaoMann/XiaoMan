@@ -81,7 +81,7 @@ hostname = api.pingmeapp.net
 ```
 # 脚本类型：http-request
 # 匹配 URL：^https:\/\/(api\.revenuecat\.com|api\.rc-backup\.com|rc\.visionarytech\.ltd|revenue\.cuto\.app)\/
-# 脚本 URL：https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/Study Thailand.js
+# 脚本 URL：https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/StudyThailand.js
 # MITM hostname：api.revenuecat.com, api.rc-backup.com, rc.visionarytech.ltd, revenue.cuto.app
 ```
 
