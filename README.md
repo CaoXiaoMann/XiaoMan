@@ -41,17 +41,30 @@ hostname = api.wetalkapp.com
 - 🔄 网络异常自动重试（3 次）
 - 📊 PingMe 风格汇总通知
 
-### PingMe 抓包配置
-PingMe 应用 Cookie 获取配置。
+### PingMe 签到 + 视频奖励
+自动化签到、看视频赚 Coins，支持多账号、随机 IP 伪装、断线自动重试、每日统计。
+
+**定时任务配置：**
+```
+[task_local]
+20 8,20 * * * https://raw.githubusercontent.com/caoxiaoman999/XiaoMan/main/Scripts/PingMe.js, tag=PingMe签到, enabled=true
+```
 
 **重写抓包：**
 ```
 [rewrite_local]
-^https:\/\/api\.pingmeapp\.net\/app\/queryBalanceAndBonus url script-request-header https://raw.githubusercontent.com/caoxiaoman999/XiaoMan/main/Scripts/PingMe.conf
+^https:\/\/api\.pingmeapp\.net\/app\/queryBalanceAndBonus url script-request-header https://raw.githubusercontent.com/caoxiaoman999/XiaoMan/main/Scripts/PingMe.js
 
 [MITM]
 hostname = api.pingmeapp.net
 ```
+
+**功能特性：**
+- 🎯 多账号全自动适配
+- 🎬 自动签到 + 看视频领奖励
+- 🌐 随机伪装 IP
+- 🔄 网络异常自动重试
+- 📊 PingMe 风格汇总通知
 
 ### 今日油价
 查询全国各省市今日油价（默认陕西，可自行修改地区拼因）。
