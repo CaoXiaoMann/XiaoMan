@@ -11,7 +11,6 @@ XiaoMan/
 ├── Scripts/            # 脚本目录（每个脚本独立文件夹）
 │   ├── WeTalk/         # WeTalk 签到+视频
 │   ├── PingMe/         # PingMe 签到+视频
-│   ├── Facebook/       # 屏蔽 Facebook Reels
 │   └── 今日油价/        # 全国油价查询
 ├── docs/
 │   └── images/         # 文档图片
@@ -20,14 +19,11 @@ XiaoMan/
 
 ## 🛠 脚本列表
 
-| 脚本 | 说明 | 说明文档 |
-|------|------|---------|
-| [WeTalk](Scripts/WeTalk/README.md) | WeTalk 签到 + 视频奖励 | [查看](Scripts/WeTalk/README.md) |
-| [PingMe](Scripts/PingMe/README.md) | PingMe 签到 + 视频奖励 | [查看](Scripts/PingMe/README.md) |
-| [Facebook](Scripts/Facebook/README.md) | 屏蔽 Facebook Reels | [查看](Scripts/Facebook/README.md) |
-| [今日油价](Scripts/今日油价/README.md) | 全国各省市油价查询 | [查看](Scripts/今日油价/README.md) |
-
-> 每个脚本文件夹内都有详细的配置说明，点击上方脚本名即可查看。
+| 脚本 | 说明 | 脚本文件 | 说明文档 |
+|------|------|---------|---------|
+| WeTalk | WeTalk 签到 + 视频奖励 | [WeTalk.js](Scripts/WeTalk/WeTalk.js) | [说明](Scripts/WeTalk/README.md) |
+| PingMe | PingMe 签到 + 视频奖励 | [PingMe.js](Scripts/PingMe/PingMe.js) | [说明](Scripts/PingMe/README.md) |
+| 今日油价 | 全国各省市油价查询 | [今日油价.js](Scripts/今日油价/今日油价.js) | [说明](Scripts/今日油价/README.md) |
 
 ## 📌 使用说明
 
