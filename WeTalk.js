@@ -266,6 +266,11 @@ function runAccount(acc, index, total) {
   const fakeDeviceId = genFakeDeviceId();
   const msgs = [tag];
 
+  let initialBal = "?";
+  let finalBal = "?";
+  let checkInStr = "签×";
+  let videoCount = 0;
+
   // 借助 Env.js 的 $.http.get 抹平底层抓取差异
   const RETRY_DELAY = 3000;
   msgs.push(`▶️ 开始执行... (伪装IP: ${fakeDeviceId})`);
@@ -301,6 +306,7 @@ function runAccount(acc, index, total) {
               const d = JSON.parse(res.body);
               if (d.retcode === 0) {
                 msgs.push(`🎬 视频${i}：+${d.result?.bonus || '?'} Coins`);
+                videoCount++;
                 resolve(next());
               } else {
                 msgs.push(`⏸ 视频${i}：${d.retmsg}`);
@@ -323,26 +329,39 @@ function runAccount(acc, index, total) {
   return fetchApi('queryBalanceAndBonus').then(res => {
     try {
       const d = JSON.parse(res.body);
-      if (d.retcode === 0) msgs.push(`💰 余额：${d.result.balance} Coins`);
-      else msgs.push(`⚠️ 查询：${d.retmsg}`);
+      if (d.retcode === 0) {
+        initialBal = d.result.balance;
+        msgs.push(`💰 余额：${initialBal} Coins`);
+      } else msgs.push(`⚠️ 查询：${d.retmsg}`);
     } catch (e) { msgs.push('❌ 查询：解析失败'); }
     return fetchApi('checkIn');
   }).then(res => {
     try {
       const d = JSON.parse(res.body);
-      if (d.retcode === 0) msgs.push(`✅ 签到：${(d.result?.bonusHint || d.retmsg || '').replace(/\n/g, ' ')}`);
-      else msgs.push(`⚠️ 签到：${d.retmsg}`);
+      if (d.retcode === 0) {
+        msgs.push(`✅ 签到：${(d.result?.bonusHint || d.retmsg || '').replace(/\n/g, ' ')}`);
+        checkInStr = "签✓";
+      } else {
+        msgs.push(`⚠️ 签到：${d.retmsg}`);
+        const lowerMsg = (d.retmsg || '').toLowerCase();
+        if (lowerMsg.includes('已经') || lowerMsg.includes('已經') || lowerMsg.includes('已签') || lowerMsg.includes('already')) {
+          checkInStr = "已签";
+        }
+      }
     } catch (e) { msgs.push('❌ 签到：解析失败'); }
     return doVideoLoop(MAX_VIDEO);
   }).then(() => fetchApi('queryBalanceAndBonus')).then(res => {
     try {
       const d = JSON.parse(res.body);
-      if (d.retcode === 0) msgs.push(`💰 最新余额：${d.result.balance} Coins`);
+      if (d.retcode === 0) {
+        finalBal = d.result.balance;
+        msgs.push(`💰 最新余额：${finalBal} Coins`);
+      }
     } catch (e) {}
-    return msgs.join('\n');
+    return { detail: msgs.join('\n'), initialBal, finalBal, checkInStr, videoCount };
   }).catch(err => {
     msgs.push(`❌ 异常：${err.error || String(err)}`);
-    return msgs.join('\n');
+    return { detail: msgs.join('\n'), initialBal, finalBal: "错误", checkInStr: "签×", videoCount };
   });
 }
 
@@ -399,10 +418,27 @@ if (typeof $request !== 'undefined' && $request) {
         .then(() => idx < ids.length - 1 ? $.wait(ACCOUNT_GAP) : null);
     });
     chain.then(() => {
-      notify(`🎉 全部完成 (${total}个账号)`, results.join('\n———\n'));
+      const notifyLines = [];
+      for (let i = 0; i < results.length; i++) {
+        const res = results[i];
+        let checkStatus = '×';
+        if (res.checkInStr.includes('✓')) checkStatus = '✓';
+        else if (res.checkInStr.includes('已签')) checkStatus = '☑';
+        const shortName = `账号 ${i + 1} [${checkStatus}] [${res.videoCount}]`;
+        let balanceStr = `${res.initialBal} → ${res.finalBal}`;
+        const initNum = parseFloat(res.initialBal);
+        const finalNum = parseFloat(res.finalBal);
+        if (!isNaN(initNum) && !isNaN(finalNum)) {
+          const diff = finalNum - initNum;
+          const diffStr = (diff >= 0 ? '+' : '') + diff.toFixed(3);
+          balanceStr += `（${diffStr}）`;
+        }
+        notifyLines.push(`${shortName}：${balanceStr}\n${res.detail}`);
+      }
+      notify('✓ 运行完毕', notifyLines.join('\n———\n'));
       $.done();
     }).catch(err => {
-      notify('❌ 任务异常', results.join('\n———\n') + '\n' + (err.error || String(err)));
+      notify('❌ 任务异常', (err.error || String(err)));
       $.done();
     });
   }
