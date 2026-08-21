@@ -222,25 +222,7 @@ function buildUrl(path, capture, overrideDeviceId) {
   const qs = Object.keys(params).map(k => `${k}=${encodeURIComponent(params[k])}`).join('&');
   return `https://${API_HOST}/app/${path}?${qs}`;
 }
-// 随机生成公网IP（Header伪装用）
-function getRandomIP() {
-  const a = Math.floor(Math.random() * 223) + 1;
-  const b = Math.floor(Math.random() * 255);
-  const c = Math.floor(Math.random() * 255);
-  const d = Math.floor(Math.random() * 254) + 1;
 
-  // 排除部分保留地址
-  if (
-    a === 10 ||
-    a === 127 ||
-    (a === 172 && b >= 16 && b <= 31) ||
-    (a === 192 && b === 168)
-  ) {
-    return getRandomIP();
-  }
-
-  return `${a}.${b}.${c}.${d}`;
-}
 function randHex(n) {
   let s = '';
   for (let i = 0; i < n; i++) s += Math.floor(Math.random() * 16).toString(16);
@@ -258,57 +240,18 @@ function cloneHeaders(headers) {
 }
 
 function buildHeaders(capture, ua) {
-
   const headers = cloneHeaders(capture.headers || {});
-
-  const fakeIp = getRandomIP();
-
-  delete headers['Content-Length'];
-  delete headers['content-length'];
-  delete headers[':authority'];
-  delete headers[':method'];
-  delete headers[':path'];
-  delete headers[':scheme'];
-
+  delete headers['Content-Length']; delete headers['content-length'];
+  delete headers[':authority']; delete headers[':method']; delete headers[':path']; delete headers[':scheme'];
   headers['Host'] = API_HOST;
   headers['Accept'] = headers['Accept'] || 'application/json';
-
-
   Object.keys(headers).forEach(k => {
-
     const lk = k.toLowerCase();
-
-    if (
-      lk === 'user-agent' ||
-      lk === 'connection' ||
-      lk === 'proxy-connection' ||
-      lk === 'keep-alive'
-    ) {
-      delete headers[k];
-    }
-
+    if (lk === 'user-agent' || lk === 'connection' || lk === 'proxy-connection' || lk === 'keep-alive') delete headers[k];
   });
-
-
-  // UA伪装
   headers['User-Agent'] = ua;
-
-
-  // ==========================
-  // IP Header 伪装
-  // ==========================
-
-  headers['X-Forwarded-For'] = fakeIp;
-  headers['X-Real-IP'] = fakeIp;
-  headers['Client-IP'] = fakeIp;
-  headers['True-Client-IP'] = fakeIp;
-
-
   headers['Connection'] = 'close';
-
-
   return headers;
-}
 }
 
 // 统一使用 Env.js 的系统通知方法
@@ -317,13 +260,16 @@ function notify(title, body) {
 }
 
 function runAccount(acc, index, total) {
-  const tag = `[账号${index+1}/${total} ${acc.alias || acc.email || acc.id}]`;
+  const tag = `[账号${index+1}/${total} ${(acc.alias && !/@/.test(acc.alias)) ? acc.alias : '用户' + (index+1)}]`;
   const ua = buildUA(acc.baseUA, acc.uaSeed);
   const headers = buildHeaders(acc.capture, ua);
   const fakeDeviceId = genFakeDeviceId();
   const msgs = [tag];
 
   // 借助 Env.js 的 $.http.get 抹平底层抓取差异
+  const RETRY_DELAY = 3000;
+  msgs.push(`▶️ 开始执行... (伪装IP: ${fakeDeviceId})`);
+
   function fetchApi(path, useFakeId, retry) {
     retry = (retry === undefined) ? 3 : retry;
     const overrideId = useFakeId ? fakeDeviceId : null;
@@ -335,10 +281,11 @@ function runAccount(acc, index, total) {
 
     return $.http.get(options).catch(err => {
       const m = (err && (err.error || String(err))) || '';
-      if (retry > 0 && /SSL|SSLSessionState|timeout|timed out|reset|connection|network|stream closed|closed|EOF/i.test(m)) {
-        return $.wait(1200).then(() => fetchApi(path, useFakeId, retry - 1));
+      if (retry > 0) {
+        msgs.push(`⚠️ ${path} 网络不佳，正在重试 (还剩 ${retry} 次)...`);
+        return $.wait(RETRY_DELAY).then(() => fetchApi(path, useFakeId, retry - 1));
       }
-      return Promise.reject(err);
+      throw err;
     });
   }
 
@@ -416,7 +363,7 @@ if (typeof $request !== 'undefined' && $request) {
     const now = Date.now();
     const existed = !!store.accounts[accId];
     const uaSeed = existed ? store.accounts[accId].uaSeed : store.order.length;
-    const alias = existed ? (store.accounts[accId].alias || email) : email;
+    const alias = existed ? (store.accounts[accId].alias || '') : '';
 
     store.accounts[accId] = {
       id: accId,
@@ -432,7 +379,7 @@ if (typeof $request !== 'undefined' && $request) {
     saveStore(store);
 
     const total = store.order.length;
-    notify(existed ? '🔄 账号参数已更新' : '✅ 新账号已入库', `${email}\n当前账号总数：${total}`);
+    notify(existed ? '🔄 账号参数已更新' : '✅ 新账号已入库', `账号已更新\n当前账号总数：${total}`);
     $.log(`【${$.name}】${existed ? 'update' : 'add'} account ${email}\n${JSON.stringify(store.accounts[accId], null, 2)}`);
     $.done({});
   }
