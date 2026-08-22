@@ -17,7 +17,17 @@ https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Egern/Profile.yaml
 1. 打开 **Egern** → 配置（Configuration）
 2. 导入 `Profile.yaml`（从 URL 导入或本地导入）
 3. 确保已安装 CA 证书并信任（MITM 需要）
-4. 添加你的机场订阅（proxies 列表）
+4. 添加你的机场订阅 —— **必须添加**！
+
+### ⚠️ 重要：必须先添加机场订阅
+
+配置里的 **港/台/日/韩/美 策略组** 是 `smart` 类型，通过关键词过滤器**从你的机场订阅节点中自动筛选**，所以：
+
+- ❌ 不添加订阅 → 策略组为空，流量无法分发
+- ✅ 添加订阅后 → 各策略组自动匹配对应地区节点（如香港节点组自动筛出含"香港/HK/🇭🇰"的节点）
+
+**添加订阅方法：** Egern → 订阅（Subscription）→ 添加你的机场订阅链接 → 更新订阅
+**订阅更新后：** PROXY 策略组中就能看到 港/台/日/韩/美 各分组，手动选择即可
 
 ## 配置包含
 
@@ -38,4 +48,4 @@ https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Egern/Profile.yaml
 ## 来源
 
 - TG频道: https://t.me/BYouXianLiaoShe
-- 最后更新时间: 2026-8-22 10:38
+- 最后更新时间: 2026-8-22 10:42
