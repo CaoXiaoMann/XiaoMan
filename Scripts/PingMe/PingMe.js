@@ -1,4 +1,5 @@
 // PingMe_Task.js (Surge/Loon/QX 通用版 - 账号全自动适配 + 精致排版)
+//最后更新时间: 2026-08-22 19:35
 const scriptName = 'PingMe';
 const storeKey = 'pingme_accounts_v1';
 const statsKey = 'pingme_daily_stats_v1';
