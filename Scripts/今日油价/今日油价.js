@@ -1,86 +1,348 @@
-/******************************************
- *转自https://raw.githubusercontent.com/RS0485/network-rules/main/scripts/gas-price.js
- *感谢 @chavyleung, @Keywos
- *把'fujian'修改为其他地区拼音，支持省/市/区'fujian/fuzhou/gulou'
- *因为陕西和山西拼音一样，陕西需要改为"shanxi-3"
-******************************************
+/**
+ * ⛽ 全国实时油价小组件
+ * 数据源：http://m.qiyoujiage.com/
+ * 脚本作者：Egern 群友 tg://user?id=5122789128
+ * 由 iBL3ND 二次修改
+ * 
+ * 🔧 功能特性：
+ * - 支持全国所有省份和城市
+ * - 标题自动显示当前填写的地区
+ * - 实时显示 92/95/98 号汽油和柴油价格
+ * - 深色模式自动适配
+ * - 全 iPhone 机型适配
+ * 
+ * 📚 使用教程
+ * ═══════════════════════════════════════════════════
+ *
+ * 1️⃣ 环境变量配置
+ * ─────────────────────────────────────────────────
+ * 在 Egern 小组件 编辑里面 添加环境变量 中添加
+ *
+ * 名称：region
+ * 值：省份/城市（拼音，用 / 分隔）
+ *
+ * 名称：SHOW_TREND
+ * 值：true（显示调价趋势）或 false（不显示）
+ *
+ *
+ * 2️⃣ 地区代码对照表
+ * ─────────────────────────────────────────────────
+ * 【直辖市】
+ * • 北京：beijing  • 上海：shanghai
+ * • 天津：tianjin  • 重庆：chongqing
+ *
+ * 【省份 - 省会城市】
+ * • 广东：guangdong/guangzhou
+ * • 江苏：jiangsu/nanjing
+ * • 浙江：zhejiang/hangzhou
+ * • 山东：shandong/jinan
+ * • 河南：henan/zhengzhou
+ * • 河北：hebei/shijiazhuang
+ * • 四川：sichuan/chengdu
+ * • 湖北：hubei/wuhan
+ * • 湖南：hunan/changsha
+ * • 安徽：anhui/hefei
+ * • 福建：fujian/fuzhou
+ * • 江西：jiangxi/nanchang
+ * • 辽宁：liaoning/shenyang
+ * • 陕西：shanxi-3/xian  ⚠️
+ * • 海南：hainan/haikou
+ * • 山西：shanxi-1/taiyuan  ⚠️
+ * • 吉林：jilin/changchun
+ * • 黑龙江：heilongjiang/haerbin
+ * • 云南：yunnan/kunming
+ * • 贵州：guizhou/guiyang
+ * • 广西：guangxi/nanning
+ * • 甘肃：gansu/lanzhou
+ * • 青海：qinghai/xining
+ * • 宁夏：ningxia/yinchuan
+ * • 新疆：xinjiang/wulumuqi
+ * • 西藏：xizang/lasa
+ * • 内蒙古：neimenggu/huhehaote
+ * • 也可以去 http://m.qiyoujiage.com/shanxi-3.shtml 查看自己省份拼音
+ * ═══════════════════════════════════════════════════
+ */
 
-BoxJs重写链接：https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf
-BoxJs网址链接：https://boxjs.com 或者新版：https://dompling.github.io/boxjs.react
-BoxJs订阅地址：https://raw.githubusercontent.com/Toperlock/Quantumult/main/boxjs.json
+export default async function (ctx) {
+  const regionParam = ctx.env.region || "hainan/haikou";
+  const SHOW_TREND = (ctx.env.SHOW_TREND || "true").trim() !== "false";
 
-[task_local]
-0 8 * * * https://raw.githubusercontent.com/Toperlock/Quantumult/main/task/oil_price.js, tag=今日油价, img-url=https://raw.githubusercontent.com/Toperlock/Quantumult/main/icon/oil.png, enabled=true
-******************************************/
+  const now = new Date();
+  const timeStr = `${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+  const refreshTime = new Date(Date.now() + 6*60*60*1000).toISOString();
 
-const $ = new Env("查询油价");
-// 默认福建
-var region = $.getdata("oilArea") || "shanxi-3";
+  const backgroundColor = { light: "#FFFFFF", dark: "#1C1C1E" };
 
+  const COLORS = {
+    primary: { light: "#1A1A1A", dark: "#FFFFFF" },
+    secondary: { light: "#666666", dark: "#CCCCCC" },
+    tertiary: { light: "#999999", dark: "#888888" },
+    card: { light: "#F5F5F7", dark: "#2C2C2E" },
+    cardBorder: { light: "#E0E0E0", dark: "#3A3A3C" },
+    p92: { light: "#FF9F0A", dark: "#FFB347" },
+    p95: { light: "#FF6B35", dark: "#FF8A5C" },
+    p98: { light: "#FF3B30", dark: "#FF6B6B" },
+    diesel: { light: "#30D158", dark: "#5CD67D" },
+    trend: { light: "#2C2C2E", dark: "#FFFFFF" },
+  };
 
-const query_addr = `http://m.qiyoujiage.com/${region}.shtml`;
+  const CACHE_KEY = `qiyoujiage_oil_${regionParam}`;
+  let prices = {p92:null, p95:null, p98:null, diesel:null};
+  let regionName = "";
+  let trendInfo = "";
+  let hasCache = false;
+  
+  try {
+    const cached = ctx.storage.getJSON(CACHE_KEY);
+    if (cached && cached.prices) {
+      prices = cached.prices;
+      regionName = cached.regionName || "";
+      trendInfo = cached.trendInfo || "";
+      hasCache = true;
+    }
+  } catch(_){}
 
-const myRequest = {
-  url: query_addr,
-  headers: {
-    'referer': 'http://m.qiyoujiage.com/',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
-  }
-};
+  let fetchError = false;
+  let errorMsg = "";
 
-$.get(myRequest, (error, response, data) => {
-    const reg_price = /<dl>[\s\S]+?<dt>(.*油)<\/dt>[\s\S]+?<dd>(.*)\(元\)<\/dd>/gm;
-    var prices = [];
-    var m = null;
-    while ((m = reg_price.exec(data)) !== null) {
-        // This is necessary to avoid infinite loops with zero-width matches
-        if (m.index === reg_price.lastIndex) {
-            reg_price.lastIndex++;
-        }
-        prices.push({
-            name: m[1],
-            value: `${m[2]} 元/L`
-        });
+  try {
+    const queryAddr = `http://m.qiyoujiage.com/${regionParam}.shtml`;
+    
+    const resp = await ctx.http.get(queryAddr, {
+      headers: {
+        'referer': 'http://m.qiyoujiage.com/',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+      },
+      timeout: 15000
+    });
+    
+    if (resp.status !== 200) {
+      throw new Error(`HTTP ${resp.status}: 页面不存在`);
     }
     
-    var adjust_date = '';
-    var adjust_trend = '';
-    var adjust_value = '';
+    const html = await resp.text();
+
+    // 🔹 从网页标题解析地区名（清理多余词汇）
+    const titleMatch = html.match(/<title>([^_]+)_/);
+    if (titleMatch && titleMatch[1]) {
+      let rawName = titleMatch[1].trim();
+      // 移除所有与"油价"相关的词
+      regionName = rawName.replace(/(油价|实时|今日|最新|查询|价格)/g, '').trim();
+    }
+
+    // 解析油价
+    const regPrice = /<dl>[\s\S]+?<dt>(.*油)<\/dt>[\s\S]+?<dd>(.*)\(元\)<\/dd>/gm;
+    const priceList = [];
+    let m = null;
     
-    const reg_adjust_tips = /<div class="tishi"> <span>(.*)<\/span><br\/>([\s\S]+?)<br\/>/;
-    const adjust_tips_match = data.match(reg_adjust_tips);
-    if (adjust_tips_match && adjust_tips_match.length === 3) {
-        adjust_date = adjust_tips_match[1].split('价')[1].slice(0, -2);
-        adjust_value = adjust_tips_match[2];
-        adjust_trend = (adjust_value.indexOf('下调') > -1 || adjust_value.indexOf('下跌') > -1) ? '↓' : '↑';
-        const adjust_value_re = /([\d\.]+)元\/升-([\d\.]+)元\/升/;
-        const adjust_value_re2 = /[\d\.]+元\/吨/;
-        const adjust_value_match = adjust_value.match(adjust_value_re);
-        if (adjust_value_match && adjust_value_match.length === 3) {
-            adjust_value = `${adjust_value_match[1]}-${adjust_value_match[2]}元/L`;
-        } else {
-            const adjust_value_match2 = adjust_value.match(adjust_value_re2);
-            if (adjust_value_match2) {
-                adjust_value = adjust_value_match2[0];
+    while ((m = regPrice.exec(html)) !== null) {
+      if (m.index === regPrice.lastIndex) regPrice.lastIndex++;
+      priceList.push({ name: m[1].trim(), value: m[2].trim() });
+    }
+
+    if (priceList.length >= 3) {
+      const nameMap = { 
+        "92 号": "p92", "92": "p92",
+        "95 号": "p95", "95": "p95",
+        "98 号": "p98", "98": "p98",
+        "0 号": "diesel", "柴油": "diesel"
+      };
+      
+      prices = {p92:null, p95:null, p98:null, diesel:null};
+      
+      priceList.forEach(item => {
+        const key = Object.keys(nameMap).find(k => item.name.includes(k));
+        if (key) {
+          const priceVal = parseFloat(item.value);
+          if (!isNaN(priceVal)) {
+            prices[nameMap[key]] = priceVal;
+          }
+        }
+      });
+
+      // 🔹 解析调价趋势（完整信息）
+      if (SHOW_TREND) {
+        const regTrend = /<div class="tishi">[\s\S]*?<span>([^<]+)<\/span>[\s\S]*?<br\/>([\s\S]+?)<br\/>/;
+        const trendMatch = html.match(regTrend);
+        
+        if (trendMatch && trendMatch.length >= 3) {
+          const datePart = trendMatch[1].split('价')[1]?.slice(0, -2) || "";
+          const valuePart = trendMatch[2];
+          
+          // 判断涨跌方向
+          const trend = (valuePart.includes('下调') || valuePart.includes('下跌')) ? '↓' : '↑';
+          
+          // 🔹 提取完整的调价金额（优化正则）
+          let amount = "";
+          
+          // 🔸 尝试多种格式匹配
+          // 格式1：提取所有数字+单位 "0.55元/升" 和 "0.67元/升"
+          const allPrices = valuePart.match(/([\d\.]+)\s*元\/升/g);
+          if (allPrices && allPrices.length >= 2) {
+            const nums = allPrices.map(p => p.match(/([\d\.]+)/)[1]);
+            amount = `${nums[0]}-${nums[1]}`;
+          }
+          // 格式2：每吨调整 "200元" 和 "195元"
+          else {
+            const allTons = valuePart.match(/([\d]+)\s*元(?:\/吨)?/g);
+            if (allTons && allTons.length >= 2) {
+              const nums = allTons.map(p => p.match(/([\d]+)/)[1]);
+              amount = `${nums[0]}-${nums[1]}元/吨`;
             }
+            // 格式3：单个数值
+            else {
+              const singleMatch = valuePart.match(/([\d\.]+)\s*元\/升/);
+              if (singleMatch) {
+                amount = `${singleMatch[1]}元/L`;
+              }
+            }
+          }
+          
+          // 🔹 完整显示调价信息
+          trendInfo = `${datePart}调整 ${trend} ${amount}`.trim();
         }
-    }
-    
-    const friendly_tips = `${adjust_date}调整\t${adjust_trend} ${adjust_value}`;
-    if (prices.length !== 4) {
-        $.log(`解析油价信息失败, URL=${query_addr}`);
-        $.msg("油价查询", "解析失败", "请检查脚本或反馈给开发者");
-        $.done()
-    } else {
-        const content = `${prices[0].name}\t\t\t${prices[0].value}\n${prices[1].name}\t\t\t${prices[1].value}\n${prices[2].name}\t\t\t${prices[2].value}\n${prices[3].name}\t\t\t${prices[3].value}`;
-        $.msg("油价查询", `${friendly_tips}`, content);
-        $.log("油价查询成功");
-        //$.log(`油价查询结果：\n${friendly_tips}\n${content}`);
-        $.done()
-    }
-})
+      }
 
-// https://github.com/chavyleung/scripts/blob/master/Env.min.js
-/*********************************** API *************************************/
-function Env(t,e){class s{constructor(t){this.env=t}send(t,e="GET"){t="string"==typeof t?{url:t}:t;let s=this.get;return"POST"===e&&(s=this.post),new Promise((e,a)=>{s.call(this,t,(t,s,r)=>{t?a(t):e(s)})})}get(t){return this.send.call(this.env,t)}post(t){return this.send.call(this.env,t,"POST")}}return new class{constructor(t,e){this.name=t,this.http=new s(this),this.data=null,this.dataFile="box.dat",this.logs=[],this.isMute=!1,this.isNeedRewrite=!1,this.logSeparator="\n",this.encoding="utf-8",this.startTime=(new Date).getTime(),Object.assign(this,e),this.log("",`🔔${this.name}, 开始!`)}getEnv(){return"undefined"!=typeof $environment&&$environment["surge-version"]?"Surge":"undefined"!=typeof $environment&&$environment["stash-version"]?"Stash":"undefined"!=typeof module&&module.exports?"Node.js":"undefined"!=typeof $task?"Quantumult X":"undefined"!=typeof $loon?"Loon":"undefined"!=typeof $rocket?"Shadowrocket":void 0}isNode(){return"Node.js"===this.getEnv()}isQuanX(){return"Quantumult X"===this.getEnv()}isSurge(){return"Surge"===this.getEnv()}isLoon(){return"Loon"===this.getEnv()}isShadowrocket(){return"Shadowrocket"===this.getEnv()}isStash(){return"Stash"===this.getEnv()}toObj(t,e=null){try{return JSON.parse(t)}catch{return e}}toStr(t,e=null){try{return JSON.stringify(t)}catch{return e}}getjson(t,e){let s=e;const a=this.getdata(t);if(a)try{s=JSON.parse(this.getdata(t))}catch{}return s}setjson(t,e){try{return this.setdata(JSON.stringify(t),e)}catch{return!1}}getScript(t){return new Promise(e=>{this.get({url:t},(t,s,a)=>e(a))})}runScript(t,e){return new Promise(s=>{let a=this.getdata("@chavy_boxjs_userCfgs.httpapi");a=a?a.replace(/\n/g,"").trim():a;let r=this.getdata("@chavy_boxjs_userCfgs.httpapi_timeout");r=r?1*r:20,r=e&&e.timeout?e.timeout:r;const[i,o]=a.split("@"),n={url:`http://${o}/v1/scripting/evaluate`,body:{script_text:t,mock_type:"cron",timeout:r},headers:{"X-Key":i,Accept:"*/*"},timeout:r};this.post(n,(t,e,a)=>s(a))}).catch(t=>this.logErr(t))}loaddata(){if(!this.isNode())return{};{this.fs=this.fs?this.fs:require("fs"),this.path=this.path?this.path:require("path");const t=this.path.resolve(this.dataFile),e=this.path.resolve(process.cwd(),this.dataFile),s=this.fs.existsSync(t),a=!s&&this.fs.existsSync(e);if(!s&&!a)return{};{const a=s?t:e;try{return JSON.parse(this.fs.readFileSync(a))}catch(t){return{}}}}}writedata(){if(this.isNode()){this.fs=this.fs?this.fs:require("fs"),this.path=this.path?this.path:require("path");const t=this.path.resolve(this.dataFile),e=this.path.resolve(process.cwd(),this.dataFile),s=this.fs.existsSync(t),a=!s&&this.fs.existsSync(e),r=JSON.stringify(this.data);s?this.fs.writeFileSync(t,r):a?this.fs.writeFileSync(e,r):this.fs.writeFileSync(t,r)}}lodash_get(t,e,s){const a=e.replace(/\[(\d+)\]/g,".$1").split(".");let r=t;for(const t of a)if(r=Object(r)[t],void 0===r)return s;return r}lodash_set(t,e,s){return Object(t)!==t?t:(Array.isArray(e)||(e=e.toString().match(/[^.[\]]+/g)||[]),e.slice(0,-1).reduce((t,s,a)=>Object(t[s])===t[s]?t[s]:t[s]=Math.abs(e[a+1])>>0==+e[a+1]?[]:{},t)[e[e.length-1]]=s,t)}getdata(t){let e=this.getval(t);if(/^@/.test(t)){const[,s,a]=/^@(.*?)\.(.*?)$/.exec(t),r=s?this.getval(s):"";if(r)try{const t=JSON.parse(r);e=t?this.lodash_get(t,a,""):e}catch(t){e=""}}return e}setdata(t,e){let s=!1;if(/^@/.test(e)){const[,a,r]=/^@(.*?)\.(.*?)$/.exec(e),i=this.getval(a),o=a?"null"===i?null:i||"{}":"{}";try{const e=JSON.parse(o);this.lodash_set(e,r,t),s=this.setval(JSON.stringify(e),a)}catch(e){const i={};this.lodash_set(i,r,t),s=this.setval(JSON.stringify(i),a)}}else s=this.setval(t,e);return s}getval(t){switch(this.getEnv()){case"Surge":case"Loon":case"Stash":case"Shadowrocket":return $persistentStore.read(t);case"Quantumult X":return $prefs.valueForKey(t);case"Node.js":return this.data=this.loaddata(),this.data[t];default:return this.data&&this.data[t]||null}}setval(t,e){switch(this.getEnv()){case"Surge":case"Loon":case"Stash":case"Shadowrocket":return $persistentStore.write(t,e);case"Quantumult X":return $prefs.setValueForKey(t,e);case"Node.js":return this.data=this.loaddata(),this.data[e]=t,this.writedata(),!0;default:return this.data&&this.data[e]||null}}initGotEnv(t){this.got=this.got?this.got:require("got"),this.cktough=this.cktough?this.cktough:require("tough-cookie"),this.ckjar=this.ckjar?this.ckjar:new this.cktough.CookieJar,t&&(t.headers=t.headers?t.headers:{},void 0===t.headers.Cookie&&void 0===t.cookieJar&&(t.cookieJar=this.ckjar))}get(t,e=(()=>{})){switch(t.headers&&(delete t.headers["Content-Type"],delete t.headers["Content-Length"],delete t.headers["content-type"],delete t.headers["content-length"]),t.params&&(t.url+="?"+this.queryStr(t.params)),this.getEnv()){case"Surge":case"Loon":case"Stash":case"Shadowrocket":default:this.isSurge()&&this.isNeedRewrite&&(t.headers=t.headers||{},Object.assign(t.headers,{"X-Surge-Skip-Scripting":!1})),$httpClient.get(t,(t,s,a)=>{!t&&s&&(s.body=a,s.statusCode=s.status?s.status:s.statusCode,s.status=s.statusCode),e(t,s,a)});break;case"Quantumult X":this.isNeedRewrite&&(t.opts=t.opts||{},Object.assign(t.opts,{hints:!1})),$task.fetch(t).then(t=>{const{statusCode:s,statusCode:a,headers:r,body:i,bodyBytes:o}=t;e(null,{status:s,statusCode:a,headers:r,body:i,bodyBytes:o},i,o)},t=>e(t&&t.error||"UndefinedError"));break;case"Node.js":let s=require("iconv-lite");this.initGotEnv(t),this.got(t).on("redirect",(t,e)=>{try{if(t.headers["set-cookie"]){const s=t.headers["set-cookie"].map(this.cktough.Cookie.parse).toString();s&&this.ckjar.setCookieSync(s,null),e.cookieJar=this.ckjar}}catch(t){this.logErr(t)}}).then(t=>{const{statusCode:a,statusCode:r,headers:i,rawBody:o}=t,n=s.decode(o,this.encoding);e(null,{status:a,statusCode:r,headers:i,rawBody:o,body:n},n)},t=>{const{message:a,response:r}=t;e(a,r,r&&s.decode(r.rawBody,this.encoding))})}}post(t,e=(()=>{})){const s=t.method?t.method.toLocaleLowerCase():"post";switch(t.body&&t.headers&&!t.headers["Content-Type"]&&!t.headers["content-type"]&&(t.headers["content-type"]="application/x-www-form-urlencoded"),t.headers&&(delete t.headers["Content-Length"],delete t.headers["content-length"]),this.getEnv()){case"Surge":case"Loon":case"Stash":case"Shadowrocket":default:this.isSurge()&&this.isNeedRewrite&&(t.headers=t.headers||{},Object.assign(t.headers,{"X-Surge-Skip-Scripting":!1})),$httpClient[s](t,(t,s,a)=>{!t&&s&&(s.body=a,s.statusCode=s.status?s.status:s.statusCode,s.status=s.statusCode),e(t,s,a)});break;case"Quantumult X":t.method=s,this.isNeedRewrite&&(t.opts=t.opts||{},Object.assign(t.opts,{hints:!1})),$task.fetch(t).then(t=>{const{statusCode:s,statusCode:a,headers:r,body:i,bodyBytes:o}=t;e(null,{status:s,statusCode:a,headers:r,body:i,bodyBytes:o},i,o)},t=>e(t&&t.error||"UndefinedError"));break;case"Node.js":let a=require("iconv-lite");this.initGotEnv(t);const{url:r,...i}=t;this.got[s](r,i).then(t=>{const{statusCode:s,statusCode:r,headers:i,rawBody:o}=t,n=a.decode(o,this.encoding);e(null,{status:s,statusCode:r,headers:i,rawBody:o,body:n},n)},t=>{const{message:s,response:r}=t;e(s,r,r&&a.decode(r.rawBody,this.encoding))})}}time(t,e=null){const s=e?new Date(e):new Date;let a={"M+":s.getMonth()+1,"d+":s.getDate(),"H+":s.getHours(),"m+":s.getMinutes(),"s+":s.getSeconds(),"q+":Math.floor((s.getMonth()+3)/3),S:s.getMilliseconds()};/(y+)/.test(t)&&(t=t.replace(RegExp.$1,(s.getFullYear()+"").substr(4-RegExp.$1.length)));for(let e in a)new RegExp("("+e+")").test(t)&&(t=t.replace(RegExp.$1,1==RegExp.$1.length?a[e]:("00"+a[e]).substr((""+a[e]).length)));return t}queryStr(t){let e="";for(const s in t){let a=t[s];null!=a&&""!==a&&("object"==typeof a&&(a=JSON.stringify(a)),e+=`${s}=${a}&`)}return e=e.substring(0,e.length-1),e}msg(e=t,s="",a="",r){const i=t=>{switch(typeof t){case void 0:return t;case"string":switch(this.getEnv()){case"Surge":case"Stash":default:return{url:t};case"Loon":case"Shadowrocket":return t;case"Quantumult X":return{"open-url":t};case"Node.js":return}case"object":switch(this.getEnv()){case"Surge":case"Stash":case"Shadowrocket":default:{let e=t.url||t.openUrl||t["open-url"];return{url:e}}case"Loon":{let e=t.openUrl||t.url||t["open-url"],s=t.mediaUrl||t["media-url"];return{openUrl:e,mediaUrl:s}}case"Quantumult X":{let e=t["open-url"]||t.url||t.openUrl,s=t["media-url"]||t.mediaUrl,a=t["update-pasteboard"]||t.updatePasteboard;return{"open-url":e,"media-url":s,"update-pasteboard":a}}case"Node.js":return}default:return}};if(!this.isMute)switch(this.getEnv()){case"Surge":case"Loon":case"Stash":case"Shadowrocket":default:$notification.post(e,s,a,i(r));break;case"Quantumult X":$notify(e,s,a,i(r));break;case"Node.js":}if(!this.isMuteLog){let t=["","==============📣系统通知📣=============="];t.push(e),s&&t.push(s),a&&t.push(a),console.log(t.join("\n")),this.logs=this.logs.concat(t)}}log(...t){t.length>0&&(this.logs=[...this.logs,...t]),console.log(t.join(this.logSeparator))}logErr(t,e){switch(this.getEnv()){case"Surge":case"Loon":case"Stash":case"Shadowrocket":case"Quantumult X":default:this.log("",`❗️${this.name}, 错误!`,t);break;case"Node.js":this.log("",`❗️${this.name}, 错误!`,t.stack)}}wait(t){return new Promise(e=>setTimeout(e,t))}done(t={}){const e=(new Date).getTime(),s=(e-this.startTime)/1e3;switch(this.log("",`🔔${this.name}, 结束! 🕛 ${s} 秒`),this.log(),this.getEnv()){case"Surge":case"Loon":case"Stash":case"Shadowrocket":case"Quantumult X":default:$done(t);break;case"Node.js":process.exit(1)}}}(t,e)}
-/*****************************************************************************/
+      // 缓存包含地区名
+      ctx.storage.setJSON(CACHE_KEY, { prices, regionName, trendInfo });
+      fetchError = false;
+    } else {
+      if (!hasCache) {
+        fetchError = true;
+        errorMsg = `解析失败`;
+      }
+    }
+
+  } catch (e) {
+    if (!hasCache) {
+      fetchError = true;
+      errorMsg = e.message;
+    }
+  }
+
+  const titleText = regionName ? `${regionName}实时油价` : "实时油价";
+
+  const rows = [
+    {label:"92 号", price:prices.p92, color:COLORS.p92},
+    {label:"95 号", price:prices.p95, color:COLORS.p95},
+    {label:"98 号", price:prices.p98, color:COLORS.p98},
+    {label:"柴油", price:prices.diesel, color:COLORS.diesel},
+  ].filter(r => r.price !== null);
+
+  function priceCard(row){
+    return {
+      type:"stack",
+      direction:"column",
+      alignItems:"center",
+      justifyContent:"center",
+      flex:1,
+      padding:[8,4,8,4],
+      backgroundColor: COLORS.card,
+      borderRadius:12,
+      borderWidth: 0.5,
+      borderColor: COLORS.cardBorder,
+      children:[
+        {
+          type:"stack",
+          direction:"row",
+          alignItems:"center",
+          justifyContent:"center",
+          width:44,
+          height:22,
+          backgroundColor: {
+            light: row.color.light + "28",
+            dark: row.color.dark + "28"
+          },
+          borderRadius:6,
+          borderWidth:0.5,
+          borderColor: {
+            light: row.color.light + "55",
+            dark: row.color.dark + "55"
+          },
+          children:[{
+            type:"text",
+            text:row.label,
+            font:{size:"caption2",weight:"bold"},
+            textColor: row.color,
+            textAlign:"center"
+          }]
+        },
+        {
+          type:"text",
+          text:row.price !== null ? row.price.toFixed(2) : "--",
+          font:{size:"title3",weight:"semibold"},
+          textColor: COLORS.primary,
+          textAlign:"center",
+          lineLimit:1,
+          minScale:0.7
+        }
+      ]
+    }
+  }
+
+  return {
+    type:"widget",
+    padding:[10,8,10,8],
+    gap:5,
+    backgroundColor: backgroundColor,
+    refreshAfter:refreshTime,
+    children:[
+      {
+        type:"stack",
+        direction:"row",
+        alignItems:"center",
+        gap:4,
+        padding:[0,4,0,4],
+        children:[
+          {type:"image",src:"sf-symbol:fuelpump.fill",width:13,height:13,color:COLORS.p92},
+          {type:"text",text:titleText,font:{size:"caption2",weight:"semibold"},textColor:COLORS.secondary},
+          {type:"spacer"},
+          // 🔹 右上角调价信息
+          ...(SHOW_TREND && trendInfo ? [{
+            type:"text",
+            text: trendInfo,
+            font:{size:"caption2"},
+            textColor: COLORS.trend,
+            textAlign:"right",
+            lineLimit:1,
+            minScale: 0.8
+          }] : []),
+          // 错误信息
+          ...(fetchError ? [{
+            type:"text",text:errorMsg,font:{size:"caption2"},textColor:COLORS.p98
+          }] : [])
+        ].filter(Boolean)
+      },
+      rows.length > 0 ? {
+        type:"stack",
+        direction:"row",
+        alignItems:"center",
+        justifyContent:"space-between",
+        gap:6,
+        padding:[6,0,6,0],
+        children: rows.map(priceCard)
+      } : {
+        type:"stack",
+        direction:"column",
+        alignItems:"center",
+        justifyContent:"center",
+        padding:[20,10,20,10],
+        children:[
+          {type:"image",src:"sf-symbol:exclamationmark.triangle.fill",width:24,height:24,color:COLORS.p98},
+          {type:"text",text:fetchError?"数据获取失败":"暂无数据",font:{size:"body"},textColor:COLORS.secondary}
+        ]
+      },
+      {
+        type:"stack",
+        direction:"row",
+        alignItems:"center",
+        padding:[0,4,0,4],
+        children:[
+          {type:"text",text:`${timeStr} 更新`,font:{size:"caption2"},textColor:COLORS.tertiary},
+          {type:"spacer"},
+          {type:"text",text:"元/升",font:{size:"caption2"},textColor:COLORS.tertiary}
+        ]
+      }
+    ]
+  }
+}
