@@ -99,7 +99,7 @@ policy_groups:
     icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/emby.png
     hidden: true                # 隐藏（仅供内部引用）
 
-# ---- TV 组（按节点名智能筛选，自动匹配 x 分辨率节点）----
+# ---- TV 组（按节点名智能筛选，自动匹配筛选低倍率节点，例如0.5x节点）----
 - smart:
     name: TV
     policies: []
