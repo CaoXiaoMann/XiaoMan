@@ -162,7 +162,9 @@ policy_groups:
     - PROXY                    # 全部走主代理
     flatten: false
     icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Bypass.png
-    hidden: true# ============================================================
+    hidden: true
+
+# ============================================================
 # 分流规则（从上到下依次匹配，命中即停止）
 # ============================================================
 rules:
