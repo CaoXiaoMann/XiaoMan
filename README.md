@@ -50,6 +50,6 @@ XiaoMan/
 
 ## 🌟 致谢
 
-如果我的脚本对你有帮助，欢迎 ⭐ Star 支持一下！
+如果我的脚本对你有帮助，欢迎点个 ⭐ Star 支持一下！你的每一次点亮，都是我持续更新和维护的最大动力。
 
-📢 TG频道：[小满亡命天涯](https://t.me/XiaoManWangMingTianYa)
+📢 **TG频道：** [小满亡命天涯](https://t.me/XiaoManWangMingTianYa) —— 最新脚本更新、配置教程、使用答疑都在这里，欢迎来玩！
