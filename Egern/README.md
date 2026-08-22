@@ -4,18 +4,18 @@
 
 ## 配置文件
 
-[Profile.yaml](Profile.yaml) — 完整注释版配置
+[XiaoManEgern2.0.yaml](XiaoManEgern2.0.yaml) — 完整注释版配置
 
 ## 配置链接
 
 ```
-https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Egern/Profile.yaml
+https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Egern/XiaoManEgern2.0.yaml
 ```
 
 ## 使用方法
 
 1. 打开 **Egern** → 配置（Configuration）
-2. 导入 `Profile.yaml`（从 URL 导入或本地导入）
+2. 导入 `XiaoManEgern2.0.yaml`（从 URL 导入或本地导入）
 3. 确保已安装 CA 证书并信任（MITM 需要）
 4. 添加你的机场订阅 —— **必须添加**！
 
