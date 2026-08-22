@@ -4,6 +4,8 @@
 
 主要收集日常签到、自动任务、生活类脚本。
 
+📢 **TG频道：** [@BYouXianLiaoShe](https://t.me/BYouXianLiaoShe)
+
 ## 📁 目录结构
 
 ```
