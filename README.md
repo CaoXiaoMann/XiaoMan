@@ -11,7 +11,7 @@ XiaoMan/
 ├── Scripts/            # 脚本目录（每个脚本独立文件夹）
 │   ├── WeTalk/         # WeTalk 签到+视频
 │   ├── PingMe/         # PingMe 签到+视频
-│   └── 今日油价/        # 全国油价查询
+│   └── JinRiYouJia/   # 全国油价查询
 ├── docs/
 │   └── images/         # 文档图片
 └── README.md
@@ -23,7 +23,7 @@ XiaoMan/
 |------|------|---------|
 | [WeTalk](Scripts/WeTalk/WeTalk.js) | WeTalk 签到 + 视频奖励 | [说明](Scripts/WeTalk/README.md) |
 | [PingMe](Scripts/PingMe/PingMe.js) | PingMe 签到 + 视频奖励 | [说明](Scripts/PingMe/README.md) |
-| [今日油价](Scripts/今日油价/今日油价.js) | 全国各省市油价查询 | [说明](Scripts/今日油价/README.md) |
+| [JinRiYouJia](Scripts/JinRiYouJia/JinRiYouJia.js) | 全国各省市油价查询 | [说明](Scripts/JinRiYouJia/README.md) |
 
 ## 📌 使用说明
 

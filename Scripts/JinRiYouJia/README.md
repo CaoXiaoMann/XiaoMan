@@ -7,7 +7,7 @@
 ## 插件链接
 
 ```
-https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/今日油价/今日油价.js
+https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/JinRiYouJia/JinRiYouJia.js
 ```
 
 ## 使用方法（Egern 小组件）
