@@ -47,5 +47,5 @@ https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Egern/XiaoManEgern2.0
 
 ## 来源
 
-- TG频道: https://t.me/BYouXianLiaoShe
+- TG频道: https://t.me/XiaoManWangMingTianYa
 - 最后更新时间: 2026-8-22 10:42
