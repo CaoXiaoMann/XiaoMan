@@ -16,6 +16,7 @@ XiaoMan/
 │   ├── WeTalk/         # WeTalk 签到+视频
 │   ├── PingMe/         # PingMe 签到+视频
 │   ├── NetWork/        # 网络诊断雷达
+│   ├── Spotify/       # Spotify Premium 解锁
 │   └── JinRiYouJia/   # 全国油价查询
 ├── docs/
 │   └── images/         # 文档图片
@@ -30,6 +31,7 @@ XiaoMan/
 | [WeTalk](Scripts/WeTalk/WeTalk.js) | WeTalk 签到 + 视频奖励 | [说明](Scripts/WeTalk/README.md) |
 | [PingMe](Scripts/PingMe/PingMe.js) | PingMe 签到 + 视频奖励 | [说明](Scripts/PingMe/README.md) |
 | [NetWork](Scripts/NetWork/Network-Pro.js) | 网络诊断雷达小组件 | [说明](Scripts/NetWork/README.md) |
+| [Spotify](Scripts/Spotify/spotify.plugin) | Spotify Premium 解锁 | [说明](Scripts/Spotify/README.md) |
 | [JinRiYouJia](Scripts/JinRiYouJia/JinRiYouJia.js) | 全国各省市油价查询 | [说明](Scripts/JinRiYouJia/README.md) |
 
 ## 📌 使用说明
