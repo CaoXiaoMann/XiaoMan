@@ -15,7 +15,6 @@ XiaoMan/
 ├── Scripts/            # 脚本目录（每个脚本独立文件夹）
 │   ├── WeTalk/         # WeTalk 签到+视频
 │   ├── PingMe/         # PingMe 签到+视频
-│   ├── NetWork/        # 网络诊断雷达（基础版）
 │   ├── Network-Pro/   # 网络诊断雷达（增强版）
 │   ├── Spotify/       # Spotify Premium 解锁
 │   ├── YouTube/       # YouTube 双语字幕(源语言纠正补丁)
@@ -33,15 +32,12 @@ XiaoMan/
 | [Egern配置](Egern/XiaoManEgern2.1.yaml) | Egern 2.1 完整注释配置 | [说明](Egern/README.md) |
 | [WeTalk](Scripts/WeTalk/WeTalk.js) | WeTalk 签到 + 视频奖励 | [说明](Scripts/WeTalk/README.md) |
 | [PingMe](Scripts/PingMe/PingMe.js) | PingMe 签到 + 视频奖励 | [说明](Scripts/PingMe/README.md) |
-| [NetWork](Scripts/NetWork/Network.js) | 网络诊断雷达（基础版） | [说明](Scripts/NetWork/README.md) |
 | [Network-Pro](Scripts/Network-Pro/Network-Pro.js) | 网络诊断雷达（增强版） | [说明](Scripts/Network-Pro/README.md) |
 | [Spotify](Scripts/Spotify/spotify.plugin) | Spotify Premium 解锁 | [说明](Scripts/Spotify/README.md) |
 | [JinRiYouJia](Scripts/JinRiYouJia/JinRiYouJia.js) | 全国各省市油价查询 | [说明](Scripts/JinRiYouJia/README.md) |
 
 **脚本直链：**
 ```
-# 网络诊断雷达（基础版）
-https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/NetWork/Network.js
 # 网络诊断雷达（增强版）
 https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/Network-Pro/Network-Pro.js
 ```
