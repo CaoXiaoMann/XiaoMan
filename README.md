@@ -18,6 +18,7 @@ XiaoMan/
 │   ├── NetWork/        # 网络诊断雷达（基础版）
 │   ├── Network-Pro/   # 网络诊断雷达（增强版）
 │   ├── Spotify/       # Spotify Premium 解锁
+│   ├── YouTube/       # YouTube 双语字幕(源语言纠正补丁)
 │   └── JinRiYouJia/   # 全国油价查询
 ├── docs/
 │   └── images/         # 文档图片
@@ -28,6 +29,7 @@ XiaoMan/
 
 | 脚本 | 说明 | 说明文档 |
 |------|------|---------|
+| [YouTube](Scripts/YouTube/README.md) | YouTube 双语字幕 + 源语言纠正补丁 | [说明文档](Scripts/YouTube/README.md) |
 | [Egern配置](Egern/XiaoManEgern2.1.yaml) | Egern 2.1 完整注释配置 | [说明](Egern/README.md) |
 | [WeTalk](Scripts/WeTalk/WeTalk.js) | WeTalk 签到 + 视频奖励 | [说明](Scripts/WeTalk/README.md) |
 | [PingMe](Scripts/PingMe/PingMe.js) | PingMe 签到 + 视频奖励 | [说明](Scripts/PingMe/README.md) |
