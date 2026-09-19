@@ -59,16 +59,24 @@ http://boxjs.com/#/app/DualSubs.YouTube
 看 `tracks=` 那一串：如果里面**根本没有**该语言的轨道（只有 `en*`），
 说明 YouTube 没有为该视频生成对应语言的自动字幕，这种情况下任何脚本都无法补救。
 
+## 脚本来源 / 生成方式
+
+仓库里 3 个 `.js` 是**脚本本体**，插件（`.plugin`）是**入口**：
+
+| 文件 | 作用 | 生成方式 |
+|------|------|---------|
+| `DualSubs.YouTube.plugin` | Loon/Stash 插件入口，写死 `script-path` 指向下面两个 JS | 我基于官方 `DualSubs/YouTube` v1.5.11 的 `.plugin` 模板生成，加了 `SourceLang` 参数 |
+| `request.bundle.js` | 拦截 YouTube `timedtext` 请求，把 `lang=` 覆盖成真实源语言 | 在官方 `request.bundle.js` 基础上插入一段 IIFE 补丁 |
+| `response.bundle.js` | 解析视频真实语言（优先音频轨 → 人工轨 → 第 0 条），改 `defaultCaptionTrackIndex` | 在官方 `response.bundle.js` 基础上替换「无条件取第 0 条」为完整解析逻辑 |
+
+另外两个 `script-path`（合成器 / 翻译器）**没改动**，仍指向 `DualSubs/Universal` 官方地址，不需要放进仓库。
+
 ## 注意
 
-- 基于 DualSubs **v1.5.11**（2024-12-11，上游至今未更新）
-- 修改了 `request.bundle.js` 和 `response.bundle.js`；
-  插件导入时自动拉取这两个 JS，无需手动导入；合成器 / 翻译器两个 bundle
-  未改动，仍指向 DualSubs/Universal 官方地址
-- 上游后续更新时需要重新应用补丁
+- **Loon/Stash 需要信任 MITM 证书**：本插件要解密 `www.youtube.com` / `m.youtube.com` / `youtubei.googleapis.com` / `*.googlevideo.com` 的流量才能改字幕。如果你之前为去广告把证书删了（看到仓库里 Egern 配置有「删除证书」的提交），导入这个插件后记得在 Loon/Stash 里重新开启 MITM 并信任这几个域名，否则插件不生效
+- 基于 DualSubs **v1.5.11**（2024-12-11，上游至今未更新）；上游后续更新时需要重新应用补丁
 - 语法通过 `node --check` 校验，解析逻辑 21 项单元测试通过
-- 未能实测 YouTube 真实字幕轨响应（innertube 接口在本环境不可用），
-  实际效果请以端上日志为准
+- 未能实测 YouTube 真实字幕轨响应（innertube 接口在本环境不可用），实际效果请以端上日志为准
 
 ## 来源
 
