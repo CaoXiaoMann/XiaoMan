@@ -20,6 +20,7 @@ XiaoMan/
 │   ├── Network-Pro/   # 网络诊断雷达（增强版）
 │   ├── Spotify/       # Spotify Premium 解锁
 │   ├── YouTube/       # YouTube 双语字幕(源语言纠正补丁)
+│   ├── tingdiandian/  # 听点点会员解锁
 │   └── JinRiYouJia/   # 全国油价查询
 ├── docs/
 │   └── images/         # 文档图片
@@ -45,6 +46,10 @@ XiaoMan/
 https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/Network-Pro/Network-Pro.js
 ```
 
+# 听点点会员解锁
+https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/tingdiandian/TingDianDian.plugin
+```
+
 ## 📌 使用说明
 
 1. 进入对应脚本文件夹查看配置方法
@@ -59,7 +64,8 @@ https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/Network-Pro/N
 ## 📢 更新日志
 
 - 2026/06/26 - 新增 WeTalk 签到脚本，增强重试机制，PingMe 风格通知
-- 2026/08/21 - 重构仓库结构，每个脚本独立文件夹并附说明
+- 2026/08/21 - 重构仓库结构
+- 2026/09/20 - 新增 听点点(tingdiandian)会员解锁脚本（客户端 PRO 解锁），每个脚本独立文件夹并附说明
 
 ## 🌟 致谢
 

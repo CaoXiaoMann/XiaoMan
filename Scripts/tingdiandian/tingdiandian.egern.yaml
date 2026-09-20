@@ -1,0 +1,13 @@
+# Egern 配置（追加到你的 Egern 配置文件）
+# MITM 域名 + 响应脚本，挂在 GET /user/<id> 上。
+# unlock.js 用仓库 URL；本地测试可把 script-path 换成本地路径。
+
+mitm:
+  - api.tingdiandian.com
+
+scripts:
+  - name: tingdiandian-unlock
+    type: response
+    pattern: ^https?://api\.tingdiandian\.com/user/[\w-]+$
+    require-body: true
+    script-path: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/tingdiandian/unlock.js

@@ -1,0 +1,15 @@
+#!name = 听点点会员解锁
+#!desc = 解锁听点点(tingdiandian)App 客户端会员 UI 与本地额度门槛。仅绕过客户端门控；AI 转写的点点额度由服务端真实记账，本脚本无法白送算力。
+#!author = CaoXiaoMann
+#!homepage = https://github.com/CaoXiaoMann/XiaoMan
+#!icon = https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/tingdiandian/icon.png
+
+[MITM]
+hostname = api.tingdiandian.com
+
+[Script]
+# 已上传到仓库时用此 URL：
+http-response ^https?://api\.tingdiandian\.com/user/[\w-]+$ script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/tingdiandian/unlock.js, requires-body=true, tag=听点点·会员解锁
+
+# 未上传、本地测试时改为本地路径（把 unlock.js 放进 Loon 脚本目录后启用下行）：
+# http-response ^https?://api\.tingdiandian\.com/user/[\w-]+$ script-path=unlock.js, requires-body=true, tag=听点点·会员解锁
