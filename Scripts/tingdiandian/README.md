@@ -38,10 +38,13 @@ https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/tingdiandian/
 把 `tingdiandian.stash.conf` 的 `[Script]` 与 `[MITM]` 段合并进你的配置。
 
 ### Egern
-把 `tingdiandian.egern.yaml` 的 `mitm` 与 `scripts` 合并进你的 Egern 配置。
+Egern 兼容 Loon 插件格式，**直接导入上面的 Loon 插件链接即可**，无需单独配置：
+```
+https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/tingdiandian/TingDianDian.plugin
+```
+Egern → 插件/订阅 → 添加该链接 → 启用 → 重启听点点。
 
 ## 文件
-- `unlock.js` — 响应脚本本体（已通过 14/14 本地单测，含 `patchBody` 字符串往返、used 值不变性校验）
-- `TingDianDian.plugin` — Loon 插件
+- `unlock.js` — 响应脚本本体（已通过本地单测：v2 编码头剥离 + body 不可解析时原样放行 + used 值不变性）
+- `TingDianDian.plugin` — Loon 插件（Egern 可直接兼容导入）
 - `tingdiandian.stash.conf` — Stash/Surge 片段
-- `tingdiandian.egern.yaml` — Egern 片段

@@ -2,8 +2,6 @@
 #!desc = 解锁听点点(tingdiandian)App 客户端会员 UI 与本地额度门槛。仅绕过客户端门控；AI 转写的点点额度由服务端真实记账，本脚本无法白送算力。
 #!author = CaoXiaoMann
 #!homepage = https://github.com/CaoXiaoMann/XiaoMan
-#!icon = https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/tingdiandian/icon.png
-
 [MITM]
 hostname = api.tingdiandian.com
 
