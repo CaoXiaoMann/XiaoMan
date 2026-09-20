@@ -1,0 +1,8 @@
+# 钱迹/账单应用直连规则
+# 转换自 Surge/Loon .list 格式
+# 用途: 在 Egern 配置中作为 rule_set 引用, 策略 DIRECT
+payload:
+  - DOMAIN-SUFFIX,qianjiapp.com
+  - DOMAIN-SUFFIX,xxoojoke.com
+  - DOMAIN-SUFFIX,litangkj.com
+  - DOMAIN-SUFFIX,qianjibillimage.kodo-accelerate.cn-south-1.qiniucs.com

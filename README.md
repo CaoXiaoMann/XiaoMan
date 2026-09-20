@@ -12,6 +12,8 @@
 XiaoMan/
 ├── Egern/              # Egern 2.1 配置
 │   └── XiaoManEgern2.1.yaml
+├── Rule/
+│   └── QianJi/        # 钱迹账单直连规则
 ├── Scripts/            # 脚本目录（每个脚本独立文件夹）
 │   ├── WeTalk/         # WeTalk 签到+视频
 │   ├── PingMe/         # PingMe 签到+视频
@@ -28,6 +30,7 @@ XiaoMan/
 
 | 脚本 | 说明 | 说明文档 |
 |------|------|---------|
+| [QianJi](Rule/QianJi/README.md) | 钱迹/账单应用直连规则 | [说明文档](Rule/QianJi/README.md) |
 | [YouTube](Scripts/YouTube/README.md) | YouTube 双语字幕 + 源语言纠正补丁 | [说明文档](Scripts/YouTube/README.md) |
 | [Egern配置](Egern/XiaoManEgern2.1.yaml) | Egern 2.1 完整注释配置 | [说明](Egern/README.md) |
 | [WeTalk](Scripts/WeTalk/WeTalk.js) | WeTalk 签到 + 视频奖励 | [说明](Scripts/WeTalk/README.md) |
