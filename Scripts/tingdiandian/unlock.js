@@ -1,7 +1,9 @@
-// 听点点 (tingdiandian) 会员解锁 — response 脚本
-// 拦截 GET https://api.tingdiandian.com/user/<id> 响应，把 free 账号改写为「永久 PRO」。
-// 客户端改写只绕过 App 内 UI 付费墙 / 本地时长门槛；AI 转写点点额度由服务端真实记账，
-// 本脚本不能让服务端白送算力——额度耗尽时服务端仍会拒绝。
+// 听点点 (tingdiandian) 会员解锁 — response 脚本 v2
+// 拦截 GET https://api.tingdiandian.com/user/<id> 响应，把 free 改写为「永久 PRO」。
+// v2 修复：剥掉 Content-Encoding/Content-Length/Transfer-Encoding 头，避免 App 按
+//   gzip 去解一段明文 JSON 而崩；body 非可解析字符串时原样放行，绝不返回空 body。
+// 边界：客户端改写只绕过 UI 付费墙/本地时长门槛；AI 转写点点额度由服务端真实记账，
+//   本脚本不能白送算力。
 
 var TDD_UNLOCK = (function () {
   var FAR_FUTURE = "2099-12-31T23:59:59.000Z";
@@ -10,9 +12,8 @@ var TDD_UNLOCK = (function () {
   function patch(obj) {
     if (!obj || typeof obj !== "object") return obj;
     var d = obj.data;
-    if (!d || typeof d !== "object") return obj;
+    if (!d || typeof d !== "object" || typeof d.isPro === "undefined") return obj;
 
-    // 会员身份：永久 PRO
     d.isPro = true;
     d.entitlement = "pro";
     d.isProPermanentMember = true;
@@ -32,7 +33,6 @@ var TDD_UNLOCK = (function () {
     d.newUserOfferVariant = null;
     d.newUserOfferExpiresAt = null;
 
-    // 客户端额度上限放宽（仅显示/本地门槛，服务端仍真实扣费）
     d.timeLimit = BIG;
     d.tokenLimit = BIG;
     d.pointsLimit = BIG;
@@ -46,19 +46,44 @@ var TDD_UNLOCK = (function () {
   }
 
   function patchBody(body) {
-    if (typeof body !== "string") return body;
+    if (typeof body !== "string" || !body) return null;
     try {
-      return JSON.stringify(patch(JSON.parse(body)));
+      var o = JSON.parse(body);
+      if (!o || typeof o !== "object") return null;
+      return JSON.stringify(patch(o));
     } catch (e) {
-      return body;
+      return null; // 解析失败 → 让外层原样放行
     }
   }
 
-  return { patch: patch, patchBody: patchBody };
+  // 剥掉会让 App 误判 body 编码的头，其余原样保留
+  function cleanHeaders(h) {
+    var out = {};
+    if (h && typeof h === "object") {
+      for (var k in h) {
+        if (!Object.prototype.hasOwnProperty.call(h, k)) continue;
+        var lk = String(k).toLowerCase();
+        if (lk === "content-encoding" || lk === "content-length" || lk === "transfer-encoding") continue;
+        out[k] = h[k];
+      }
+    }
+    return out;
+  }
+
+  return { patch: patch, patchBody: patchBody, cleanHeaders: cleanHeaders };
 })();
 
+// —— 工具入口（Surge / Stash / Loon / Egern 通用）——
 if (typeof $response !== "undefined" && typeof $done !== "undefined") {
-  $done({ body: TDD_UNLOCK.patchBody($response.body) });
+  var b = $response.body;
+  var nb = (typeof TDD_UNLOCK !== "undefined") ? TDD_UNLOCK.patchBody(b) : null;
+  if (nb !== null) {
+    // 成功改写：返回明文 body + 剥掉编码头
+    $done({ body: nb, headers: TDD_UNLOCK.cleanHeaders($response.headers) });
+  } else {
+    // body 不可解析（gzip 原始字节 / 空 / 非 JSON）→ 一律原样放行，绝不动 body
+    $done({});
+  }
 }
 
 if (typeof module !== "undefined") module.exports = TDD_UNLOCK;
