@@ -1,9 +1,9 @@
-# Apple Intelligence / Siri / iCloud Private Relay 分流规则
+# AppleIntelligence分流
+# Update 2026-09-22
 # 融合自：
 #   1) https://raw.githubusercontent.com/RocM301/Apple-Rule/refs/heads/main/Apple-AI.list
 #   2) https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list
 # 合并去重，bare 规则（无策略），引用时自行指定代理分组（需 Apple Intelligence 支持区，如美国节点）。
-# 生成日期：2026-09-22
 DOMAIN-KEYWORD,siri
 DOMAIN,guzzoni.apple.com
 DOMAIN,mask-api.fe.apple-dns.net
