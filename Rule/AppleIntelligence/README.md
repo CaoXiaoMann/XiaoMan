@@ -1,10 +1,6 @@
 # Apple Intelligence / Siri / iCloud Private Relay 分流规则
 
-融合自两个上游规则并去重：
-1. [RocM301/Apple-Rule · Apple-AI.list](https://github.com/RocM301/Apple-Rule/blob/main/Apple-AI.list)
-2. [ddgksf2013/Filter · AppleIntelligence.list](https://github.com/ddgksf2013/Filter/blob/master/AppleIntelligence.list)
-
-合并后 **21 条**去重规则（bare，无策略），引用时自行指定代理分组。
+**21 条**去重规则（bare，无策略），引用时自行指定代理分组。
 
 > ⚠️ Apple Intelligence 需要在**支持区域**（如美国）的节点上才能用，引用时把策略换成你对应的落地节点组，而不是普通 PROXY。
 
