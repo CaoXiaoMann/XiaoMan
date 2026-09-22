@@ -1,0 +1,17 @@
+DOMAIN,guzzoni.apple.com,PROXY
+DOMAIN,mask-api.fe.apple-dns.net,PROXY
+DOMAIN,mask-api.icloud.com,PROXY
+DOMAIN,mask-t.apple-dns.net,PROXY
+DOMAIN,mask.apple-dns.net,PROXY
+DOMAIN-SUFFIX,apple-relay.apple.com,PROXY
+DOMAIN-SUFFIX,apple-relay.cloudflare.com,PROXY
+DOMAIN-SUFFIX,apple-relay.fastly-edge.com,PROXY
+DOMAIN-SUFFIX,apple-relay.mask.apple-dns.net,PROXY
+DOMAIN-SUFFIX,cp4.cloudflare.com,PROXY
+DOMAIN-SUFFIX,gateway.icloud.com,PROXY
+DOMAIN-SUFFIX,gspel-ssl.ls.apple.com,PROXY
+DOMAIN-SUFFIX,ls.apple.com,PROXY
+DOMAIN-SUFFIX,mask-h2.icloud.com,PROXY
+DOMAIN-SUFFIX,mask.icloud.com,PROXY
+DOMAIN-SUFFIX,smoot.apple.com,PROXY
+DOMAIN-SUFFIX,apps.mzstatic.com,PROXY
