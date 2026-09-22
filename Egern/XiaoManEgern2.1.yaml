@@ -194,6 +194,12 @@ rules:
     match: https://kelee.one/Tool/Loon/Lsr/LAN_SPLITTER.lsr
     policy: DIRECT
     disabled: false
+# ---- Apple Intelligence / Siri（走美国节点，须在「苹果服务直连」之前命中）----
+- rule_set:
+    name: AppleIntelligence
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/AppleIntelligence/AppleIntelligence.list
+    policy: 美国节点
+    disabled: false
 # ---- 苹果服务直连 ----
 - domain_suffix:
     name: 苹果服务
