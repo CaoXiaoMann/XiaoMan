@@ -1,0 +1,31 @@
+#!name=车来了去广告
+#!desc=车来了 7.6.6 去广告；不拦截公交业务接口
+#!author=CaoXiaoMann
+#!category=广告拦截
+#!homepage=https://github.com/CaoXiaoMann/XiaoMan
+#!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/CheLaiLe/CheLaiLe.sgmodule
+
+[Rule]
+# 车来了专用广告与埋点
+DOMAIN,ad.chelaile.net.cn,REJECT
+DOMAIN,atrace.chelaile.net.cn,REJECT
+# 第三方广告 SDK
+DOMAIN-SUFFIX,pangolin-sdk-toutiao.com,REJECT
+DOMAIN-SUFFIX,pangolin-sdk-toutiao1.com,REJECT
+DOMAIN-SUFFIX,pangolin-sdk-toutiao-b.com,REJECT
+DOMAIN-SUFFIX,yg84.com,REJECT
+DOMAIN-SUFFIX,mobads.baidu.com,REJECT
+DOMAIN-SUFFIX,pos.baidu.com,REJECT
+DOMAIN-SUFFIX,sofire.baidu.com,REJECT
+
+[URL Rewrite]
+# 车来了广告配置、广告任务、开屏资源
+^https?:\/\/[^\/]*chelaile(?:app)?\.cn\/(?:adpub|goocity\/advert|goocity\/flowPos\/home|feserver\/vip-page\/images\/).* - reject
+^https?:\/\/[^\/]*chelaile\.net\.cn\/adpub\/.* - reject
+# 穿山甲、亿广、百度广告接口
+^https?:\/\/api-access\.pangolin-sdk-toutiao(?:1)?\.com\/api\/ad\/union\/sdk\/.* - reject
+^https?:\/\/adx\.yg84\.com\/sdk\/ad\/.* - reject
+^https?:\/\/mobads\.baidu\.com\/.* - reject
+
+[MITM]
+hostname = %APPEND% ad.chelaile.net.cn,atrace.chelaile.net.cn,api.chelaile.net.cn,cdn.api.chelaile.net.cn,cdn.api.chelaileapp.cn,web.chelaile.net.cn,cdn.*.chelaileapp.cn
