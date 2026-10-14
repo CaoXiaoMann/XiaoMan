@@ -3,7 +3,7 @@
 #!author=CaoXiaoMann
 #!category=广告拦截
 #!homepage=https://github.com/CaoXiaoMann/XiaoMan
-#!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/CheLaiLe/CheLaiLe.sgmodule
+#!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/CheLaiLe/cheMeiLe.sgmodule
 
 [Rule]
 # 车来了专用广告与埋点
