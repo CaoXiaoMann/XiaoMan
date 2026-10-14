@@ -34,9 +34,10 @@ DOMAIN,pgdt.ugdtimg.com,REJECT
 ^https?:\/\/(api|cdn\.api)\.chelaile\.net\.cn\/adpub\/.* - reject
 ^https?:\/\/(api|cdn\.api)\.chelaileapp\.cn\/adpub\/.* - reject
 ^https?:\/\/pic1\.chelaile\.net\.cn\/adv\/.* - reject
+# 调试用：车没了整站图片域全拦，先把主页残留广告图拿掉
+^https?:\/\/image3\.chelaile\.net\.cn\/.* - reject
 # 固定广告图片：京东横幅、京东落地页主图、美团权益图
 ^https?:\/\/land\.yg84\.com\/jdl\/assets\/.*\.(?:jpe?g|png|webp).* - reject
-^https?:\/\/image3\.chelaile\.net\.cn\/qb5ZXXzk\.png.* - reject
 # 广告落地页资源
 ^https?:\/\/land\.yg84\.com\/jdl\/.* - reject
 ^https?:\/\/quanyi\.yh-jiudian\.com\/activity8\/.* - reject
