@@ -23,11 +23,22 @@ DOMAIN,pgdt.ugdtimg.com,REJECT
 
 [URL Rewrite]
 # 车来了广告配置、广告任务、开屏资源
-^https?:\/\/[^\/]*chelaile(?:app)?\.cn\/(?:adpub\/sdk\/adConfig|adpub\/appAdTask|goocity\/advert|goocity\/flowPos\/(?:home|listByPos)|feserver\/vip-page\/images\/).* - reject
-^https?:\/\/[^\/]*chelaile\.net\.cn\/adpub\/.* - reject
+^https?:\/\/cdn\.api\.chelaileapp\.cn\/goocity\/flowPos\/home\?.* - reject
+^https?:\/\/cdn\.api\.chelaileapp\.cn\/goocity\/flowPos\/listByPos\?.* - reject
+^https?:\/\/cdn\.api\.chelaile\.net\.cn\/goocity\/flowPos\/home\?.* - reject
+^https?:\/\/cdn\.api\.chelaile\.net\.cn\/goocity\/flowPos\/listByPos\?.* - reject
+^https?:\/\/cdn\.api\.chelaile\.net\.cn\/adpub\/sdk\/adConfig\?.* - reject
+^https?:\/\/cdn\.api\.chelaileapp\.cn\/adpub\/sdk\/adConfig\?.* - reject
+^https?:\/\/cdn\.api\.chelaileapp\.cn\/encourage\/activity\/control\?.* - reject
+^https?:\/\/cdn\.api\.chelaile\.net\.cn\/encourage\/activity\/control\?.* - reject
+^https?:\/\/api\.chelaile\.net\.cn\/adpub\/.* - reject
+^https?:\/\/cdn\.api\.chelaile\.net\.cn\/adpub\/.* - reject
+^https?:\/\/pic1\.chelaile\.net\.cn\/adv\/.* - reject
 # 抓包中的活动广告与第三方 SDK
-^https?:\/\/[^\/]*chelaileapp\.cn\/encourage\/activity\/control.* - reject
-^https?:\/\/[^\/]*chelaile\.net\.cn\/encourage\/activity\/control.* - reject
+^https?:\/\/[^\/]*chelaileapp\.cn\/goocity\/advert\/.* - reject
+^https?:\/\/[^\/]*chelaileapp\.cn\/feserver\/vip-page\/images\/.* - reject
+^https?:\/\/[^\/]*chelaile\.net\.cn\/goocity\/advert\/.* - reject
+^https?:\/\/[^\/]*chelaile\.net\.cn\/feserver\/vip-page\/images\/.* - reject
 # 穿山甲、亿广、百度广告接口
 ^https?:\/\/api-access\.pangolin-sdk-toutiao(?:1)?\.com\/api\/ad\/union\/sdk\/.* - reject
 ^https?:\/\/adx\.yg84\.com\/sdk\/ad\/.* - reject
