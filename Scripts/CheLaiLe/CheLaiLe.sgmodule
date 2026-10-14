@@ -51,4 +51,4 @@ DOMAIN,pgdt.ugdtimg.com,REJECT
 ^https?:\/\/mobads\.baidu\.com\/.* - reject
 
 [MITM]
-hostname = %APPEND% ad.chelaile.net.cn,atrace.chelaile.net.cn,api.chelaile.net.cn,cdn.api.chelaile.net.cn,cdn.api.chelaileapp.cn,web.chelaile.net.cn,cdn.*.chelaileapp.cn
+hostname = %APPEND% ad.chelaile.net.cn,atrace.chelaile.net.cn,api.chelaile.net.cn,cdn.api.chelaile.net.cn,cdn.api.chelaileapp.cn,web.chelaile.net.cn,image3.chelaile.net.cn,land.yg84.com,cdn.*.chelaileapp.cn
