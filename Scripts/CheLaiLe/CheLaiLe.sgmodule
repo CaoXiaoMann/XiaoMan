@@ -24,7 +24,7 @@ DOMAIN,pgdt.ugdtimg.com,REJECT
 [URL Rewrite]
 # 车来了广告配置、广告任务、开屏资源
 ^https?:\/\/(api|cdn\.api)\.chelaile\.net\.cn\/goocity\/flowPos\/home\?.* - reject
-^https?:\/\/(api|cdn\.api)\.chelaile\.net\.cn\/goocity\/flowPos\/listByPos\?[^#]*\badPosition=29\b[^#]* - reject
+^https?:\/\/(api|cdn\.api)\.chelaile\.net\.cn\/goocity\/flowPos\/listByPos\?.* - reject
 ^https?:\/\/(api|cdn\.api)\.chelaileapp\.cn\/goocity\/flowPos\/home\?.* - reject
 ^https?:\/\/(api|cdn\.api)\.chelaileapp\.cn\/goocity\/flowPos\/listByPos\?.* - reject
 ^https?:\/\/(api|cdn\.api)\.chelaile\.net\.cn\/adpub\/sdk\/adConfig\?.* - reject
