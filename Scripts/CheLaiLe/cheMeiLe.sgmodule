@@ -53,8 +53,9 @@ DOMAIN,pgdt.ugdtimg.com,REJECT
 ^https?:\/\/mobads\.baidu\.com\/.* - reject
 
 [Body Rewrite]
-# 只删除签到和邀请好友条目，保留其他正常页面数据
-http-response-jq ^https?:\/\/(api|cdn\.api)\.(chelaile\.net\.cn|chelaileapp\.cn)\/goocity\/flowPos\/listByPos\?.* '.jsonr.data.flowList? |= map(select((.id | tostring) as $id | ($id != "500854" and $id != "500855" and $id != "626")))'
+# flowPos 响应改空，不再整条 reject
+http-response-regex ^https?:\/\/(api|cdn\.api)\.(chelaile\.net\.cn|chelaileapp\.cn)\/goocity\/flowPos\/home\?.* ^.*$ **YGKJ{"jsonr":{"status":"00","data":{"advertList":[]},"errmsg":"","subCode":"","subMsg":"","sversion":""}}YGKJ##
+http-response-regex ^https?:\/\/(api|cdn\.api)\.(chelaile\.net\.cn|chelaileapp\.cn)\/goocity\/flowPos\/listByPos\?.* ^.*$ **YGKJ{"jsonr":{"status":"00","data":{"flowList":[]},"errmsg":"","subCode":"","subMsg":"","sversion":""}}YGKJ##
 
 [MITM]
 hostname = %APPEND% ad.chelaile.net.cn,atrace.chelaile.net.cn,api.chelaile.net.cn,cdn.api.chelaile.net.cn,cdn.api.chelaileapp.cn,web.chelaile.net.cn,image3.chelaile.net.cn,land.yg84.com,cdn.*.chelaileapp.cn
