@@ -12,10 +12,6 @@
 XiaoMan/
 ├── Egern/              # Egern 2.1 配置
 │   └── XiaoManEgern2.1.yaml
-├── Rule/
-│   ├── AppleIntelligence/  # Apple Intelligence/Siri 分流规则
-│   ├── AppleRelay/   # Apple iCloud Private Relay/掩码 代理规则
-│   └── QianJi/        # 钱迹账单直连规则
 ├── Scripts/            # 脚本目录（每个脚本独立文件夹）
 │   ├── WeTalk/         # WeTalk 签到+视频
 │   ├── PingMe/         # PingMe 签到+视频
@@ -33,9 +29,6 @@ XiaoMan/
 
 | 脚本 | 说明 | 说明文档 |
 |------|------|---------|
-| [QianJi](Rule/QianJi/README.md) | 钱迹/账单应用直连规则 | [说明文档](Rule/QianJi/README.md) |
-| [AppleRelay](Rule/AppleRelay/README.md) | Apple iCloud Private Relay/掩码 代理规则 | [说明文档](Rule/AppleRelay/README.md) |
-| [AppleIntelligence](Rule/AppleIntelligence/README.md) | Apple Intelligence/Siri 分流规则 | [说明文档](Rule/AppleIntelligence/README.md) |
 | [YouTube](Scripts/YouTube/README.md) | YouTube 双语字幕 + 源语言纠正补丁 | [说明文档](Scripts/YouTube/README.md) |
 | [Egern配置](Egern/XiaoManEgern2.1.yaml) | Egern 2.1 完整注释配置 | [说明](Egern/README.md) |
 | [WeTalk](Scripts/WeTalk/WeTalk.js) | WeTalk 签到 + 视频奖励 | [说明](Scripts/WeTalk/README.md) |
@@ -67,6 +60,7 @@ https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/tingdiandian/
 
 ## 📢 更新日志
 
+- 2026/10/17 - 删除 Rule/ 目录（AppleIntelligence / AppleRelay / QianJi 规则）
 - 2026/06/26 - 新增 WeTalk 签到脚本，增强重试机制，PingMe 风格通知
 - 2026/08/21 - 重构仓库结构
 - 2026/09/20 - 新增 听点点(tingdiandian)会员解锁脚本（客户端 PRO 解锁），每个脚本独立文件夹并附说明
