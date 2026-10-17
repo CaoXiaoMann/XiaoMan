@@ -1,0 +1,696 @@
+# ============================================================
+# 小满的松鼠🐿️ 3.0 配置（Egern）
+# —— 完整中文注释版，适合新手参考 ——
+# ============================================================
+# TG 频道: https://t.me/XiaoManWangMingTianYa
+# 最后更新时间: 2026-10-17 20:00
+# 版本说明: 小满作者 3.0 版本（已移除内置 MITM 证书，证书请自行在 Egern 内生成，更保险）
+# ============================================================
+#
+# ⚠️ 使用前必读（超重要！）
+# -----------------------------------------------------------
+# ① 【必须添加机场订阅】
+#    本配置里的「香港节点 / 台湾节点 / 日本节点 / 新加坡节点 /
+#    韩国节点 / 美国节点 / 泰国节点」等策略组都写的是空的（policies: []），
+#    靠 filter 关键字从你的机场订阅里自动筛选节点。
+#    → 你必须在 Egern → 订阅 里添加机场订阅链接，
+#    → 更新订阅后，这些地区策略组才会自动填充可用节点。
+#    → 不加订阅 = 策略组空 = 分流规则失效 = 可能上不了网！
+#
+# ② 【必须自己安装 CA 证书】
+#    本配置已删除内置 CA，你需要自己在 Egern 内生成证书：
+#      Egern → 设置 → 生成 CA 证书 → 安装到 iPhone
+#      iPhone → 设置 → 通用 → VPN 与设备管理 → 安装描述文件
+#      iPhone → 设置 → 通用 → 关于本机 → 证书信任设置 → 打开信任
+#    不装证书，Spotify / Telegram 增强 / HTTPDNS 拦截 等模块全部失效。
+#
+# ③ 【本配置包含什么】
+#    DNS 国内外分流 / 港台日韩美新泰等地区策略组 / Telegram/ChatGPT/
+#    Emby 专项策略 / 广告拦截 & 国内外分流规则 / URL 重写 /
+#    桌面小组件（网络诊断雷达 Pro、今日金价、今日油价）/
+#    一批功能模块（Spotify 去广告、脚本中心、Sub-Store、BoxJS、
+#    车来了、Facebook、B站去广告、京东去广告、拼多多去广告……）
+#
+# 配置文件链接:
+# https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Egern/XiaoManEgern3.0.yaml
+# ============================================================
+
+
+# ==================== 基础设置 ====================
+ipv6: false                        # 关闭 IPv6，避免部分网站/游戏 IPv6 直连异常
+http_port: 3080                    # 本地 HTTP 代理端口（默认 3080，一般不用改）
+socks_port: 3090                   # 本地 SOCKS5 代理端口（默认 3090）
+allow_external_connections: true   # 允许局域网其他设备通过 WiFi 连接本机代理
+vif_only: true                     # 仅虚拟网接口模式（更安全、更少冲突）
+close_connections_on_policy_change: false   # 策略组切换时不主动断开旧连接
+hide_vpn_icon: false               # 状态栏显示 VPN 图标（关了能看到自己是否走了代理）
+
+
+# ==================== DNS 劫持 ====================
+hijack_dns:
+- '*:53'                           # 劫持所有设备的 53 端口 DNS，防止 DNS 泄漏
+
+
+# ==================== GeoIP / ASN 数据库 ====================
+# 用于 geoip / asn 分流规则的地址库，自动下载并定期更新
+geoip_db_url: https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/Country-all.mmdb
+asn_db_url: https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb
+
+
+# ==================== 延迟测试 URL ====================
+# 用于 auto_test / fallback 策略组测速
+proxy_latency_test_url: https://cp.cloudflare.com/generate_204
+direct_latency_test_url: http://connectivitycheck.platform.hicloud.com/generate_204
+
+
+# ==================== 隧道模式 ====================
+# 保持默认即可，除非你非常清楚自己在做什么
+compat_route: false                # 兼容路由模式
+include_all_networks: false        # 是否捕获所有网络流量
+include_apns: false                # 是否包含 APNs 流量（需 include_all_networks 开启）
+include_cellular_services: false   # 是否包含蜂窝网络服务流量（同上）
+
+
+# ==================== DNS 配置（国内外分流）====================
+# 结构:
+#   bootstrap  → 引导 DNS（解析 DoH 服务器本身的地址，用固定 IP）
+#   upstreams  → 命名 DNS 服务器组
+#   forward    → 按规则把域名转发到不同 upstream，从上到下匹配
+dns:
+  bootstrap:                       # 引导 DNS，混合多家固定 IP 提高稳定性
+  - system                        # 系统默认 DNS
+  - 223.5.5.5                     # 阿里 DNS
+  - 223.6.6.6                     # 阿里 DNS 备用
+  - 119.28.28.28                  # 腾讯 DNSPod
+  - 119.29.29.29                  # 腾讯 DNSPod 备用
+  - 180.76.76.76                  # 百度 DNS
+  - 2400:da00::6666               # 百度 DNS（IPv6）
+
+  upstreams:                       # 三套命名 DNS，按需选用
+    DIRECT-DNS:                    # 国内 DNS（阿里 + 腾讯 + 百度，速度最快）
+    - 180.76.76.76
+    - 2400:da00::6666
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+    PROXY-DNS:                     # 代理用 DNS（含 Cloudflare DoH，抗污染）
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+    - https://cloudflare-dns.com/dns-query
+    iBL3ND-DNS:                    # 海外直连 DNS（Cloudflare + Google，防污染）
+    - https://1.1.1.1/dns-query
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+
+  forward:                         # 转发规则（从上到下，命中即停）
+  # 国内常用 App → 走国内 DNS（速度快、不会被境外 DNS 污染）
+  - proxy_rule_set:
+      match: https://yfamilys.com/rule/DouYin.list        # 抖音
+      value: DIRECT-DNS
+      disabled: false
+  # 以下是走海外 DNS 的域名（防止国内 DNS 污染海外服务）
+  - proxy_rule_set:
+      match: https://yfamilys.com/rule/TikTok.list        # TikTok
+      value: iBL3ND-DNS
+      disabled: false
+  - proxy_rule_set:
+      match: https://raw.githubusercontent.com/IBL3ND/rule/refs/heads/main/Gemini.list  # Gemini
+      value: iBL3ND-DNS
+      disabled: false
+  - proxy_rule_set:
+      match: https://kelee.one/Tool/Loon/Lsr/AI.lsr       # AI 服务总表
+      value: iBL3ND-DNS
+      disabled: false
+  - proxy_rule_set:
+      match: https://yfamilys.com/rule/Gemini.list        # Gemini 备用表
+      value: iBL3ND-DNS
+      disabled: false
+  - proxy_rule_set:
+      match: https://www.naiixi.com/Extra_Crypto.list     # 加密货币
+      value: iBL3ND-DNS
+      disabled: false
+  - proxy_rule_set:
+      match: https://yfamilys.com/rule/OpenAI.list        # OpenAI
+      value: iBL3ND-DNS
+      disabled: false
+  - proxy_rule_set:
+      match: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/rule/openai.list  # OpenAI 备用
+      value: iBL3ND-DNS
+      disabled: false
+  - proxy_rule_set:
+      match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list  # OpenAI 备用
+      value: iBL3ND-DNS
+      disabled: false
+  - proxy_rule_set:
+      match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list  # 加密货币
+      value: iBL3ND-DNS
+      disabled: false
+  - proxy_rule_set:
+      match: https://yfamilys.com/rule/Binance.list       # 币安
+      value: iBL3ND-DNS
+      disabled: false
+  - proxy_rule_set:
+      match: https://yfamilys.com/rule/Twitter.list       # Twitter / X
+      value: iBL3ND-DNS
+      disabled: false
+  - proxy_rule_set:
+      match: https://yfamilys.com/rule/Telegram.list      # Telegram
+      value: iBL3ND-DNS
+      disabled: false
+  - proxy_rule_set:
+      match: https://yfamilys.com/rule/YouTube.list       # YouTube
+      value: iBL3ND-DNS
+      disabled: false
+  - proxy_rule_set:
+      match: https://yfamilys.com/rule/Instagram.list     # Instagram
+      value: iBL3ND-DNS
+      disabled: false
+  - proxy_rule_set:
+      match: https://yfamilys.com/rule/Cloudflare.list    # Cloudflare
+      value: iBL3ND-DNS
+      disabled: false
+  - proxy_rule_set:
+      match: https://raw.githubusercontent.com/GMOogway/shadowrocket-rules/master/sr_proxy_list.module  # 代理流量总表
+      value: iBL3ND-DNS
+      disabled: false
+  - proxy_rule_set:
+      match: https://yfamilys.com/rule/ProxyMedia.list    # 海外媒体
+      value: iBL3ND-DNS
+      disabled: false
+  # 以下是走国内 DNS 的域名（国内直连更快）
+  - proxy_rule_set:
+      match: https://raw.githubusercontent.com/Rabbit-Spec/Surge/refs/heads/Master/Rules/China.list  # 国内 App 总表
+      value: DIRECT-DNS
+      disabled: false
+  - proxy_rule_set:
+      match: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/direct.txt  # 国内直连列表
+      value: DIRECT-DNS
+      disabled: false
+  - proxy_rule_set:
+      match: https://raw.githubusercontent.com/GMOogway/shadowrocket-rules/master/sr_direct_list.module  # 国内直连备用
+      value: DIRECT-DNS
+      disabled: false
+  # 兜底规则：其他所有域名 → 走海外 DNS
+  - domain_wildcard:
+      match: '*'
+      value: iBL3ND-DNS
+      disabled: false
+
+  proxy_nameservers:               # 走代理时的 DNS 服务器（一般用 PROXY-DNS 即可）
+  - PROXY-DNS
+
+
+# ==================== 真实 IP 域名 ====================
+# 这些域名不用 Fake IP，直接解析真实 IP（部分服务对 Fake IP 不兼容）
+real_ip_domains:
+- '*.lan'                          # 局域网
+- '*.push.apple.com'               # Apple 推送（关了会收不到推送）
+- speech.platform.bing.com         # Bing 语音（TTS）
+- doh.pub                          # 腾讯 DoH
+
+
+# ============================================================
+# 策略组（Policy Groups）—— 流量分组的核心
+# ⚠️⚠️⚠️ 关键说明 ⚠️⚠️⚠️
+#   本文件里所有「地区节点」策略组（香港/台湾/日本/新加坡/韩国/美国/泰国）
+#   都故意把 policies 写成空数组 []，靠 filter 关键字从你的机场订阅里
+#   自动筛选节点。
+#   → 必须先添加机场订阅，这些组才会自动填充。
+#   → 不加订阅 = 这些组空 = 依赖它们的规则失效 = 可能上不了网！
+#
+# 策略组类型速查：
+#   select     → 手动选择（下拉菜单）
+#   auto_test  → 按延迟自动切（interval/tolerance/timeout）
+#   fallback   → 故障转移（主不通自动切备）
+#   load_balance → 负载均衡
+#   smart      → Egern 特有的智能组，policies 为空时自动从订阅筛选
+#   conditional→ 按 SSID / 蜂窝 自动切换
+#   external   → 从远端 URL 拉取
+# ============================================================
+policy_groups:
+
+# --------- 用户可见的主入口 ---------
+- select:                          # 主入口：所有「走代理」的流量默认走这里
+    name: PROXY
+    policies:
+    - 美国节点
+    - 新加坡节点
+    - 日本节点
+    - 台湾节点
+    - 香港节点
+    flatten: false                 # 不展开成单层菜单
+    icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/05icon/liuliang(3).png
+    hidden: false                  # 显示在策略列表里
+
+- select:                          # Telegram 专项（TG 走港/新美最稳）
+    name: Telegram
+    policies:
+    - 美国节点
+    - 新加坡节点
+    - 香港节点
+    flatten: false
+    icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Telegram_04.png
+    hidden: false
+
+- smart:                           # ChatGPT 专项（GPT 用港/日/美最佳）
+    name: ChatGPT
+    policies:
+    - 韩国节点
+    - 日本节点
+    - 美国节点
+    flatten: false
+    icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/ChatGPT8.png
+    hidden: false
+
+- select:                          # Emby 家庭影院（本地 Emby 走 DIRECT，海外订阅走 TV）
+    name: Emby
+    policies:
+    - TV
+    - DIRECT
+    flatten: false
+    icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/emby.png
+    hidden: false
+
+- smart:                           # Emby 视频节点智能筛选（按分辨率选节点）
+    name: TV
+    policies: []
+    flatten: true                  # 展开成扁平节点列表
+    filter: \d+(?:\.\d+)?x         # 匹配 720p/1080p/4K 等分辨率关键字
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/LineTV.png
+    hidden: true                   # 隐藏（被 Emby 组引用）
+
+# --------- 各地区节点组（自动从机场订阅筛选）---------
+# 🌏 香港 —— 大陆访问最常用，速度最快
+- auto_test:
+    name: 香港节点
+    policies: []                   # 空！等待订阅填充
+    flatten: true
+    filter: (?i)🇭🇰|香港|\b(HK|HKG|Hong Kong|Hong)\b   # 匹配节点名中的香港关键字
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Hong_Kong.png
+    hidden: true
+
+# 🌏 台湾
+- auto_test:
+    name: 台湾节点
+    policies: []
+    flatten: true
+    filter: (?i)🇹🇼|台湾|\b(TW|TWN|Taiwan|Tai)\b
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Taiwan.png
+    hidden: true
+
+# 🌏 日本
+- auto_test:
+    name: 日本节点
+    policies: []
+    flatten: true
+    filter: (?i)🇯🇵|日本|\b(JP|JPN|Japan)\b
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Japan.png
+    hidden: true
+
+# 🌏 新加坡 —— 东南亚节点，注意关 QUIC 兼容性更好
+- auto_test:
+    name: 新加坡节点
+    policies: []
+    flatten: true
+    filter: (?i)🇸🇬|新加坡|\b(SG|SGP|Singapore)\b
+    block_quic: true               # 强制走 TCP，避免 QUIC 直连绕过代理
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Singapore.png
+    hidden: true
+
+# 🌏 韩国 —— ChatGPT 常用
+- auto_test:
+    name: 韩国节点
+    policies: []
+    flatten: true
+    filter: (?i)🇰🇷|韩国|\b(KR|KOR|Korea|South Korea)\b
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Korea.png
+    hidden: true
+
+# 🌏 泰国
+- auto_test:
+    name: 泰国节点
+    policies: []
+    flatten: true
+    filter: 🇹🇭|泰国|THA|TH
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Thailand.png
+    hidden: true
+
+# 🌏 美国 —— TG / GPT 备选
+- auto_test:
+    name: 美国节点
+    policies: []
+    flatten: true
+    filter: (?i)🇺🇸|美国|\b(US|USA|United States|States|America|American)\b
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/United_States.png
+    hidden: true
+
+# --------- 兜底策略组 ---------
+- select:                          # 未匹配任何规则时的兜底
+    name: Final
+    policies:
+    - PROXY
+    flatten: false
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Bypass.png
+    hidden: true
+
+# ============================================================
+# 分流规则（Rules）—— 从上到下匹配，命中即停
+# 常用 policy 值：
+#   DIRECT       直连（不走代理）
+#   REJECT       拒绝（返回错误，App 会显示网络错误）
+#   REJECT-DROP  丢弃（无响应，更快省流量）
+#   PROXY        走 PROXY 策略组
+#   或自定义策略组名（Telegram / ChatGPT 等）
+# ============================================================
+rules:
+
+# --------- 广告拦截（最优先）---------
+- rule_set:
+    name: AWAvenue-Ads                        # 综合广告列表
+    match: https://raw.githubusercontent.com/Repcz/Tool/refs/heads/X/Egern/Rules/Ads_AWAvenue.yaml
+    policy: REJECT-DROP
+    disabled: false
+
+- rule_set:
+    name: BlockHttpDNS                        # 拦截 App 的 HTTPDNS 请求（防绕过代理）
+    match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/BlockHttpDNS/BlockHttpDNS.list
+    policy: REJECT-DROP
+    disabled: false
+
+# --------- Apple AI 专项 ---------
+- rule_set:
+    match: https://raw.githubusercontent.com/RocM301/Apple-Rule/refs/heads/main/Apple-AI.list
+    policy: PROXY
+    disabled: false
+
+# --------- 国内直连 ---------
+- geoip:
+    name: CN                                  # 中国 IP 段 → 直连（no_resolve: false 会先解析 IP）
+    match: CN
+    policy: DIRECT
+    no_resolve: false
+    disabled: false
+
+- rule_set:
+    name: China                               # 国内域名总表 → 直连
+    match: https://rule.kelee.one/Loon/China.lsr
+    policy: DIRECT
+    disabled: false
+
+- rule_set:
+    name: LAN                                 # 局域网设备 → 直连
+    match: https://kelee.one/Tool/Loon/Lsr/LAN_SPLITTER.lsr
+    policy: DIRECT
+    disabled: false
+
+- domain_suffix:
+    name: 苹果服务                              # Apple 官方服务 → 直连（国内 CDN 快）
+    match: apple.com
+    policy: DIRECT
+    disabled: false
+
+# --------- 海外应用分流 ---------
+- rule_set:
+    name: TG                                  # Telegram
+    match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list
+    policy: Telegram
+    disabled: false
+
+- rule_set:
+    name: TikTok                              # TikTok → 走 TG 组（东南亚节点稳）
+    match: https://github.com/Repcz/Tool/raw/X/Egern/Rules/TikTok.yaml
+    policy: Telegram
+    disabled: false
+
+- rule_set:
+    name: GPT                                 # ChatGPT / OpenAI
+    match: https://raw.githubusercontent.com/Repcz/Tool/refs/heads/X/Egern/Rules/OpenAI.yaml
+    policy: ChatGPT
+    disabled: false
+
+- rule_set:
+    name: Twitter                             # Twitter / X
+    match: https://github.com/Repcz/Tool/blob/X/Egern/Rules/Twitter.yaml
+    policy: PROXY
+    disabled: false
+
+- rule_set:
+    name: YouTube                             # YouTube
+    match: https://raw.githubusercontent.com/Repcz/Tool/refs/heads/X/Egern/Rules/YouTube.yaml
+    policy: PROXY
+    disabled: false
+
+- rule_set:
+    name: Spotify                             # Spotify（需要证书 + 模块）
+    match: https://raw.githubusercontent.com/Repcz/Tool/refs/heads/X/Egern/Rules/Spotify.yaml
+    policy: PROXY
+    disabled: false
+
+- rule_set:
+    name: LINE                                # LINE
+    match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Line/Line.list
+    policy: PROXY
+    disabled: false
+
+- rule_set:
+    name: Facebook                            # Facebook / Instagram
+    match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Facebook/Facebook.list
+    policy: PROXY
+    disabled: false
+
+- rule_set:
+    name: WeChat                              # 微信走代理（默认禁用，按需打开）
+    match: https://raw.githubusercontent.com/Repcz/Tool/refs/heads/X/Egern/Rules/WeChat.yaml
+    policy: DIRECT
+    disabled: true
+
+- rule_set:
+    name: GitHub                              # GitHub
+    match: https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Loon/GitHub/GitHub.list
+    policy: PROXY
+    disabled: false
+
+- rule_set:
+    name: Apple                               # Apple 生态（App Store / iCloud 等）
+    match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Apple/Apple.list
+    policy: DIRECT
+    disabled: false
+
+# --------- 兜底 ---------
+- default:
+    name: FINAL                               # 未匹配任何规则的流量 → 走 PROXY
+    policy: PROXY
+
+
+# ============================================================
+# URL 重写 —— 把请求重定向到别的地址
+# 常用：google.cn 跳转、修复部分 App 强制跳转大陆站的问题
+# ============================================================
+url_rewrites:
+- match: ^https?://(.*?L[.])?(?:glgoogle).cn   # 匹配 google.cn
+  location: https://$1google.com               # 跳转到 google.com（$1 是捕获组）
+  status_code: 302                             # HTTP 302 临时跳转
+
+
+# ============================================================
+# 脚本（Scriptings）—— 用 JS 扩展 Egern 功能
+# 支持类型：http_request / http_response / schedule / generic / network
+# 本配置里只放 generic 类型（用于小组件渲染）
+# ============================================================
+scriptings:
+- generic:
+    name: 网络诊断雷达pro                      # 显示当前网络状态、延迟、节点信息
+    script_url: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/Network-Pro/Network-Pro.js
+
+- generic:
+    name: 今日金价                             # 展示今日黄金价格
+    script_url: https://raw.githubusercontent.com/jadkg/egern/refs/heads/main/%E4%BB%8A%E6%97%A5%E9%BB%84%E9%87%91.js
+
+- generic:
+    name: 今日油价                             # 展示各地油价
+    script_url: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/JinRiYouJia/JinRiYouJia.js
+
+
+# ============================================================
+# MITM（中间人解密）
+# ⚠️ 证书已移除！你需要自己在 Egern 内生成并安装：
+#   Egern → 设置 → 生成 CA 证书 → 安装 → 信任
+# 只有装了证书，下面的 hostnames 才会被解密，功能模块才能改写 HTTPS 内容。
+# ============================================================
+mitm:
+  # ca_p12: "..."                   # 已移除，请自行生成
+  # ca_passphrase: "..."            # 已移除
+  hostnames:
+    includes:                       # 需要解密（MITM）的域名
+    - sub.store                     # Sub-Store 相关域名
+
+    # 想启用其他模块（Spotify、微信、微博等），把对应域名加到这里。
+    # 常见例子：
+    #   "*.spotify.com"              # Spotify 去广告
+    #   "*.wechat.com"               # 微信增强
+    #   "*.bilibili.com"             # B 站去广告
+    #   "api.spotify.com"            # Spotify API
+
+
+# ============================================================
+# HTTP 抓包 —— 记录这些域名的请求用于调试
+# ============================================================
+http_captures:
+  includes:
+  - iosapps.itunes.apple.com         # iTunes App 下载
+
+
+# ============================================================
+# 桌面小组件（Widgets）
+# 说明：widget 的 script_name 必须对应上面 scriptings 里定义的 name
+# 想加新的：先在 scriptings 里放脚本，再在 widgets 里引用
+# ============================================================
+widgets:
+- name: 网络诊断雷达Pro               # 桌面显示小组件名称
+  script_name: 网络诊断雷达pro        # 对应 scriptings 里的 name
+  env:
+    POLICY: PROXY                    # 显示哪个策略组的延迟
+    YS: '1'
+
+- name: 西安油价                     # 显示西安地区的油价
+  script_name: 今日油价               # 对应 scriptings 里的 name
+  env:
+    SHOW_TREND: ture                 # 显示走势图（注：原作者 typo 成 ture，实际生效）
+    region: shanxi-3/xian            # 地区代码（陕西-西安）
+                                     # 其他常见：beijing/上海市 shanghai-shi/广东省-guangzhou
+
+# ============================================================
+# 模块（Modules）—— 从远程 URL 加载功能模块
+# 一般用来加载别人做的功能模块（Spotify 去广告、B站去广告、Sub-Store 等）
+# enabled: true/false 控制是否启用；单个模块出问题就关掉排查
+# ============================================================
+modules:
+
+# HTTPDNS 拦截（防止 App 绕过代理直连）
+- url: https://raw.githubusercontent.com/VirgilClyne/GetSomeFries/main/sgmodule/HTTPDNS.Block.sgmodule
+  enabled: true
+
+# 车来了公交实时查询
+- name: 车来了
+  url: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/CheLaiLe/CheLaiLe.sgmodule
+  enabled: true
+
+# 淘宝
+- url: https://github.com/fmz200/wool_scripts/raw/main/Surge/module/split/partT/Taobao.sgmodule
+  enabled: true
+
+# Google 增强（默认关闭，会修改 Google 搜索，按需打开）
+- url: https://kelee.one/Tool/Loon/Lpx/Google.lpx
+  enabled: false
+
+# 脚本中心 —— 一键安装大量常用脚本
+- url: https://kelee.one/Tool/Loon/Lpx/Script-Hub.lpx
+  enabled: true
+
+# YouTube 隐藏 Shorts（默认关闭）
+- url: https://raw.githubusercontent.com/Aioneas/Surge/main/Module/youtube.aioneas.hide-shorts.sgmodule
+  enabled: false
+
+# Apple 天气增强
+- url: https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/Official/%F0%9F%8D%9F%20Apple%20%E5%A4%A9%E6%B0%94%E5%A2%9E%E5%BC%BA.official.sgmodule
+  enabled: true
+
+# 豆瓣热榜小组件
+- url: https://raw.githubusercontent.com/ZLam/VPN/refs/heads/main/egern/widget/douban_ranking/douban-ranking.yaml
+  enabled: true
+
+# Spotify 去广告
+- name: Spotify去广告
+  url: https://raw.githubusercontent.com/Reukix/ukix/refs/heads/main/Script/Spotify.sgmodule
+  compat_arguments:                 # 传递给模块的环境变量
+    tab: 'false'
+    useractivity: 'true'
+  enabled: true
+
+# Spotify 歌词翻译
+- url: http://script.hub/file/_start_/https://kelee.one/Tool/Loon/Lpx/Spotify_lyrics_translation.lpx/_end_/Spotify_lyrics_translation.sgmodule?type=loon-plugin&target=surge-module&del=true&jqEnabled=true&pm=.&sni=.
+  enabled: true
+
+# 豆瓣去广告
+- url: https://kelee.one/Tool/Loon/Lpx/DouBan_remove_ads.lpx
+  enabled: true
+
+# 增强模块（TZ）
+- url: https://raw.githubusercontent.com/Aswoth/Keek/refs/heads/main/TZ%20Egern.yaml
+  enabled: true
+
+# Telegram 增强
+- url: https://raw.githubusercontent.com/Aswoth/Keek/main/Telegram.yaml
+  env:                              # 模块环境变量
+    CLIENT: Telegram
+  enabled: true
+
+# 百度网盘
+- url: https://loon.103516.xyz/Plugin/BaiduNetDisk.lpx
+  enabled: true
+
+# 微信增强
+- url: https://loon.103516.xyz/Plugin/WeChat.lpx
+  enabled: true
+
+# NodeTools 节点工具
+- url: https://loon.103516.xyz/Plugin/NodeTools.lpx
+  enabled: true
+
+# 百度贴吧
+- url: https://loon.103516.xyz/Plugin/BaiduTieba.lpx
+  enabled: true
+
+# Facebook 增强
+- name: Facebook
+  url: https://github.com/fmz200/wool_scripts/raw/main/Surge/module/split/partF/Facebook.sgmodule
+  enabled: true
+
+# 知乎去广告
+- url: http://script.hub/file/_start_/https://kelee.one/Tool/Loon/Lpx/Zhihu_remove_ads.lpx/_end_/Zhihu_remove_ads.sgmodule?type=loon-plugin&target=surge-module&del=true&jqEnabled=true&pm=.&sni=.
+  enabled: true
+
+# 拼多多去广告
+- url: https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/%E6%8B%BC%E5%A4%9A%E5%A4%9A%E5%8E%BB%E5%B9%BF%E5%91%8A.sgmodule
+  enabled: true
+
+# 京东去广告
+- url: https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/%E4%BA%AC%E4%B8%9C%E5%8E%BB%E5%B9%BF%E5%91%8A.sgmodule
+  enabled: true
+
+# 12306 去广告
+- url: http://script.hub/file/_start_/https://kelee.one/Tool/Loon/Lpx/12306_remove_ads.lpx/_end_/12306_remove_ads.sgmodule?type=loon-plugin&target=surge-module&del=true&jqEnabled=true
+  enabled: true
+
+# B 站去广告
+- name: 哔哩哔哩去广告🌲
+  url: https://kelvinlab.wuyra.com/Module/BiliBili.sgmodule
+  compat_arguments:
+    displayUpList: show
+    purifyComment: 'true'           # 净化评论区
+    optimizeRequest: 'true'         # 优化请求
+    sponsorBlock: 'true'            # 屏蔽推广视频
+    logLevel: off                   # 日志级别
+  enabled: true
+
+# Sub-Store 订阅转换工具
+- url: https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/Egern.yaml
+  enabled: true
+
+# BoxJS（Box 脚本中心）
+- url: https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.surge.sgmodule
+  enabled: true
+
+
+# ============================================================
+# 🎉 配置到此结束
+# ============================================================
+# 常见问题排查：
+#   • 上不了网 → 检查机场订阅是否已添加并更新（策略组是否为空）
+#   • 部分网站/App 打不开 → 检查证书是否已安装并信任
+#   • App 崩溃或功能异常 → 逐个关闭 modules 里对应模块排查
+#   • DNS 污染 → 确认 dns.forward 兜底规则没被禁用
+#   • 想加脚本 → 在 scriptings 加脚本，在 widgets 加小组件引用
+#   • 想加分流规则 → 在 rules 里追加，注意顺序（先命中的优先）
+#
+# 更多配置说明: https://egernapp.com/zh-CN/docs/
+# ============================================================
