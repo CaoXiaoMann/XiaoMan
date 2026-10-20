@@ -1,5 +1,5 @@
 #!name=车来了去广告
-#!desc=车来了 7.6.6 去广告；不拦截公交业务接口
+#!desc=车来了 7.6.7 去广告；不拦截公交业务接口
 #!author=CaoXiaoMann
 #!category=广告拦截
 #!homepage=https://github.com/CaoXiaoMann/XiaoMan
@@ -11,6 +11,8 @@
 DOMAIN,ad.chelaile.net.cn,REJECT
 DOMAIN,atrace.chelaile.net.cn,REJECT
 DOMAIN,logs.chelaile.net.cn,REJECT
+# 智能营销素材 CDN（7.6.7 起横幅位 bigIcon 改走这里，域名名即 smart-marketing-img）
+DOMAIN-SUFFIX,smartimg.chelaile.net.cn,REJECT
 # 亿广（yg84）广告联盟：请求、SSP、竞价、落地页
 DOMAIN-SUFFIX,yg84.com,REJECT
 # 穿山甲（字节）广告 SDK 及其素材 / 模板 / 日志 CDN
@@ -26,9 +28,16 @@ DOMAIN,mssdk.volces.com,REJECT
 DOMAIN,apmplus.volces.com,REJECT
 DOMAIN,vod-license-m.volccdn.com,REJECT
 # 腾讯广告（广点通 / ADX）
+# c3/t/v/v3 四个子域为 7.6.7 抓包新增（gdt_mclick 点击上报、gdt_stats 上报、
+# GDT 资源与监控）。只挑这几个子域拦，不整域拦 gdt.qq.com —— 它是 QQ 体系
+# 共用 CDN，整域拦会误伤其他 App
 DOMAIN,mi.gdt.qq.com,REJECT
 DOMAIN,win.gdt.qq.com,REJECT
 DOMAIN,v2mi.gdt.qq.com,REJECT
+DOMAIN,c3.gdt.qq.com,REJECT
+DOMAIN,v.gdt.qq.com,REJECT
+DOMAIN,t.gdt.qq.com,REJECT
+DOMAIN,v3.gdt.qq.com,REJECT
 DOMAIN,sdk.e.qq.com,REJECT
 DOMAIN,sdkquic.e.qq.com,REJECT
 DOMAIN,tdid.m.qq.com,REJECT
@@ -58,13 +67,14 @@ DOMAIN,ali-stats.jpush.cn,REJECT
 DOMAIN,gd-stats.jpush.cn,REJECT
 
 # ============ 可选开关 ============
-# 首页顶部「京东快递 8 折券」这类没有「广告」标的水印的横幅，是车来了自家运营位，
-# 由 goocity/flowPos、adpub/adConfig 返回素材地址 —— 这两类靠 URL Rewrite 拦，
-# **必须 HTTPS 解密生效**。若解密正常，素材地址根本拿不到，横幅不会出。
+# 顶部横幅有两条素材通道，都已在上面用 DOMAIN 拦住（不依赖 HTTPS 解密）：
+#   1) cdn.smartimg.chelaile.net.cn  7.6.7 起的横幅位 bigIcon 主地址
+#   2) image3.chelaile.net.cn        旧版横幅图（如 qb5ZXXzk.png）
+# adConfig / flowPos 配置请求靠下面的 URL Rewrite 拦，那部分**依赖 HTTPS 解密**。
+# 解密失效时配置还能取到，但素材 CDN 已被 DOMAIN 拦掉，横幅仍然显示不出来。
 #
-# 如果确定解密正常但仍能看到横幅，才考虑下面这行「无解密依赖」的兜底：
-# 它会把 image3 整域拦掉，代价是定位/站点一类业务小图标也会加载失败。
-# 确认 HTTPS 解密可用时请保持注释状态。
+# 所以下面这行通常是多余的，仅在你确认「解密失效 + 仍能加载 image3 上的图」时启用。
+# 代价：image3 整域拦掉，定位 / 站点一类业务小图标也会加载失败。
 # DOMAIN-SUFFIX,image3.chelaile.net.cn,REJECT
 
 [URL Rewrite]
@@ -103,6 +113,8 @@ DOMAIN,gd-stats.jpush.cn,REJECT
 hostname = %APPEND% ad.chelaile.net.cn,atrace.chelaile.net.cn,api.chelaile.net.cn,cdn.api.chelaile.net.cn,cdn.api.chelaileapp.cn,web.chelaile.net.cn,image3.chelaile.net.cn,land.yg84.com,cdn.*.chelaileapp.cn
 
 # 故意不拦截（保住业务功能，抓到广告再说）
+#   gdt.qq.com 只拦 mi / win / v2mi / c3 / t / v3 六个子域，未整域拦
+#                             广点通是 QQ 体系共用 CDN，整域拦会误伤其他 App
 #   api.map.baidu.com          百度地图 SDK 校验，屏蔽会导致定位/地图失效
 #   config.jpush.cn, tsis.jpush.cn, ce3e75d5.jpush.cn, smartop-sdkapi.jiguang.cn
 #   *.getui.*, *.gepush.com, cnlogs.umeng.com / utoken.umeng.com
