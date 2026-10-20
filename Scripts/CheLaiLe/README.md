@@ -28,6 +28,9 @@
   `orzonera.yingt.fun`、易点天下 `1rtb.com`、淘宝 DSP `rtb.julang.taobao.com`、
   `qh-material.taobao.com`，以及车来了埋点 `logs.chelaile.net.cn` 与
   `DataAnalysisInfo/UdidFilter`
+- **2026/10/20（补）** 追加 `DOMAIN-SUFFIX,jomoxc.com`：百度广告视频在
+  `nadvideo2.baidu.com` 被拦后会改走这个动态 CDN 镜像（`:7633` / `:8318`）
+  拉同一个 mp4 文件，只拦主地址时视频广告照样播
 - 2026/10/17 首次整理，含亿广、穿山甲、腾讯、百度广告拦截
 
 ## 验证方式
@@ -37,10 +40,10 @@
 | 类别 | 总数 | 拦截 | 说明 |
 |------|------|------|------|
 | 车来了自有域名 | 151 | 70 | 剩余 81 条为 bus/ notice/ city/ wow/ led-weather 等业务接口 |
-| 第三方请求 | 1038 | 935 | 剩余 103 条为推送、统计与通用 CDN，见下方说明 |
+| 第三方请求 | 1038 | 937 | 剩余 101 条为推送、统计与通用 CDN，见下方说明 |
 | 代理工具自身请求 | 6 | 0 | 脚本源与订阅源，必须放行 |
 
-其中本次新增规则单独命中 374 条。
+合计拦截 1007 / 1189 条，0 条正则异常，0 条代理工具流量误拦。
 
 ## 故意不拦截
 
@@ -50,6 +53,16 @@
 - `image3.chelaile.net.cn` 整域：混有定位图标等业务图片，只按具体广告图拦截
 - `sf3-cdn-tos.douyinstatic.com`、`p3-sign.douyinpic.com`、`*.xiaohongshu.com`：
   通用素材 CDN，未确认是否承载到站语音，整域拦有误伤风险
-- `wcp.taobao.com`、`*.jomoxc.com`、`124.70.194.16`、`110.43.121.3`：广告追踪的
+- `wcp.taobao.com`、`124.70.194.16`、`110.43.121.3`：广告追踪的
   共用 CDN 与裸 IP 回源，收益低于误伤风险
 - 代理工具自身流量（`kelee.one`、`raw.githubusercontent.com` 等脚本源）
+
+## 仍然会看到的广告（已知限制）
+
+- 广告 SDK 的**本地缓存兜底**：素材在上次联网时缓存过，本次即使配置请求被拦，
+  仍可能用缓存素材播一次
+- **开屏广告预取**：部分 SDK 在 App 未启动时就把下一屏广告下到本地
+- `sf3-cdn-tos.douyinstatic.com` 的互动广告音效、`p3-sign.douyinpic.com` 的素材图：
+  承载在抖音通用 CDN 上，只能靠上游配置请求（`pglstatp-toutiao.com` 等）被拦来间接止血
+- 已拦主地址 `nadvideo2.baidu.com` 后，SDK 曾改走 `*.jomoxc.com:7633/8318` 的
+  动态回源镜像拉同一个视频，现已一并拦截（见模块内 `jomoxc.com` 那行的说明）

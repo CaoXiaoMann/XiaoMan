@@ -43,6 +43,10 @@ DOMAIN-SUFFIX,pos.baidu.com,REJECT
 DOMAIN-SUFFIX,sofire.baidu.com,REJECT
 DOMAIN,nadvideo2.baidu.com,REJECT
 DOMAIN,feed-image.baidu.com,REJECT
+# 百度广告视频的动态 CDN 回源镜像（与 nadvideo2.baidu.com 同文件名的兜底地址，
+# 只拦主地址时 SDK 会改走这里，视频广告照样播）。该域为共用动态 CDN 池，
+# 若发现影响其他 App 的视频加载可单独删除这一行
+DOMAIN-SUFFIX,jomoxc.com,REJECT
 # 其他联盟 / 归因
 DOMAIN-SUFFIX,1rtb.com,REJECT
 DOMAIN,rtb.julang.taobao.com,REJECT
@@ -99,5 +103,5 @@ hostname = %APPEND% ad.chelaile.net.cn,atrace.chelaile.net.cn,api.chelaile.net.c
 #   www.chelaile.net.cn/web_active  官方活动页脚本
 #   sf3-cdn-tos.douyinstatic.com / p3-sign.douyinpic.com / *.xiaohongshu.com
 #                             抖音、小红书通用 CDN，可能承载到站语音与素材，不宜整域拦
-#   wcp.taobao.com / *.jomoxc.com / 124.70.194.16 / 110.43.121.3
+#   wcp.taobao.com / 124.70.194.16 / 110.43.121.3
 #                             广告追踪的共用 CDN 与裸 IP 回源，误伤风险高于收益
