@@ -4,22 +4,54 @@
 #!category=广告拦截
 #!homepage=https://github.com/CaoXiaoMann/XiaoMan
 #!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/CheLaiLe/CheLaiLe.sgmodule
+#!last-updated=2026-10-20
 
 [Rule]
-# 车来了专用广告与埋点
+# 车来了自有广告、埋点、统计
 DOMAIN,ad.chelaile.net.cn,REJECT
 DOMAIN,atrace.chelaile.net.cn,REJECT
-# 第三方广告 SDK
+DOMAIN,logs.chelaile.net.cn,REJECT
+# 亿广（yg84）广告联盟：请求、SSP、竞价、落地页
+DOMAIN-SUFFIX,yg84.com,REJECT
+# 穿山甲（字节）广告 SDK 及其素材 / 模板 / 日志 CDN
 DOMAIN-SUFFIX,pangolin-sdk-toutiao.com,REJECT
 DOMAIN-SUFFIX,pangolin-sdk-toutiao1.com,REJECT
 DOMAIN-SUFFIX,pangolin-sdk-toutiao-b.com,REJECT
-DOMAIN-SUFFIX,yg84.com,REJECT
-DOMAIN-SUFFIX,mobads.baidu.com,REJECT
-DOMAIN-SUFFIX,pos.baidu.com,REJECT
-DOMAIN-SUFFIX,sofire.baidu.com,REJECT
+DOMAIN-SUFFIX,pglstatp-toutiao.com,REJECT
+DOMAIN-SUFFIX,ctobsnssdk.com,REJECT
+DOMAIN,lf-cdn-tos.bytescm.com,REJECT
+DOMAIN,webcast-open.douyin.com,REJECT
+# 巨量 / 火山引擎广告 SDK 与监控
+DOMAIN,mssdk.volces.com,REJECT
+DOMAIN,apmplus.volces.com,REJECT
+DOMAIN,vod-license-m.volccdn.com,REJECT
+# 腾讯广告（广点通 / ADX）
 DOMAIN,mi.gdt.qq.com,REJECT
 DOMAIN,win.gdt.qq.com,REJECT
+DOMAIN,v2mi.gdt.qq.com,REJECT
+DOMAIN,sdk.e.qq.com,REJECT
+DOMAIN,sdkquic.e.qq.com,REJECT
+DOMAIN,tdid.m.qq.com,REJECT
 DOMAIN,pgdt.ugdtimg.com,REJECT
+DOMAIN,adsmind.ugdtimg.com,REJECT
+DOMAIN,qzs.gdtimg.com,REJECT
+DOMAIN,tencent-ssp.66mobi.com,REJECT
+# 百度广告
+DOMAIN-SUFFIX,mobads.baidu.com,REJECT
+DOMAIN,mobads-logs.baidu.com,REJECT
+DOMAIN-SUFFIX,pos.baidu.com,REJECT
+DOMAIN-SUFFIX,sofire.baidu.com,REJECT
+DOMAIN,nadvideo2.baidu.com,REJECT
+DOMAIN,feed-image.baidu.com,REJECT
+# 其他联盟 / 归因
+DOMAIN-SUFFIX,1rtb.com,REJECT
+DOMAIN,rtb.julang.taobao.com,REJECT
+DOMAIN,qh-material.taobao.com,REJECT
+DOMAIN,gungnir.xiaojukeji.com,REJECT
+DOMAIN,orzonera.yingt.fun,REJECT
+# 推送 SDK 的统计上报（不影响离线推送与到站推送）
+DOMAIN,ali-stats.jpush.cn,REJECT
+DOMAIN,gd-stats.jpush.cn,REJECT
 
 [URL Rewrite]
 # 车来了广告配置、广告任务、开屏资源
@@ -33,6 +65,9 @@ DOMAIN,pgdt.ugdtimg.com,REJECT
 ^https?:\/\/(api|cdn\.api)\.chelaile\.net\.cn\/encourage\/activity\/control\?.* - reject
 ^https?:\/\/(api|cdn\.api)\.chelaile\.net\.cn\/adpub\/.* - reject
 ^https?:\/\/(api|cdn\.api)\.chelaileapp\.cn\/adpub\/.* - reject
+# 车来了埋点：UDID 过滤 / 数据分析（chelaile.net.cn 与 chelaileapp.cn 两个域名）
+^https?:\/\/(api|cdn\.api)\.chelaile(?:app)?(?:\.net)?\.cn\/DataAnalysisInfo\/.* - reject
+# 广告图片
 ^https?:\/\/pic1\.chelaile\.net\.cn\/adv\/.* - reject
 # 固定广告图片：京东横幅、京东落地页主图、美团权益图
 ^https?:\/\/land\.yg84\.com\/jdl\/assets\/.*\.(?:jpe?g|png|webp).* - reject
@@ -52,3 +87,17 @@ DOMAIN,pgdt.ugdtimg.com,REJECT
 
 [MITM]
 hostname = %APPEND% ad.chelaile.net.cn,atrace.chelaile.net.cn,api.chelaile.net.cn,cdn.api.chelaile.net.cn,cdn.api.chelaileapp.cn,web.chelaile.net.cn,image3.chelaile.net.cn,land.yg84.com,cdn.*.chelaileapp.cn
+
+# 故意不拦截（保住业务功能，抓到广告再说）
+#   api.map.baidu.com          百度地图 SDK 校验，屏蔽会导致定位/地图失效
+#   config.jpush.cn, tsis.jpush.cn, ce3e75d5.jpush.cn, smartop-sdkapi.jiguang.cn
+#   *.getui.*, *.gepush.com, cnlogs.umeng.com / utoken.umeng.com
+#                             推送通道与注册，屏蔽会导致到站推送收不到
+#   als.baidu.com, bgg.baidu.com   百度通用统计（非广告专用域，影响面广）
+#   *.chelaileapp.cn 除广告路径外的 bus/ notice/ city/ wow/ led-weather 等均为业务接口
+#   image3.chelaile.net.cn 的 89iIqxaM.png 等是定位图标等业务图片，非广告
+#   www.chelaile.net.cn/web_active  官方活动页脚本
+#   sf3-cdn-tos.douyinstatic.com / p3-sign.douyinpic.com / *.xiaohongshu.com
+#                             抖音、小红书通用 CDN，可能承载到站语音与素材，不宜整域拦
+#   wcp.taobao.com / *.jomoxc.com / 124.70.194.16 / 110.43.121.3
+#                             广告追踪的共用 CDN 与裸 IP 回源，误伤风险高于收益

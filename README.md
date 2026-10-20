@@ -69,6 +69,7 @@ https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/CheLaiLe/CheL
 
 ## 📢 更新日志
 
+- **2026/10/20** - **车来了去广告更新**：按 7.6.6 实机抓包（1195 条请求）补全 25 条 DOMAIN 规则与 1 条 URL Rewrite，新增拦截穿山甲模板/日志、腾讯广点通 SDK、百度广告视频素材、滴滴归因、快手 KCG、淘宝 DSP、易点天下 SSP 及车来了自有埋点；规则模拟匹配拦截 1005 条，公交业务接口与到站推送全部保留
 - **2026/10/17** - **Egern 3.0 版本发布**：基于作者 3.0 内容，移除内置 CA 证书，全文补充小白友好的中文注释与排查指南；含 25 个功能模块、7 个地区策略组、22 条 DNS 分流规则
 - 2026/10/17 - 删除 Rule/ 目录（AppleIntelligence / AppleRelay / QianJi 规则）
 - 2026/08/21 - 重构仓库结构
