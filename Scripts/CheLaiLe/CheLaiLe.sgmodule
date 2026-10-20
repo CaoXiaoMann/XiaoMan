@@ -57,6 +57,16 @@ DOMAIN,orzonera.yingt.fun,REJECT
 DOMAIN,ali-stats.jpush.cn,REJECT
 DOMAIN,gd-stats.jpush.cn,REJECT
 
+# ============ 可选开关 ============
+# 首页顶部「京东快递 8 折券」这类没有「广告」标的水印的横幅，是车来了自家运营位，
+# 由 goocity/flowPos、adpub/adConfig 返回素材地址 —— 这两类靠 URL Rewrite 拦，
+# **必须 HTTPS 解密生效**。若解密正常，素材地址根本拿不到，横幅不会出。
+#
+# 如果确定解密正常但仍能看到横幅，才考虑下面这行「无解密依赖」的兜底：
+# 它会把 image3 整域拦掉，代价是定位/站点一类业务小图标也会加载失败。
+# 确认 HTTPS 解密可用时请保持注释状态。
+# DOMAIN-SUFFIX,image3.chelaile.net.cn,REJECT
+
 [URL Rewrite]
 # 车来了广告配置、广告任务、开屏资源
 ^https?:\/\/(api|cdn\.api)\.chelaile\.net\.cn\/goocity\/flowPos\/home\?.* - reject
