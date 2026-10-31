@@ -25,7 +25,7 @@
 | Google/Google.yaml | Google | Google | 2026-10-31 |
 | China/China.yaml | China | 中国国内域名/IP | 2026-10-31 |
 | ChinaIPs/ChinaIPs.yaml | ChinaIPs | 中国 IP / ASN | 2026-10-31 |
-| LAN/LAN.yaml | Lan | 局域网地址 | 2026-10-31 |
+| LAN/LAN.yaml | LAN | 局域网地址 | 2026-10-31 |
 | Apple/Apple.yaml | Apple | Apple 生态 | 2026-10-31 |
 | GlobalAI/GlobalAI.yaml | GlobalAI | 全球 AI 服务 | 2026-10-31 |
 | GitHub/GitHub.yaml | GitHub | GitHub | 2026-10-31 |
