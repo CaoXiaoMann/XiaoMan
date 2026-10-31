@@ -16,7 +16,7 @@
 |------|--------|------|----------|
 | Facebook/Facebook.yaml | Facebook | Facebook / Instagram | 2026-10-31 |
 | YouTube/YouTube.yaml | YouTube | YouTube | 2026-10-31 |
-| Line/Line.yaml | Line | LINE | 2026-10-31 |
+| LINE/LINE.yaml | Line | LINE | 2026-10-31 |
 | Twitter/Twitter.yaml | Twitter | Twitter / X | 2026-10-31 |
 | Spotify/Spotify.yaml | Spotify | Spotify | 2026-10-31 |
 | Telegram/Telegram.yaml | Telegram | Telegram | 2026-10-31 |
@@ -25,7 +25,7 @@
 | Google/Google.yaml | Google | Google | 2026-10-31 |
 | China/China.yaml | China | 中国国内域名/IP | 2026-10-31 |
 | ChinaIPs/ChinaIPs.yaml | ChinaIPs | 中国 IP / ASN | 2026-10-31 |
-| Lan/Lan.yaml | Lan | 局域网地址 | 2026-10-31 |
+| LAN/LAN.yaml | Lan | 局域网地址 | 2026-10-31 |
 | Apple/Apple.yaml | Apple | Apple 生态 | 2026-10-31 |
 | GlobalAI/GlobalAI.yaml | GlobalAI | 全球 AI 服务 | 2026-10-31 |
 | GitHub/GitHub.yaml | GitHub | GitHub | 2026-10-31 |
@@ -50,7 +50,7 @@
     disabled: false
 - rule_set:
     name: Lan                            # 局域网 → 直连
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Lan/Lan.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/LAN/LAN.yaml
     policy: DIRECT
     disabled: false
 - rule_set:
@@ -92,7 +92,7 @@
     disabled: false
 - rule_set:
     name: LINE                           # LINE
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Line/Line.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/LINE/LINE.yaml
     policy: PROXY
     disabled: false
 - rule_set:

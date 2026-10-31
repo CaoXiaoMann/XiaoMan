@@ -387,7 +387,7 @@ rules:
 
 - rule_set:
     name: LAN                                 # 局域网设备 → 直连
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Lan/Lan.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/LAN/LAN.yaml
     policy: DIRECT
     disabled: false
 
@@ -474,7 +474,7 @@ rules:
 
 - rule_set:
     name: LINE                                # LINE
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Line/Line.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/LINE/LINE.yaml
     policy: PROXY
     disabled: false
 
