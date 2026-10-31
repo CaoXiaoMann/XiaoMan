@@ -251,6 +251,39 @@ policy_groups:
     icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Telegram_04.png
     hidden: false
 
+- select:                          # TikTok 专项（TikTok 走美/新/港最稳）
+    name: TikTok
+    policies:
+    - 美国节点
+    - 新加坡节点
+    - 香港节点
+    - 日本节点
+    flatten: false
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/TikTok.png
+    hidden: false
+
+- select:                          # YouTube 专项
+    name: YouTube
+    policies:
+    - 美国节点
+    - 新加坡节点
+    - 香港节点
+    - 日本节点
+    flatten: false
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/YouTube.png
+    hidden: false
+
+- select:                          # Twitter / X 专项
+    name: Twitter
+    policies:
+    - 美国节点
+    - 新加坡节点
+    - 香港节点
+    - 日本节点
+    flatten: false
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Twitter.png
+    hidden: false
+
 - smart:                           # ChatGPT 专项（GPT 用港/日/美最佳）
     name: ChatGPT
     policies:
@@ -445,25 +478,25 @@ rules:
 - rule_set:
     name: TikTok                              # TikTok → 走 TG 组（东南亚节点稳）
     match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/TikTok/TikTok.yaml
-    policy: Telegram
+    policy: TikTok
     disabled: false
 
 - rule_set:
     name: GPT                                 # ChatGPT / OpenAI
     match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/GPT/GPT.yaml
-    policy: ChatGPT
+    policy: PROXY
     disabled: false
 
 - rule_set:
     name: Twitter                             # Twitter / X
     match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Twitter/Twitter.yaml
-    policy: PROXY
+    policy: Twitter
     disabled: false
 
 - rule_set:
     name: YouTube                             # YouTube
     match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/YouTube/YouTube.yaml
-    policy: PROXY
+    policy: YouTube
     disabled: false
 
 - rule_set:
