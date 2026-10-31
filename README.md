@@ -13,6 +13,23 @@ XiaoMan/
 ├── Egern/              # Egern 3.0 完整配置（含小白友好注释）
 │   ├── README.md                    # 使用教程 + 结构说明 + FAQ
 │   └── XiaoManEgern3.0.yaml         # 3.0 配置主文件
+├── Rule/               # 分流规则集（Egern 规则集合，MagicRule 生成）
+│   ├── Facebook/       # Facebook / Instagram
+│   ├── YouTube/        # YouTube
+│   ├── Telegram/       # Telegram
+│   ├── TikTok/         # TikTok
+│   ├── Twitter/        # Twitter / X
+│   ├── Spotify/        # Spotify
+│   ├── LINE/           # LINE
+│   ├── GPT/            # ChatGPT / OpenAI
+│   ├── Google/         # Google
+│   ├── GlobalAI/       # 全球 AI 服务
+│   ├── GitHub/         # GitHub
+│   ├── Global/         # 全球（宽泛）
+│   ├── China/          # 中国国内
+│   ├── ChinaIPs/       # 中国 IP / ASN
+│   ├── Apple/          # Apple 生态
+│   └── LAN/            # 局域网
 ├── Scripts/            # 脚本目录（每个脚本独立文件夹）
 │   ├── WeTalk/         # WeTalk 签到 + 视频奖励
 │   ├── PingMe/         # PingMe 签到 + 视频奖励
@@ -69,6 +86,7 @@ https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/CheLaiLe/CheL
 
 ## 📢 更新日志
 
+- **2026/10/31** - **新增 Rule/ 分流规则集**：从 [MagicRule](https://magicrule.pages.dev/#/c/Egern) 生成 16 个 Egern 规则集合（Facebook/YouTube/Telegram/TikTok/Twitter/Spotify/LINE/GPT/Google/GlobalAI/GitHub/Global/China/ChinaIPs/Apple/LAN），每个文件标注更新日期；主配置 `rules` 段已改为自托管引用，并按官方规则顺序重排，新增 TikTok/YouTube/Twitter 策略组，其余代理分流归 PROXY
 - **2026/10/20** - **车来了去广告 7.6.7 复查**：用户反馈京东快递横幅仍在，按 7.6.7 抓包（1073 条）定位到两个真实原因——横幅素材从 `image3` 改投新域名 `cdn.smartimg.chelaile.net.cn`（旧规则未覆盖），以及广点通新增 `c3/v/t/v3` 四个上报子域；新增 5 条 DOMAIN 规则。另修掉一个隐蔽 bug：`[Rule]` 段行尾 `#` 注释会被 Surge 当正文导致整行规则失效，已全部改为独立注释行。两份抓包回测均 0 条正则异常、0 条代理工具误拦
 - **2026/10/20** - **车来了去广告更新**：按 7.6.6 实机抓包（1195 条请求）补全 26 条 DOMAIN 规则与 1 条 URL Rewrite，新增拦截穿山甲模板/日志、腾讯广点通 SDK、百度广告视频素材、滴滴归因、快手 KCG、淘宝 DSP、易点天下 SSP 及车来了自有埋点；规则模拟匹配拦截 1007 条，公交业务接口与到站推送全部保留
 - **2026/10/17** - **Egern 3.0 版本发布**：基于作者 3.0 内容，移除内置 CA 证书，全文补充小白友好的中文注释与排查指南；含 25 个功能模块、7 个地区策略组、22 条 DNS 分流规则
