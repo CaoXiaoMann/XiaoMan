@@ -3,8 +3,9 @@
 # NAME: Apple
 # AUTHOR: MagicRule
 # REPO: https://magicrule.pages.dev
-# UPDATED: 2026-10-29 10:44:14
-no_resolve: true
+# UPDATED: 2026-10-30 15:51:59
+
+no_resolve: []
 domain_set:
   - 7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe
   - a1.mzstatic.com
@@ -286,6 +287,12 @@ domain_set:
   - www.apple.com.edgekey.net.globalredir.akadns.net
   - www.support.apple.com
   - xp.apple.com
+  - amp-api.fitness.apple.com
+  - appleid.apple.com
+  - appleintelligencefeedback.care.apple.com
+  - gsa.apple.com
+  - identity.apple.com
+  - idmsa.apple.com
 domain_suffix_set:
   - 100beatscheap.com
   - 12diasdepresentesdeitunes.com
@@ -2056,28 +2063,33 @@ domain_suffix_set:
   - xn--ruq8a011kt6y.xn--hxt814e
   - xp.apple.com
   - yourmonsterbeats.com
+  - apple.com.edgekey.net
+  - cn-ssl.ls.apple.com
+  - cn.apple.com
+  - cn.ls.apple.com
 domain_keyword_set:
   - apple.com.akadns.net
   - icloud.com.akadns.net
   - icoudo
   - icoudos
   - testflight
+  - icloud
 domain_wildcard_set:
-  - "*-content.icloud.com.cn"
-  - "apple.*"
-  - "apple.com.*"
-  - "appleworldwidedeveloper.*.net"
-  - "imac.*"
-  - "init*.push-apple.com.akadns.net"
-  - "init*.push.apple.com"
-  - "ipad.*"
-  - "ipadair.*"
-  - "ipadmini.*"
-  - "iphone.*"
-  - "ipod.*"
-  - "macbook.*"
-  - "macbookair.*"
-  - "macbookpro.*"
+  - '*-content.icloud.com.cn'
+  - apple.*
+  - apple.com.*
+  - appleworldwidedeveloper.*.net
+  - imac.*
+  - init*.push-apple.com.akadns.net
+  - init*.push.apple.com
+  - ipad.*
+  - ipadair.*
+  - ipadmini.*
+  - iphone.*
+  - ipod.*
+  - macbook.*
+  - macbookair.*
+  - macbookpro.*
 ip_cidr_set:
   - 139.178.128.0/18
   - 144.178.0.0/19
@@ -2089,13 +2101,41 @@ ip_cidr_set:
   - 205.180.175.0/24
   - 63.92.224.0/19
   - 65.199.22.0/23
+  - 17.188.128.0/18
+  - 17.188.20.0/23
+  - 17.249.0.0/16
+  - 17.252.0.0/16
+  - 17.57.144.0/22
 ip_cidr6_set:
-  - "2403:300::/32"
-  - "2620:149::/32"
-  - "2a01:b740::/32"
+  - 2403:300::/32
+  - 2620:149::/32
+  - 2a01:b740::/32
+  - 2403:300:a42::/48
+  - 2403:300:a51::/48
+  - 2620:149:a44::/48
+  - 2a01:b740:a42::/48
+  - 2a01:b747::/32
 user_agent_set:
-  - "AppleNews*"
-  - "AppleTV*"
-  - "com.apple.news*"
-  - "com.apple.trustd*"
-  - "com.apple.tv*"
+  - AppleNews*
+  - AppleTV*
+  - com.apple.news*
+  - com.apple.trustd*
+  - com.apple.tv*
+  - '%E5%9C%B0%E5%9B%BE*'
+  - '%E6%9F%A5%E6%89%BE*'
+  - '%E8%AE%BE%E7%BD%AE*'
+  - '*WeatherFoundation*'
+  - '*com.apple.mobileme.fmip1*'
+  - AppStore*
+  - FMDClient*
+  - FMFD*
+  - FindMy*
+  - Maps*
+  - Music*
+  - TestFlight*
+  - com.apple.Maps*
+  - com.apple.appstored*
+  - com.apple.geod*
+  - fmflocatord*
+  - geod*
+  - locationd*
