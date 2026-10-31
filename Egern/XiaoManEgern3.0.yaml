@@ -362,8 +362,8 @@ policy_groups:
 #   或自定义策略组名（Telegram / ChatGPT 等）
 # ============================================================
 rules:
-
 # --------- 广告拦截（最优先）---------
+
 - rule_set:
     name: AWAvenue-Ads                        # 综合广告列表
     match: https://raw.githubusercontent.com/Repcz/Tool/refs/heads/X/Egern/Rules/Ads_AWAvenue.yaml
@@ -376,13 +376,21 @@ rules:
     policy: REJECT-DROP
     disabled: false
 
-# --------- Apple AI 专项 ---------
+# --------- Apple AI 专项（海外，需代理，须在 apple.com 直连之前）---------
+
 - rule_set:
     match: https://raw.githubusercontent.com/RocM301/Apple-Rule/refs/heads/main/Apple-AI.list
     policy: PROXY
     disabled: false
 
-# --------- 国内直连 ---------
+# --------- 国内/本地 直连 ---------
+
+- rule_set:
+    name: LAN                                 # 局域网设备 → 直连
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Lan/Lan.yaml
+    policy: DIRECT
+    disabled: false
+
 - geoip:
     name: CN                                  # 中国 IP 段 → 直连（no_resolve: false 会先解析 IP）
     match: CN
@@ -402,19 +410,20 @@ rules:
     policy: DIRECT
     disabled: false
 
-- rule_set:
-    name: LAN                                 # 局域网设备 → 直连
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Lan/Lan.yaml
-    policy: DIRECT
-    disabled: false
-
 - domain_suffix:
     name: 苹果服务                              # Apple 官方服务 → 直连（国内 CDN 快）
     match: apple.com
     policy: DIRECT
     disabled: false
 
+- rule_set:
+    name: Apple                               # Apple 生态（App Store / iCloud 等）
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Apple/Apple.yaml
+    policy: DIRECT
+    disabled: false
+
 # --------- 海外应用分流 ---------
+
 - rule_set:
     name: Google                              # Google
     match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Google/Google.yaml
@@ -487,13 +496,8 @@ rules:
     policy: PROXY
     disabled: false
 
-- rule_set:
-    name: Apple                               # Apple 生态（App Store / iCloud 等）
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Apple/Apple.yaml
-    policy: DIRECT
-    disabled: false
+# --------- 全球宽泛代理（兜底前）---------
 
-# --------- 全球宽泛代理（兜底前） ---------
 - rule_set:
     name: Global                              # 全球（宽泛）→ PROXY
     match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Global/Global.yaml
@@ -501,15 +505,10 @@ rules:
     disabled: false
 
 # --------- 兜底 ---------
+
 - default:
     name: FINAL                               # 未匹配任何规则的流量 → 走 PROXY
     policy: PROXY
-
-
-# ============================================================
-# URL 重写 —— 把请求重定向到别的地址
-# 常用：google.cn 跳转、修复部分 App 强制跳转大陆站的问题
-# ============================================================
 url_rewrites:
 - match: ^https?://(.*?L[.])?(?:glgoogle).cn   # 匹配 google.cn
   location: https://$1google.com               # 跳转到 google.com（$1 是捕获组）
