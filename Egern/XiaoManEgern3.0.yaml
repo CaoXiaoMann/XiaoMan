@@ -443,12 +443,6 @@ rules:
     policy: DIRECT
     disabled: false
 
-- domain_suffix:
-    name: 苹果服务                              # Apple 官方服务 → 直连（国内 CDN 快）
-    match: apple.com
-    policy: DIRECT
-    disabled: false
-
 - rule_set:
     name: Apple                               # Apple 生态（App Store / iCloud 等）
     match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Apple/Apple.yaml
