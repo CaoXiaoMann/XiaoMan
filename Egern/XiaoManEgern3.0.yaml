@@ -412,7 +412,7 @@ rules:
 # --------- Apple AI 专项（海外，需代理，须在 apple.com 直连之前）---------
 
 - rule_set:
-    match: https://raw.githubusercontent.com/RocM301/Apple-Rule/refs/heads/main/Apple-AI.list
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Apple-AI/Apple-AI.yaml
     policy: PROXY
     disabled: false
 
