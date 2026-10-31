@@ -14,22 +14,22 @@
 
 | 文件 | 规则名 | 说明 | 更新日期 |
 |------|--------|------|----------|
-| Facebook.yaml | Facebook | Facebook / Instagram | 2026-10-31 |
-| YouTube.yaml | YouTube | YouTube | 2026-10-31 |
-| Line.yaml | Line | LINE | 2026-10-31 |
-| Twitter.yaml | Twitter | Twitter / X | 2026-10-31 |
-| Spotify.yaml | Spotify | Spotify | 2026-10-31 |
-| Telegram.yaml | Telegram | Telegram | 2026-10-31 |
-| TikTok.yaml | TikTok | TikTok | 2026-10-31 |
-| GPT.yaml | OpenAI | ChatGPT / OpenAI | 2026-10-31 |
-| Google.yaml | Google | Google | 2026-10-31 |
-| China.yaml | China | 中国国内域名/IP | 2026-10-31 |
-| ChinaIPs.yaml | ChinaIPs | 中国 IP / ASN | 2026-10-31 |
-| Lan.yaml | Lan | 局域网地址 | 2026-10-31 |
-| Apple.yaml | Apple | Apple 生态 | 2026-10-31 |
-| GlobalAI.yaml | GlobalAI | 全球 AI 服务 | 2026-10-31 |
-| GitHub.yaml | GitHub | GitHub | 2026-10-31 |
-| Global.yaml | Global | 全球（宽泛） | 2026-10-31 |
+| Facebook/Facebook.yaml | Facebook | Facebook / Instagram | 2026-10-31 |
+| YouTube/YouTube.yaml | YouTube | YouTube | 2026-10-31 |
+| Line/Line.yaml | Line | LINE | 2026-10-31 |
+| Twitter/Twitter.yaml | Twitter | Twitter / X | 2026-10-31 |
+| Spotify/Spotify.yaml | Spotify | Spotify | 2026-10-31 |
+| Telegram/Telegram.yaml | Telegram | Telegram | 2026-10-31 |
+| TikTok/TikTok.yaml | TikTok | TikTok | 2026-10-31 |
+| GPT/GPT.yaml | OpenAI | ChatGPT / OpenAI | 2026-10-31 |
+| Google/Google.yaml | Google | Google | 2026-10-31 |
+| China/China.yaml | China | 中国国内域名/IP | 2026-10-31 |
+| ChinaIPs/ChinaIPs.yaml | ChinaIPs | 中国 IP / ASN | 2026-10-31 |
+| Lan/Lan.yaml | Lan | 局域网地址 | 2026-10-31 |
+| Apple/Apple.yaml | Apple | Apple 生态 | 2026-10-31 |
+| GlobalAI/GlobalAI.yaml | GlobalAI | 全球 AI 服务 | 2026-10-31 |
+| GitHub/GitHub.yaml | GitHub | GitHub | 2026-10-31 |
+| Global/Global.yaml | Global | 全球（宽泛） | 2026-10-31 |
 
 ## 在 Egern 配置中引用（rule_set）
 
@@ -40,86 +40,86 @@
 # --------- 国内直连 ---------
 - rule_set:
     name: ChinaIPs                       # 中国 IP/ASN → 直连
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/ChinaIPs.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/ChinaIPs/ChinaIPs.yaml
     policy: DIRECT
     disabled: false
 - rule_set:
     name: China                          # 中国域名 → 直连
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/China.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/China/China.yaml
     policy: DIRECT
     disabled: false
 - rule_set:
     name: Lan                            # 局域网 → 直连
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Lan.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Lan/Lan.yaml
     policy: DIRECT
     disabled: false
 - rule_set:
     name: Apple                          # Apple 生态 → 直连
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Apple.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Apple/Apple.yaml
     policy: DIRECT
     disabled: false
 
 # --------- 海外应用分流 ---------
 - rule_set:
     name: TG                             # Telegram
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Telegram.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Telegram/Telegram.yaml
     policy: Telegram
     disabled: false
 - rule_set:
     name: TikTok                         # TikTok
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/TikTok.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/TikTok/TikTok.yaml
     policy: Telegram
     disabled: false
 - rule_set:
     name: GPT                            # ChatGPT / OpenAI
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/GPT.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/GPT/GPT.yaml
     policy: ChatGPT
     disabled: false
 - rule_set:
     name: Twitter                        # Twitter / X
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Twitter.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Twitter/Twitter.yaml
     policy: PROXY
     disabled: false
 - rule_set:
     name: YouTube                        # YouTube
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/YouTube.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/YouTube/YouTube.yaml
     policy: PROXY
     disabled: false
 - rule_set:
     name: Spotify                        # Spotify
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Spotify.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Spotify/Spotify.yaml
     policy: PROXY
     disabled: false
 - rule_set:
     name: LINE                           # LINE
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Line.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Line/Line.yaml
     policy: PROXY
     disabled: false
 - rule_set:
     name: Facebook                       # Facebook / Instagram
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Facebook.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Facebook/Facebook.yaml
     policy: PROXY
     disabled: false
 - rule_set:
     name: Google                         # Google
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Google.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Google/Google.yaml
     policy: PROXY
     disabled: false
 - rule_set:
     name: GlobalAI                       # 全球 AI 服务
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/GlobalAI.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/GlobalAI/GlobalAI.yaml
     policy: PROXY
     disabled: false
 - rule_set:
     name: GitHub                         # GitHub
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/GitHub.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/GitHub/GitHub.yaml
     policy: PROXY
     disabled: false
 - rule_set:
     name: Global                         # 全球（兜底前的宽泛代理）
-    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Global.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Global/Global.yaml
     policy: PROXY
     disabled: false
 ```
 
-> 提示：`match` 也可改用本地相对路径（`../Rule/Facebook.yaml`），前提是 Egern 配置与 Rule 目录在设备上同时存在且用本地文件方式加载。
+> 提示：`match` 也可改用本地相对路径（`../Rule/Facebook/Facebook.yaml`），前提是 Egern 配置与 Rule 目录在设备上同时存在且用本地文件方式加载。
