@@ -391,14 +391,20 @@ rules:
     disabled: false
 
 - rule_set:
+    name: ChinaIPs                            # 中国 IP/ASN → 直连（IP 类，不强制解析）
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/ChinaIPs/ChinaIPs.yaml
+    policy: DIRECT
+    disabled: false
+
+- rule_set:
     name: China                               # 国内域名总表 → 直连
-    match: https://rule.kelee.one/Loon/China.lsr
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/China/China.yaml
     policy: DIRECT
     disabled: false
 
 - rule_set:
     name: LAN                                 # 局域网设备 → 直连
-    match: https://kelee.one/Tool/Loon/Lsr/LAN_SPLITTER.lsr
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Lan/Lan.yaml
     policy: DIRECT
     disabled: false
 
@@ -410,50 +416,62 @@ rules:
 
 # --------- 海外应用分流 ---------
 - rule_set:
+    name: Google                              # Google
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Google/Google.yaml
+    policy: PROXY
+    disabled: false
+
+- rule_set:
+    name: GlobalAI                            # 全球 AI 服务
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/GlobalAI/GlobalAI.yaml
+    policy: PROXY
+    disabled: false
+
+- rule_set:
     name: TG                                  # Telegram
-    match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Telegram/Telegram.yaml
     policy: Telegram
     disabled: false
 
 - rule_set:
     name: TikTok                              # TikTok → 走 TG 组（东南亚节点稳）
-    match: https://github.com/Repcz/Tool/raw/X/Egern/Rules/TikTok.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/TikTok/TikTok.yaml
     policy: Telegram
     disabled: false
 
 - rule_set:
     name: GPT                                 # ChatGPT / OpenAI
-    match: https://raw.githubusercontent.com/Repcz/Tool/refs/heads/X/Egern/Rules/OpenAI.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/GPT/GPT.yaml
     policy: ChatGPT
     disabled: false
 
 - rule_set:
     name: Twitter                             # Twitter / X
-    match: https://github.com/Repcz/Tool/blob/X/Egern/Rules/Twitter.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Twitter/Twitter.yaml
     policy: PROXY
     disabled: false
 
 - rule_set:
     name: YouTube                             # YouTube
-    match: https://raw.githubusercontent.com/Repcz/Tool/refs/heads/X/Egern/Rules/YouTube.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/YouTube/YouTube.yaml
     policy: PROXY
     disabled: false
 
 - rule_set:
     name: Spotify                             # Spotify（需要证书 + 模块）
-    match: https://raw.githubusercontent.com/Repcz/Tool/refs/heads/X/Egern/Rules/Spotify.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Spotify/Spotify.yaml
     policy: PROXY
     disabled: false
 
 - rule_set:
     name: LINE                                # LINE
-    match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Line/Line.list
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Line/Line.yaml
     policy: PROXY
     disabled: false
 
 - rule_set:
     name: Facebook                            # Facebook / Instagram
-    match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Facebook/Facebook.list
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Facebook/Facebook.yaml
     policy: PROXY
     disabled: false
 
@@ -465,14 +483,21 @@ rules:
 
 - rule_set:
     name: GitHub                              # GitHub
-    match: https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Loon/GitHub/GitHub.list
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/GitHub/GitHub.yaml
     policy: PROXY
     disabled: false
 
 - rule_set:
     name: Apple                               # Apple 生态（App Store / iCloud 等）
-    match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Apple/Apple.list
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Apple/Apple.yaml
     policy: DIRECT
+    disabled: false
+
+# --------- 全球宽泛代理（兜底前） ---------
+- rule_set:
+    name: Global                              # 全球（宽泛）→ PROXY
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Rule/Global/Global.yaml
+    policy: PROXY
     disabled: false
 
 # --------- 兜底 ---------
