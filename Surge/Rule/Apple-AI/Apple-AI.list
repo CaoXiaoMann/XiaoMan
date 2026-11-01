@@ -1,0 +1,13 @@
+# NAME: AppleIntelligence
+# AUTHOR: MagicRule
+# REPO: https://magicrule.pages.dev/
+# UPDATED: 2026-08-27 10:19:06
+# DOMAIN: 5
+# DOMAIN-SUFFIX: 1
+
+DOMAIN,apple-relay.apple.com
+DOMAIN,apple-relay.cloudflare.com
+DOMAIN,apple-relay.fastly-edge.com
+DOMAIN,apple-relay.mask.apple-dns.net
+DOMAIN,gspe1-ssl.ls.apple.com
+DOMAIN-SUFFIX,siri.apple.com
