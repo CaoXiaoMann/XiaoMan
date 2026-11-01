@@ -1,19 +1,17 @@
 #!name=拼多多去广告
-#!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Pinduoduo/Pinduoduo.sgmodule
 #!desc=移除开屏广告、底栏多多视频、会场入口、聊天页面精选推荐及推广，精简首页和个人中心。
+#!author=ZenmoFeiShi[https://github.com/ZenmoFeiShi], 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
 #!icon=https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/PinDuoDuo.png
-#!category=XiaoMan
+#!category=iKeLee
 #!openUrl=https://apps.apple.com/app/id1044283059
 #!tag=去广告
-#!date=2026-11-01
+#!loon_version=3.2.4(787)
+#!homepage=https://hub.kelee.one
+#!date=2026-02-28 20:52:18
 
 [Rule]
 AND,((URL-REGEX,"^http:\/\/((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/d(\d)?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT
 AND,((URL-REGEX,"^http:\/\/\[[0-9a-fA-F:]+\]\/d(\d)?\?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT
-# > IP 直连广告配置接口（pmm/defined，App 用 IP 而非域名，域名 pattern 拦不到）
-AND,((URL-REGEX,"^https?:\/\/[0-9.]+\/api\/pmm\/defined",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT
-# > IP 直连素材图（v2/d、d4 等，App 用 IP 直连请求素材）
-AND,((URL-REGEX,"^http:\/\/[0-9.]+\/(v2\/)?d[0-9]?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT
 AND,((DOMAIN,api.pinduoduo.com,extended-matching),(PROTOCOL,QUIC)),REJECT
 DOMAIN,titan.pinduoduo.com,REJECT-NO-DROP,extended-matching,pre-matching
 DOMAIN,xg.pinduoduo.com,REJECT,extended-matching,pre-matching
