@@ -1,0 +1,14 @@
+#!name=美团App 12.67.403
+#!desc=美团 App 页面优化（去广告/精简 tab 等），脚本自托管至 XiaoMan 仓库
+#!author=ZenmoFeiShi/Qx (adapted by Minis for XiaoManSurge)
+#!category=ZenmoFeiShi
+
+[Script]
+MT-1 = type=http-response,pattern=^https?://apimobile\.meituan\.com/aggroup/indexTab,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Script/Meituan/MT.js,requires-body=true
+MT-2 = type=http-response,pattern=^https?://feedguess\.meituan\.com/lycoris/scene/(gwc_feed1_2265|personalcenter_2154)(\?|$),script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Script/Meituan/MT.js,requires-body=true
+MT-3 = type=http-response,pattern=^https?://mt-personalcenter\.meituan\.com/usercenter/display,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Script/Meituan/MT.js,requires-body=true
+MT-4 = type=http-response,pattern=^https?://apimobile\.meituan\.com/group/v1/deal/searchpage/defaultword,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Script/Meituan/MT.js,requires-body=true
+MT-5 = type=http-response,pattern=^https?://apimobile\.meituan\.com/group/v1/deal/searchpage/hotword/city/divide/hotrecommend/,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Script/Meituan/MT.js,requires-body=true
+MT-6 = type=http-response,pattern=^https?://assistify\.meituan\.com/assistant/getAppClientHornConfig,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Script/Meituan/MT.js,requires-body=true
+MT-7 = type=http-response,pattern=^https?://mop\.meituan\.com/mop/entry/shoppingCartEntry,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Script/Meituan/MT.js,requires-body=true
+MT-8 = type=http-response,pattern=^https?://mop\.meituan\.com/api/entryModule/startupPicture,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Script/Meituan/MT.js,requires-body=true
