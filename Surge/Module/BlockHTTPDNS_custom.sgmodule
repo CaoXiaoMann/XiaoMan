@@ -2,6 +2,8 @@
 #!desc=阻止常见的 HTTPDNS 服务器
 #!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Server.png
 #!category=XiaoMan
+#!date=2026-11-01 23:20:00
+#!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Module/BlockHTTPDNS_custom.sgmodule
 
 [General]
 force-http-engine-hosts = %APPEND% 119.29.29.29:80
