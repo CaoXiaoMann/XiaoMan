@@ -79,6 +79,7 @@ DOMAIN,gd-stats.jpush.cn,REJECT
 
 [URL Rewrite]
 # 车来了广告配置、广告任务、开屏资源
+# 域名形式
 ^https?:\/\/(api|cdn\.api)\.chelaile\.net\.cn\/goocity\/flowPos\/home\?.* _ reject
 ^https?:\/\/(api|cdn\.api)\.chelaile\.net\.cn\/goocity\/flowPos\/listByPos\?.* _ reject
 ^https?:\/\/(api|cdn\.api)\.chelaileapp\.cn\/goocity\/flowPos\/home\?.* _ reject
@@ -89,6 +90,10 @@ DOMAIN,gd-stats.jpush.cn,REJECT
 ^https?:\/\/(api|cdn\.api)\.chelaile\.net\.cn\/encourage\/activity\/control\?.* _ reject
 ^https?:\/\/(api|cdn\.api)\.chelaile\.net\.cn\/adpub\/.* _ reject
 ^https?:\/\/(api|cdn\.api)\.chelaileapp\.cn\/adpub\/.* _ reject
+# IP 直连形式（App 用 IP 直连请求，不走域名，上述域名 pattern 拦不到）
+^https?:\/\/[0-9]{1,3}(\.[0-9]{1,3}){3}\/goocity\/flowPos\/(home|listByPos)\?.* _ reject
+^https?:\/\/[0-9]{1,3}(\.[0-9]{1,3}){3}\/adpub\/(sdk\/adConfig|.*)\?.* _ reject
+^https?:\/\/[0-9]{1,3}(\.[0-9]{1,3}){3}\/encourage\/activity\/control\?.* _ reject
 # 车来了埋点：UDID 过滤 / 数据分析（chelaile.net.cn 与 chelaileapp.cn 两个域名）
 ^https?:\/\/(api|cdn\.api)\.chelaile(?:app)?(?:\.net)?\.cn\/DataAnalysisInfo\/.* _ reject
 # 广告图片
