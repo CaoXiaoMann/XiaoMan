@@ -550,7 +550,7 @@ url_rewrites:
 scriptings:
 - generic:
     name: 网络诊断雷达pro                      # 显示当前网络状态、延迟、节点信息
-    script_url: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/Network-Pro/Network-Pro.js
+    script_url: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Egern/Scripts/Network-Pro/Network-Pro.js
 
 - generic:
     name: 今日金价                             # 展示今日黄金价格
@@ -558,7 +558,7 @@ scriptings:
 
 - generic:
     name: 今日油价                             # 展示各地油价
-    script_url: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/JinRiYouJia/JinRiYouJia.js
+    script_url: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Egern/Scripts/JinRiYouJia/JinRiYouJia.js
 
 
 # ============================================================
@@ -622,7 +622,7 @@ modules:
 
 # 车来了公交实时查询
 - name: 车来了
-  url: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Scripts/CheLaiLe/CheLaiLe.sgmodule
+  url: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Egern/Scripts/CheLaiLe/CheLaiLe.sgmodule
   enabled: true
 
 # 淘宝
