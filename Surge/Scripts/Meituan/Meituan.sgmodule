@@ -1,7 +1,7 @@
 #!name=美团App 12.67.403
 #!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Meituan/Meituan.sgmodule
 #!desc=美团 App 去广告/精简（46 拦截规则 + 8 脚本），脚本自托管至 XiaoMan 仓库
-#!category=ZenmoFeiShi
+#!category=XiaoMan
 # 上游来源：muktsoen/SurgeRules MT.sgmodule（每日自动同步）
 # 更新日期：2026-11-01
 
