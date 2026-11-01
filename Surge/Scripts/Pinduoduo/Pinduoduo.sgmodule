@@ -12,8 +12,10 @@
 [Rule]
 # > 拼多多广告配置接口拦截（IP 直连 + 域名，pre-matching 确保在 China.list 之前）
 AND,((URL-REGEX,"^https?:\/\/((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|[a-z0-9.-]*pinduoduo\.com)\/api\/(pmm\/defined|pmm\/ad|ad|advertise|ads)[\/?#]?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT,pre-matching
-AND,((URL-REGEX,"^http:\/\/((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/d(\d)?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT
-AND,((URL-REGEX,"^http:\/\/\[[0-9a-fA-F:]+\]\/d(\d)?\?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT
+# > 多多视频弹窗/开屏广告接口拦截（app_popup，IP 直连 + 域名）
+AND,((URL-REGEX,"^https?:\/\/((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|[a-z0-9.-]*pinduoduo\.com)\/api\/aquarius\/hungary\/global\/(app_popup|homepage)[\/?#]?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT,pre-matching
+AND,((URL-REGEX,"^http:\/\/((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/(v2\/)?d(\d)?\?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT
+AND,((URL-REGEX,"^http:\/\/\[[0-9a-fA-F:]+\]\/(v2\/)?d(\d)?\?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT
 AND,((DOMAIN,api.pinduoduo.com,extended-matching),(PROTOCOL,QUIC)),REJECT
 DOMAIN,titan.pinduoduo.com,REJECT-NO-DROP,extended-matching,pre-matching
 DOMAIN,xg.pinduoduo.com,REJECT,extended-matching,pre-matching
