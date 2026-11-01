@@ -10,12 +10,13 @@
 #!date=2026-02-28 20:52:18
 
 [Rule]
-# > 拼多多广告配置接口拦截（IP 直连 + 域名，pre-matching 确保在 China.list 之前）
-AND,((URL-REGEX,"^https?:\/\/((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|[a-z0-9.-]*pinduoduo\.com)\/api\/(pmm\/defined|pmm\/ad|ad|advertise|ads)[\/?#]?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT,pre-matching
-# > 多多视频弹窗/开屏广告接口拦截（app_popup，IP 直连 + 域名）
-AND,((URL-REGEX,"^https?:\/\/((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|[a-z0-9.-]*pinduoduo\.com)\/api\/aquarius\/hungary\/global\/(app_popup|homepage)[\/?#]?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT,pre-matching
-AND,((URL-REGEX,"^http:\/\/((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/(v2\/)?d(\d)?\?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT
-AND,((URL-REGEX,"^http:\/\/\[[0-9a-fA-F:]+\]\/(v2\/)?d(\d)?\?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT
+# > 拼多多广告配置接口拦截（pmm/广告/开屏launch，IP直连+域名，无UA——IP直连请求UA不匹配导致AND失效）
+URL-REGEX,"^https?:\/\/(((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|[a-z0-9.-]*pinduoduo\.com)\/api\/(pmm\/(defined|page|api|ad)|ad|advertise|ads|dunkirk\/la\/create)[\/?#]?",REJECT,pre-matching,extended-matching
+# > 拼多多弹窗/开屏/多多视频红点接口（app_popup/splash/live_red_dot，IP直连+域名，无UA）
+URL-REGEX,"^https?:\/\/(((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|[a-z0-9.-]*pinduoduo\.com)\/api\/(aquarius\/hungary\/global\/(app_popup|homepage)|cappuccino\/splash|light\/live_tab\/query\/live_red_dot)[\/?#]?",REJECT,pre-matching,extended-matching
+# > 拼多多 HTTPDNS 拦截（限定拼多多HTTPDNS IP段 101.35.212.x/114.110.96-97.x，v2/v3/v4任意版本，无UA——App拿不到IP回退域名）
+URL-REGEX,"^http:\/\/((101\.35\.212\.|114\.110\.(96|97)\.)[0-9.]+|[a-z0-9.-]*pinduoduo\.com)\/(v\d\/)?d(\d)?\?",REJECT,pre-matching,extended-matching
+URL-REGEX,"^http:\/\/\[[0-9a-fA-F:]+\]\/(v\d\/)?d(\d)?\?",REJECT,pre-matching,extended-matching
 AND,((DOMAIN,api.pinduoduo.com,extended-matching),(PROTOCOL,QUIC)),REJECT
 DOMAIN,titan.pinduoduo.com,REJECT-NO-DROP,extended-matching,pre-matching
 DOMAIN,xg.pinduoduo.com,REJECT,extended-matching,pre-matching
