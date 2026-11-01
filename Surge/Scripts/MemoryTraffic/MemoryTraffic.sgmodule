@@ -1,4 +1,5 @@
 #!name=内存和流量实时监控
+#!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/MemoryTraffic/MemoryTraffic.sgmodule
 #!desc=本机流量 + Tailscale 入站设备累计流量监控面板。多台设备按设备名独立统计（dev1~dev5），API 地址/密码可配置
 #!author=mickeu (adapted by Minis for XiaoManSurge)
 #!category=mickeu

@@ -1,4 +1,5 @@
 #!name =  iRingo: 🌤 WeatherKit
+#!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/WeatherKit/WeatherKit.sgmodule
 #!desc = iOS 18 & macOS 15 & watchOS 11\n1.解锁全部天气功能\n2.替换空气质量数据\n3.添加下一小时降水数据\n4.添加天气数据
 #!openUrl = http://boxjs.com/#/app/iRingo.WeatherKit
 #!author = (adapted from iRingo WeatherKit v3.0.9, self-hosted)

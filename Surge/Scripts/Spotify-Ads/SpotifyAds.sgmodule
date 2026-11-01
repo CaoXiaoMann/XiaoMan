@@ -1,4 +1,5 @@
 #!name=Spotify去广告
+#!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Spotify-Ads/SpotifyAds.sgmodule
 #!desc=移除播放广告，恢复歌手和专辑列表的正常展示。修改插件自定义配置项需要重新登陆方可生效。
 #!icon=https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Spotify.png
 #!category=XiaoMan
