@@ -1,0 +1,5 @@
+# 微信域名白名单（防广告拦截误伤，置于广告拦截前）
+DOMAIN-SUFFIX,wxs.qq.com
+DOMAIN,dns.weixin.qq.com
+DOMAIN,aedns.weixin.qq.com
+DOMAIN,dns.weixin.qq.com.cn
