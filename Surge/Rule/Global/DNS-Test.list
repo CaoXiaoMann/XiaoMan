@@ -1,0 +1,5 @@
+# DNS 泄漏检测/浏览器指纹检测域名（走代理）
+DOMAIN-KEYWORD,browserleaks
+DOMAIN-SUFFIX,dnsleaktest.com
+DOMAIN-SUFFIX,dnsleaktest.org
+DOMAIN-SUFFIX,browserscan.net
