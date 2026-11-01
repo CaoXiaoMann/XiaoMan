@@ -399,13 +399,13 @@ rules:
 
 - rule_set:
     name: AWAvenue-Ads                        # 综合广告列表
-    match: https://raw.githubusercontent.com/Repcz/Tool/refs/heads/X/Egern/Rules/Ads_AWAvenue.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Egern/Rule/AWAvenue-Ads/AWAvenue-Ads.yaml
     policy: REJECT-DROP
     disabled: false
 
 - rule_set:
     name: BlockHttpDNS                        # 拦截 App 的 HTTPDNS 请求（防绕过代理）
-    match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/BlockHttpDNS/BlockHttpDNS.list
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Egern/Rule/BlockHttpDNS/BlockHttpDNS.yaml
     policy: REJECT-DROP
     disabled: false
 
@@ -513,7 +513,7 @@ rules:
 
 - rule_set:
     name: WeChat                              # 微信走代理（默认禁用，按需打开）
-    match: https://raw.githubusercontent.com/Repcz/Tool/refs/heads/X/Egern/Rules/WeChat.yaml
+    match: https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Egern/Rule/WeChat/WeChat.yaml
     policy: DIRECT
     disabled: true
 
