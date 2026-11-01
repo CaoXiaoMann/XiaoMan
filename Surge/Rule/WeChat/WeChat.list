@@ -116,3 +116,7 @@ DOMAIN,wx.qcloud.com
 DOMAIN,wxpay.qq.com
 DOMAIN-SUFFIX,wxqcloud.qq.com
 DOMAIN,dns.weixin.qq.com
+
+# 裸域精确直连（防 SUFFIX 裸域匹配波动）
+DOMAIN,qlogo.cn
+DOMAIN,qpic.cn
