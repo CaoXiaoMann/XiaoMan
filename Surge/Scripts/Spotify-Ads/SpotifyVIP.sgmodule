@@ -1,18 +1,30 @@
 #!name=Spotify(iOS15)
 #!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Spotify-Ads/SpotifyVIP.sgmodule
-#!desc=部分解锁premium,建议重新登录,音质不能设置为超高
+#!desc=会员解锁premium + 去广告（QUIC拦截+pendragon空响应+artistview重写），建议重新登录，音质不能设为超高
 #!category=XiaoMan
 #!tag=Spotify
-#!date=2026-11-01
+#!date=2026-11-02
 
-# 1. 搜索界面 歌单/歌曲可以随意切换完全播放  2. 音乐库已点赞歌曲随意切换完全播放
+# =====================================================
+# 整合版：SpotifyVIP（会员解锁）+ SpotifyAds（去广告）合一
+# - 会员：spotify-json 伪装iPad + spotify-proto 改写accountAttributes=premium
+# - 去广告：QUIC拦截（强制走TCP才能被MITM处理）+ pendragon空响应
+# - artistview platform重写统一由 spotify-json 处理（已含com:443修正，比原URL Rewrite全）
+# - 已删除：SpotifyAds 的无效Protobuf处理（Spotify_remove_ads.js 类型错配空转）+ 冗余URL Rewrite
+# =====================================================
 
 [Header Rewrite]
 http-request ^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/user-customization-service\/v1\/customize$ header-del if-none-match
 
-[MITM]
-hostname = %APPEND% spclient.wg.spotify.com, *spclient.spotify.com
+[Rule]
+AND,((DOMAIN-SUFFIX,spotify.com,extended-matching),(PROTOCOL,QUIC)),REJECT
+
+[Map Local]
+^https:\/\/(?:\w+-spclient|spclient\.wg)\.spotify\.com(?::443)?\/pendragon\/ data-type=text data="{}" status-code=200 header="Content-Type:application/json"
 
 [Script]
 spotify-json = type=http-request,pattern=^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/(artistview\/v1\/artist|album-entity-view\/v2\/album)\/,requires-body=0,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Spotify-Ads/spotify-json.js
 spotify-proto = type=http-response,pattern=^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/(bootstrap\/v1\/bootstrap|user-customization-service\/v1\/customize)$,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Spotify-Ads/spotify-proto.js,script-update-interval=0
+
+[MITM]
+hostname = %APPEND% spclient.wg.spotify.com, *spclient.spotify.com
