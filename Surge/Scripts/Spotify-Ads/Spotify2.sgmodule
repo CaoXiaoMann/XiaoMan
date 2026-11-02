@@ -1,6 +1,7 @@
 #!name=Spotify 去广告
 #!desc=转自 devchristian1337/loon-plugins(2026-10-08)：去广告 + 解锁高级功能 + 屏蔽 Spotify QUIC(修复随机切歌)。启用后请重登 Spotify。
 #!author=小龙女她爸
+#!category=XiaoMan
 
 [Rule]
 # 对应 lpx 的 AND,((DOMAIN-SUFFIX,spotify.com),(PROTOCOL,QUIC)),REJECT
