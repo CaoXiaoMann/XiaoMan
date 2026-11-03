@@ -9,6 +9,8 @@
 #!date=2026-02-28 20:52:18
 
 [Rule]
+# > IP 直连广告接口兜底（下拉刷新走缓存IP直连，SNI=域名，extended-matching 用SNI匹配；Body Rewrite/Map Local 只匹配请求行URL匹配不到IP）
+URL-REGEX,"^https?:\/\/(((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|[a-z0-9.-]*pinduoduo\.com|[a-z0-9.-]*yangkeduo\.com)(\/api)?\/(cappuccino/splash|alexa/cells/hub|alexa/goods/back_up|aquarius/hungary/global/homepage|brand\-olay/goods_detail/bybt_guide|buffon/nasus/recommend|caterham/v3/query/order_express_group|caterham/v3/query/new_chat_group|caterham/v3/query/personal|caterham/v3/query/my_order_group|caterham/v3/query/likes|dunkirk/subaru/goods_list_v2|dunkirk/liveactivity/push/create/url/report|engels/reviews/require/append|engels/wait/receive/review|express/post/landing_page/ad/recommend_goods_list/pickup_identity_code|flow/hungary/window/global/v2|growth/nagato/app/index/gather|manufacturer/cross/shortcut/list|phantom/gbdbpdv/extra|xrec/goods_rec/pay_after_use_v2|zaire_biz/chat/resource/get_list_data|light/live_tab/query/live_red_dot|search_hotquery)([\/?#]|$)",REJECT,pre-matching,extended-matching
 AND,((URL-REGEX,"^http:\/\/((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/d(\d)?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT
 AND,((URL-REGEX,"^http:\/\/\[[0-9a-fA-F:]+\]\/d(\d)?\?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT
 AND,((DOMAIN,api.pinduoduo.com,extended-matching),(PROTOCOL,QUIC)),REJECT
