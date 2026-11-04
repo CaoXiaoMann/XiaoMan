@@ -1,6 +1,7 @@
 #!name=拼多多
 #!desc=过滤拼多多广告
 #!category=XiaoMan
+#!date=2026-11-04 12:26:45
 # 许可：上游内容 CC BY-NC-SA 4.0 · 来源 LoonLab
 # 来源：https://loon.103516.xyz/Plugin/PinDuoDuo.lpx
 # 提示：Body Rewrite 需要 Surge iOS 5.10+ / macOS 5.6+；jq 正文改写需要 iOS 5.14+ / macOS 5.9+。
