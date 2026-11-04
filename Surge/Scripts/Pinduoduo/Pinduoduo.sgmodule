@@ -76,6 +76,7 @@ http-response-jq (?i)^https://api\.pinduoduo\.com/order/ 'delpaths([["marketing_
 http-response-jq (?i)^https://api\.pinduoduo\.com/api/aristotle/order_list_v4\? '.orders |= map(.order_buttons |= map(del(.order_growth_tip)))'
 
 [Script]
+plugin_home = type=http-response, pattern=(?i)^https?://[^/]+/api/alexa/homepage/hub, script-path=https://cdn.jsdelivr.net/gh/CaoXiaoMann/XiaoMan@main/Surge/Scripts/Pinduoduo/pinduoduo.js, requires-body=true, timeout=10
 plugin_1 = type=http-response, pattern=(?i)^https://m\.pinduoduo\.net/comment_result\.html\?, script-path=https://cdn.jsdelivr.net/gh/CaoXiaoMann/XiaoMan@main/Surge/Scripts/Pinduoduo/pinduoduo.js, requires-body=true, timeout=10
 plugin_2 = type=http-response, pattern=(?i)^https://m\.pinduoduo\.net/mdkd/package\?, script-path=https://cdn.jsdelivr.net/gh/CaoXiaoMann/XiaoMan@main/Surge/Scripts/Pinduoduo/pinduoduo.js, requires-body=true, timeout=10
 
