@@ -21,7 +21,7 @@
 # request if ${url} ~= /^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/likes\?/i then reject_dict(200)
 # request if ${url} ~= /^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/push_express\?/i then reject_dict(200)
 # response if ${url} ~= /^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/order_detail_group\?/i then response.json.delete("goods_list")
-# response if ${url} ~= /^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\?/i then script("https://rucu6.pages.dev/Scripts/pinduoduo.js") with tag="[拼多多]精简首页", timeout=10, requires_body=true
+# response if ${url} ~= /^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\?/i then script("https://cdn.jsdelivr.net/gh/CaoXiaoMann/XiaoMan@main/Surge/Scripts/Pinduoduo/pinduoduo.js") with tag="[拼多多]精简首页", timeout=10, requires_body=true
 # 原始脚本标签：[拼多多]精简评价页
 # 原始脚本标签：[拼多多]精简取件页
 
@@ -76,9 +76,8 @@ http-response-jq (?i)^https://api\.pinduoduo\.com/order/ 'delpaths([["marketing_
 http-response-jq (?i)^https://api\.pinduoduo\.com/api/aristotle/order_list_v4\? '.orders |= map(.order_buttons |= map(del(.order_growth_tip)))'
 
 [Script]
-plugin_home = type=http-response, pattern=(?i)^https?://[^/]+/api/alexa/homepage/hub, script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Pinduoduo/pinduoduo.js, requires-body=true, timeout=10
-plugin_1 = type=http-response, pattern=(?i)^https://m\.pinduoduo\.net/comment_result\.html\?, script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Pinduoduo/pinduoduo.js, requires-body=true, timeout=10
-plugin_2 = type=http-response, pattern=(?i)^https://m\.pinduoduo\.net/mdkd/package\?, script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Pinduoduo/pinduoduo.js, requires-body=true, timeout=10
+plugin_1 = type=http-response, pattern=(?i)^https://m\.pinduoduo\.net/comment_result\.html\?, script-path=https://cdn.jsdelivr.net/gh/CaoXiaoMann/XiaoMan@main/Surge/Scripts/Pinduoduo/pinduoduo.js, requires-body=true, timeout=10
+plugin_2 = type=http-response, pattern=(?i)^https://m\.pinduoduo\.net/mdkd/package\?, script-path=https://cdn.jsdelivr.net/gh/CaoXiaoMann/XiaoMan@main/Surge/Scripts/Pinduoduo/pinduoduo.js, requires-body=true, timeout=10
 
 [MITM]
 hostname = %APPEND% api.pinduoduo.com, api.yangkeduo.com, m.pinduoduo.net
