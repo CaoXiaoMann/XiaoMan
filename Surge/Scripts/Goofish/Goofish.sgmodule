@@ -1,0 +1,57 @@
+#!name=闲鱼
+#!desc=过滤闲鱼广告
+#!author=RuCu6, ZenmoFeiShi, ishowshu, 可莉🅥
+#!homepage=https://loonlab.103516.xyz/Plugin/
+#!icon=https://raw.githubusercontent.com/sooyaaabo/IconLibrary/main/App/Goofish.png
+#!category=XiaoMan
+# 由 Loon 插件按 Surge 官方模块语法重写；脚本仍调用原作者脚本文件，JSON 类操作由本站通用脚本复刻
+
+[Rule]
+DOMAIN-SUFFIX,iyes.youku.com,REJECT
+AND,((URL-REGEX,"^http:\/\/.+\/amdc\/mobileDispatch"),(USER-AGENT,"%E9%97%B2%E9%B1%BC*")),REJECT
+
+[URL Rewrite]
+(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlecommerce\.splash\.ads/ reject-dict
+(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idle\.item\.recommend\.list/ reject-dict
+(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idle\.local\.near\.by\.corner\.info/ reject-dict
+(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idle\.local\.home\.top/ reject-dict
+(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idle\.item\.buy\.feeds/ reject-dict
+(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlemtopsearch\.search\.discover/1\.0 reject-dict
+(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlemtopsearch\.item\.search\.activate/ reject-dict
+(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idle\.playboy\.recommend/1\.0 reject
+(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idle\.item\.resell\.recommendorhotcate/1\.0 reject-dict
+(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlehome\.idle\.coin\.nextfresh/1\.0 reject-dict
+(?i)^https://acs\.m\.goofish\.com/gw/mtop\.idle\.trade\.item\.recommend\.render/ reject-dict
+(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlemtopsearch\.detailpage\.search\.shade/ reject-dict
+(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlemessage\.user\.query\.top\.resource reject-dict
+(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idle\.item\.recommend\.tab reject-dict
+
+[Script]
+闲鱼-处理1 = type=http-response, pattern=(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idle\.user\.strategy\.list/, script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Goofish/qgg-ops.js, requires-body=true, argument=eyJvcHMiOiBbeyJ0IjogImpxZGVsIiwgInRhcmdldCI6IG51bGwsICJwYXRocyI6IFsiZGF0YSJdfV19
+闲鱼-处理2 = type=http-response, pattern=(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlemtopsearch\.search\.shade/, script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Goofish/qgg-ops.js, requires-body=true, argument=eyJvcHMiOiBbeyJ0IjogImpxZGVsIiwgInRhcmdldCI6IG51bGwsICJwYXRocyI6IFsiZGF0YSJdfV19
+闲鱼-处理3 = type=http-response, pattern=(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlehome\.magic\.home\.page\.list/, script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Goofish/qgg-ops.js, requires-body=true, argument=eyJvcHMiOiBbeyJ0IjogImRlbCIsICJwYXRocyI6IFsiZGF0YS50b3BMaXN0Il19XX0=
+[闲鱼]商品信息流广告 = type=http-response, pattern=(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlehome\.home\.nextfresh/, script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Goofish/goofish.js, requires-body=true
+[闲鱼]定位地区页面的信息流广告 = type=http-response, pattern=(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idle\.local\.home/, script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Goofish/goofish.js, requires-body=true
+[闲鱼]个人主页 = type=http-response, pattern=(?i)^https://acs\.m\.goofish\.com/gw/mtop\.idle\.user\.page\.my\.adapter/, script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Goofish/goofish.js, requires-body=true
+[闲鱼]首页顶部频道菜单 = type=http-response, pattern=(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idlehome\.home\.circle\.list/, script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Goofish/goofish.js, requires-body=true
+[闲鱼]商品详情页周边推荐 = type=http-response, pattern=(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idle\.local\.nearby\.itemdetail\.enter/, script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Goofish/goofish.js, requires-body=true
+[闲鱼]搜索结果信息流广告 = type=http-response, pattern=(?i)^https://g-acs\.m\.goofish\.com/gw/mtop\.taobao\.idlemtopsearch\.search/, script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Goofish/goofish.js, requires-body=true
+[闲鱼]同城页横幅广告 = type=http-response, pattern=(?i)^https://acs\.m\.goofish\.com/gw/mtop\.taobao\.idle\.local\.flow\.plat\.section/, script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Goofish/goofish.js, requires-body=true
+
+[MITM]
+hostname = %APPEND% acs.m.goofish.com, g-acs.m.goofish.com
+
+# 以下 Loon 专有写法（多为复杂 jq 过滤）Surge 无原生对应，未翻译，该部分功能在 Surge 下缺失：
+# response if ${url} ~= /^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlehome\.widget\.refresh\.get\//i then response.json.jq(".data.homeTopList = []")
+# response if ${url} ~= /^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.home\.whale\.modulet\//i then response.json.jq(".data.container.sections |= map(select(.template.name == \"fish_home_miniapp\"))")
+# response if ${url} ~= /^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.fun\.follow\.feed\.list\//i then response.json.jq(".data.sections|=map(select(.cardType==2001))")
+# response if ${url} ~= /^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlehome\.home\.community\//i then response.json.jq(".data.feedsList |= map(select(.template.name == \"idlefish_home_new_commodity_card\" or .template.name == \"idlefish_home_new_content_card\"))")
+# response if ${url} ~= /^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlehome\.home\.newitem\.page\//i then response.json.jq(".data.sections |= map(select(.data.clickParam.args.cardType as $ct | $ct != \"banner\" and $ct != \"mamaAD\"))")
+# response if ${url} ~= /^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.trade\.full\.info\//i then response.json.jq(".data.components |= map(select(.render != \"recommendTabVO\"))")
+# response if ${url} ~= /^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.group\.myself\.banner\//i then response.json.jq(".data.bannerList = []")
+# response if ${url} ~= /^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.playboy\.recommend\/2\.0/i then response.json.jq(".data.recommends = [] | .data.items = [] | .data.next = false")
+# response if ${url} ~= /^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.fun\.follow\.often\.visit\//i then response.json.jq(".data.sections = []")
+# response if ${url} ~= /^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.circle\.myself\.banner\/1\.0/i then response.json.jq(".data.bannerList = []")
+# response if ${url} ~= /^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.circle\.visited\/1\.0/i then response.json.jq(".data.visitedCircleList = []")
+# response if ${url} ~= /^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlemtopsearch\.search\.activate\.tablist\//i then response.json.jq(".data.tabList = []")
+# response if ${url} ~= /^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.trade\.order\.render\//i then response.json.jq("del(.data.bottomBarVO.benefitPointAtmosphere) | .data.components |= map(select(.render != \"meanTimeBuyVO\"))")
