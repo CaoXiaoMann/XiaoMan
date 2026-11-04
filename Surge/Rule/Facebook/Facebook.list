@@ -600,3 +600,9 @@ IP-CIDR,69.171.224.0/19,no-resolve
 IP-CIDR,69.63.176.0/20,no-resolve
 IP-CIDR,74.119.76.0/22,no-resolve
 IP-ASN,32934,no-resolve
+DOMAIN,ai.developer.meta.com
+DOMAIN,ai.meta.com
+DOMAIN,aidemos.meta.com
+DOMAIN,connect.facebook.net
+DOMAIN,developer.meta.com
+DOMAIN,llama.developer.meta.com
