@@ -1,3 +1,6 @@
+// 来源频道：https://t.me/XiaoManWangMingTianYa
+// 本脚本由 XiaoMan 提供，仅供个人学习研究使用
+
 /*
  * Apple 天气增强 (iRingo WeatherKit) - 响应处理
  * 更新日期：2026-11-01
