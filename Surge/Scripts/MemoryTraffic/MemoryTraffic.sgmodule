@@ -5,6 +5,7 @@
 #!category=XiaoMan
 #!arguments=dev1:iphone-xr,dev2:选填,dev3:选填,dev4:选填,dev5:选填,api_host:127.0.0.1,api_port:6171,api_key:xiaoMan1997
 #!arguments-desc=\n📌 参数说明\n\n1️⃣ dev1～dev5 各台 Tailscale 设备名\n   填 Tailscale 中显示的设备名称（deviceName），多台设备各占一个参数口，留空则不显示\n   设备名可在 console.tailscale.com/admin/machines 查看或改名\n\n2️⃣ api_host HTTP API 地址（默认 127.0.0.1）\n3️⃣ api_port HTTP API 端口（默认 6171）\n4️⃣ api_key HTTP API 密码（默认 xiaoMan1997，即 XiaoManSurge 的 HTTP API key）\n\n⚠️ 填完参数后必须 Reload Profile（Surge 配置→Reload Profile）让脚本重新加载参数
+#!date=2026-11-04 12:30:00
 
 [Panel]
 MemoryTraffic = title="内存和流量实时监控",content="正在获取数据...",style=info,script-name=memory-traffic,update-interval=10
