@@ -161,12 +161,6 @@ PROCESS-NAME,ChatGPT.exe
 PROCESS-NAME,chatgpt
 
 # ========== Meta AI ==========
-DOMAIN,ai.developer.meta.com
-DOMAIN,ai.meta.com
-DOMAIN,aidemos.meta.com
-DOMAIN,connect.facebook.net
-DOMAIN,developer.meta.com
-DOMAIN,llama.developer.meta.com
 DOMAIN,meta-ohttp-config-prod.fastly-edge.com
 DOMAIN,meta-ohttp-relay-prod.fastly-edge.com
 DOMAIN,production.museai.com
