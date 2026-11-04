@@ -26,6 +26,19 @@ if (url.includes("/api/alexa/homepage/hub")) {
     if (obj?.result?.top_skin) {
       delete obj.result.top_skin; // 首页 顶部背景图
     }
+    // —— 屏蔽首页 4 个推广位（路径匹配，抗 IP 直连，下拉不失效）——
+    delete obj.result.icon_set; // 营销图标（限时秒杀/补贴/转盘/水果/其他）
+    delete obj.result.recommend_fresh_info; // 送货上门/多多买菜
+    delete obj.result.billion_subsidy_entrance; // 百亿补贴
+    delete obj.result.friends; // 拼小圈（好友动态）
+    delete obj.result.friend_entrance;
+    delete obj.result.pdd_friend;
+    if (obj?.result?.module_order?.length > 0) {
+      // 模块顺序过滤广告/推广模块（拼小圈/广告/时间线）
+      obj.result.module_order = obj.result.module_order.filter(
+        (m) => !/(?:timeline|ad_module|irregular_banner|friend|pdd_friend)/.test(m?.module_name || "")
+      );
+    }
   }
   body = JSON.stringify(obj);
 } else if (url.includes("/comment_result")) {
