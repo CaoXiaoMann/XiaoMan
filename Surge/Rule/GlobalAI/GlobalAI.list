@@ -127,6 +127,10 @@ PROCESS-NAME,claude
 PROCESS-NAME,claude.exe
 
 # ========== OpenAI / ChatGPT ==========
+
+DOMAIN,o33249.ingest.sentry.io
+DOMAIN,openaiapi-site.azureedge.net
+DOMAIN,openaicom.imgix.net
 DOMAIN,openai-api.arkoselabs.com
 DOMAIN,openai.qualtrics.com
 DOMAIN,openaiassets.blob.core.windows.net
