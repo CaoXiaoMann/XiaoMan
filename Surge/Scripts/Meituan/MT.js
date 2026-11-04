@@ -1,3 +1,6 @@
+// 来源频道：https://t.me/XiaoManWangMingTianYa
+// 本脚本由 XiaoMan 提供，仅供个人学习研究使用
+
 const mtqxUrl = (typeof $request !== "undefined" && $request && $request.url) || "";
 const mtqxHideTabs = ["video", "xiaotuan"];
 const mtqxKeepTabs = ["homepage", "mine"];
