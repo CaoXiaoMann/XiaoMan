@@ -37,6 +37,16 @@ if (/<\/head>/.test(body) && body.indexOf('hl-kill-ads') < 0) {
   kill();
   document.addEventListener('DOMContentLoaded', kill);
   window.addEventListener('load', kill);
+
+  // 诊断：报告拦截状态（仅首次）
+  setTimeout(function(){
+    var adCount = 0;
+    document.querySelectorAll('.van-popup, .popup-wrapper, .popup-panel').forEach(function(el){
+      if (/约炮|娱乐城|棋牌|春药/i.test(el.innerText||'')) adCount++;
+    });
+    var addboxN = document.querySelectorAll('.addbox').length;
+    $notification.post('HL抓包v4', '注入OK ad弹窗=' + adCount + ' 横幅=' + addboxN, '拦截主页面成功');
+  }, 1500);
   setInterval(kill, 200);
   var mo = new MutationObserver(function(){ kill(); });
   mo.observe(document.documentElement, {childList:true, subtree:true});
