@@ -1,5 +1,5 @@
 #!name=黑料网去广告
-#!desc=净化首页/列表页广告（横幅/列表位/跳转）、详情页广告（页脚/浮层/正文引用）、App接口广告（首页/详情/配置/用户）；适配主站域名 heiliao.com；横幅为JS动态渲染，用CSS+JS双保险持续删除
+#!desc=去除首页/列表/详情页广告及「添加到主屏幕」横幅，净化App接口广告；适配 heiliao.com
 #!category=XiaoMan
 #!system=iOS
 #!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/HeiLiao/HeiLiao.sgmodule
