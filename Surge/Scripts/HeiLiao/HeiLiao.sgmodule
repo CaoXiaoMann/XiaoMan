@@ -1,5 +1,5 @@
 #!name=黑料网去广告
-#!desc=去除黑料网页面广告/横幅/浮层（含添加到主屏幕横幅），支持 heiliao.com 与 18hlw.com
+#!desc=净化首页/列表页广告（横幅/列表位/跳转）、详情页广告（页脚/浮层/正文引用）、App接口广告（首页/详情/配置/用户）；适配主站域名 heiliao.com；横幅为JS动态渲染，用CSS+JS双保险持续删除
 #!category=XiaoMan
 #!system=iOS
 #!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/HeiLiao/HeiLiao.sgmodule
