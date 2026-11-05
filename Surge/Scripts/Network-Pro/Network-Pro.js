@@ -214,39 +214,39 @@ async function testService(url) {
   var currentPolicy = "";
   try { if ($surge && $surge.getOutboundMode) currentPolicy = $surge.getOutboundMode(); } catch (e) {}
 
-  // 标题行：原脚本 header 用 network/wifi symbol，这里用 📡
-  lines.push("📡 " + (ssid || (cellular.radio ? "蜂窝数据" : "网络")));
+  // ===== 标题（网络名）=====
+  lines.push("**" + (ssid || (cellular.radio ? "蜂窝数据" : "网络")) + "**");
 
-  // 出口检测（原脚本 symbol: location.ip / location.city / network）
+  // ===== 出口检测 =====
   var exit = await getExit();
-  var ipLine = "  🌐 出口IP: " + (exit.ip ? showIP(exit.ip) : "获取失败");
-  var locLine = "  📍 位置: " + (exit.countryCode ? flag(exit.countryCode) + " " : "") + (exit.country || "未知") + (exit.city ? " - " + exit.city : "");
-  var ispLine = "  🏢 ISP: " + (exit.isp || exit.org || "未知");
-  lines.push(ipLine, locLine, ispLine);
+  lines.push("━━━━━━━━━━━━━━");
+  lines.push("**🌐 出口**  " + (exit.ip ? showIP(exit.ip) : "获取失败"));
+  lines.push("📍 位置   " + (exit.countryCode ? flag(exit.countryCode) + " " : "") + (exit.country || "未知") + (exit.city ? " - " + exit.city : ""));
+  lines.push("🏢 ISP    " + (exit.isp || exit.org || "未知"));
 
   // 本地信息
-  if (localIP) lines.push("  📱 本机IP: " + showIP(localIP) + (gateway ? " (网关 " + gateway + ")" : ""));
+  if (localIP) lines.push("📱 本机   " + showIP(localIP) + (gateway ? " (网关 " + gateway + ")" : ""));
 
-  // 延迟检测（原脚本 symbol: clock）
+  // ===== 延迟 =====
   var proxyLat = await getProxyLatency();
   var localLat = await getLocalLatency();
-  lines.push("⏱ 延迟: 代理 " + (proxyLat.ok ? proxyLat.ms + "ms" : "失败") + " | 直连 " + (localLat.ok ? localLat.ms + "ms" : "失败"));
+  lines.push("⏱ 延迟   代理 " + (proxyLat.ok ? proxyLat.ms + "ms" : "失败") + " | 直连 " + (localLat.ok ? localLat.ms + "ms" : "失败"));
 
-  // NAT 检测（原脚本 symbol: shield.lefthalf.filled）+ DNS（server.rack/cloud）
+  // ===== NAT + DNS =====
   var natLabel = "未知";
   if (isCGNATIPv4(localIP)) natLabel = "CGNAT";
   else if (isPrivateIPv4(localIP) && isPublicIPv4(exit.ip)) natLabel = "NAT/Open";
   else if (isPublicIPv4(localIP)) natLabel = "Open";
   else if (isPrivateIPv4(localIP)) natLabel = "NAT";
-  lines.push("🛡️ NAT: " + natLabel + " | ☁️ DNS: " + (net.dns && net.dns.length ? net.dns.join(",") : "系统"));
+  lines.push("🛡️ NAT   " + natLabel + " | ☁️ DNS " + (net.dns && net.dns.length ? net.dns.join(",") : "系统"));
 
-  // 节点纯净度（原脚本: purityGaugeSVG 圆形仪表 + 纯净评分 + 风险等级）
+  // ===== 节点纯净度 =====
   var purity = purityScore(exit);
   var risk = riskLevel(exit, purity);
-  var purityEmoji = purity >= 75 ? "🟢" : purity >= 45 ? "🟡" : "🔴";
-  lines.push(purityEmoji + " 纯净度: " + purity + "分 (" + (exit.kind || "未知") + ") 风险:" + risk);
+  var puritySym = purity >= 75 ? "🟢" : purity >= 45 ? "🟡" : "🔴";
+  lines.push(puritySym + " 纯净度 " + purity + "分 (" + (exit.kind || "未知") + ") · " + risk);
 
-  // 流媒体解锁（原脚本 symbol: play.rectangle.fill）
+  // ===== 流媒体解锁（2×3 网格，用文字符号避免大 emoji）=====
   var media = [
     ["netflix", "Netflix", "https://www.netflix.com/title/81215567"],
     ["disney", "Disney+", "https://www.disneyplus.com/"],
@@ -256,14 +256,18 @@ async function testService(url) {
     ["prime", "Prime", "https://www.primevideo.com/"]
   ];
   var mediaResults = await Promise.all(media.map(function (m) { return testService(m[2]); }));
-  lines.push("📺 流媒体:");
-  media.forEach(function (m, i) {
-    var r = mediaResults[i];
-    // 原脚本状态: checkmark.shield.fill / xmark → ✅ / ❌
-    lines.push("  " + (r.ok ? "✅" : "❌") + " " + m[1] + (r.ok ? " OK" : " 失败"));
-  });
+  var mediaOk = mediaResults.filter(function (r) { return r.ok; }).length;
+  lines.push("━━━━━━━━━━━━━━");
+  lines.push("**📺 流媒体解锁** (" + mediaOk + "/" + media.length + ")");
+  for (var mi = 0; mi < media.length; mi += 2) {
+    var a = media[mi], ra = mediaResults[mi];
+    var b = media[mi + 1], rb = mediaResults[mi + 1];
+    var sa = (ra.ok ? "✓" : "✗") + " " + a[1];
+    var sb = b ? (rb.ok ? "✓" : "✗") + " " + b[1] : "";
+    lines.push(sa + "   " + sb);
+  }
 
-  // AI 解锁（原脚本 symbol: sparkles）
+  // ===== AI 解锁（2×3 网格）=====
   var ai = [
     ["chatgpt", "ChatGPT", "https://chatgpt.com/"],
     ["claude", "Claude", "https://claude.ai/"],
@@ -273,11 +277,19 @@ async function testService(url) {
     ["perplexity", "Perplexity", "https://www.perplexity.ai/"]
   ];
   var aiResults = await Promise.all(ai.map(function (a) { return testService(a[2]); }));
-  lines.push("🤖 AI:");
-  ai.forEach(function (a, i) {
-    var r = aiResults[i];
-    lines.push("  " + (r.ok ? "✅" : "❌") + " " + a[1] + (r.ok ? " OK" : " 失败"));
-  });
+  var aiOk = aiResults.filter(function (r) { return r.ok; }).length;
+  lines.push("**🤖 AI 解锁检测** (" + aiOk + "/" + ai.length + ")");
+  for (var ai2 = 0; ai2 < ai.length; ai2 += 2) {
+    var aa = ai[ai2], raa = aiResults[ai2];
+    var bb = ai[ai2 + 1], rbb = aiResults[ai2 + 1];
+    var sa2 = (raa.ok ? "✓" : "✗") + " " + aa[1];
+    var sb2 = bb ? (rbb.ok ? "✓" : "✗") + " " + bb[1] : "";
+    lines.push(sa2 + "   " + sb2);
+  }
+
+  // ===== 底部：协议/策略（原版 footerCell）=====
+  lines.push("━━━━━━━━━━━━━━");
+  lines.push("🔄 策略 " + (currentPolicy || "规则") + " · 更新时间 " + new Date().toTimeString().slice(0, 5));
 
   // 输出（顶层 icon 用原脚本核心 SF Symbol: network）
   var content = lines.join("\n");
