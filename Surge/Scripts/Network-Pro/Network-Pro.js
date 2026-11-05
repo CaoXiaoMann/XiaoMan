@@ -9,11 +9,12 @@
 
 // ==================== 配置 ====================
 var ARG = parseArgs($argument || "");
-var POLICY = ARG.POLICY || "";            // 最高优先级策略
-var LMT_POLICY = ARG.LMT || "";           // 流媒体检测策略组
-var AI_POLICY = ARG.AI || "";             // AI 检测策略组
-var MASK_IP = ARG.YS === "1";             // 打码 IP
-var FORCE_PROTOCOL = ARG.XY || "";        // 指定协议
+function argVal(k) { var v = clean(ARG[k]); return (v === "-" || v === "_") ? "" : v; }
+var POLICY = argVal("POLICY");           // 最高优先级策略
+var LMT_POLICY = argVal("LMT");          // 流媒体检测策略组
+var AI_POLICY = argVal("AI");            // AI 检测策略组
+var MASK_IP = argVal("YS") === "1";      // 打码 IP
+var FORCE_PROTOCOL = argVal("XY");       // 指定协议
 
 var TIMEOUT = 4500;
 var POLICY_TIMEOUT = 1800;

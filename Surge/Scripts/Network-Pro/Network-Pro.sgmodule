@@ -4,7 +4,7 @@
 #!system=iOS
 #!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Network-Pro/Network-Pro.sgmodule
 #!date=2026-11-05
-#!arguments=YS:0,POLICY:,LMT:,AI:,XY:
+#!arguments=YS:0,POLICY:-,LMT:-,AI:-,XY:-
 #!arguments-desc=
 📌 参数说明
 
