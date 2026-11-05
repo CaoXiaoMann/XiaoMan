@@ -10,5 +10,5 @@
 hostname = %APPEND% heiliao.com, *.heiliao.com, 18hlw.com, *.18hlw.com, api*.hlwapi*.com
 
 [Script]
-黑料网页去广告 = type=http-response,pattern=^https?:\/\/(heiliao\.com|18hlw\.com|www\.heiliao\.com|www\.18hlw\.com)\/.*$,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/HeiLiao/web-v4.js,requires-body=1,max-size=5242880,timeout=30
+黑料网页去广告 = type=http-response,pattern=^https?:\/\/(heiliao\.com|18hlw\.com|www\.heiliao\.com|www\.18hlw\.com)\/.*$,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/HeiLiao/web-v7.js,requires-body=1,max-size=5242880,timeout=30
 黑料App去广告 = type=http-response,pattern=^https:\/\/api(\d+)?\.hlwapi(\d+)?\.com\/api\.php\/api\/index\/(config|userInfo|index|detail),script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/HeiLiao/app.js,requires-body=1,max-size=-1,timeout=30
