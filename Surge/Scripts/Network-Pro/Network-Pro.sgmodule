@@ -11,4 +11,4 @@
 NetworkPro = title="网络诊断雷达",content="正在检测...",style=info,script-name=network-pro,update-interval=60
 
 [Script]
-network-pro = type=generic,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Network-Pro/Network-Pro-v3.js,argument=YS={{{YS}}}&POLICY={{{POLICY}}}&XY={{{XY}}},timeout=30
+network-pro = type=generic,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Network-Pro/Network-Pro-v4.js,argument=YS={{{YS}}}&POLICY={{{POLICY}}}&XY={{{XY}}},timeout=30
