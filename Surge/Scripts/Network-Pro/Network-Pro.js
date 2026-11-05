@@ -84,12 +84,57 @@ function parseExit(data) {
   var isp = data.isp || data.org || data.asname || "";
   var org = data.org || "";
   var as = data.as || "";
-  return { ip: ip, country: country, countryCode: countryCode, city: city, region: region, isp: isp, org: org, as: as };
+  // 纯净度标记（ip-api.com 免费字段：proxy/hosting/mobile）
+  var flags = {
+    proxy: !!(data.proxy || data.is_proxy),
+    hosting: !!(data.hosting || data.is_hosting || data.is_datacenter),
+    datacenter: !!(data.datacenter || data.is_datacenter || data.hosting),
+    mobile: !!(data.mobile || data.is_mobile)
+  };
+  return { ip: ip, country: country, countryCode: countryCode, city: city, region: region, isp: isp, org: org, as: as, flags: flags };
+}
+
+// ==================== 节点纯净度 ====================
+function classifyExitKind(flags) {
+  var f = flags || {};
+  if (f.mobile) return "移动网络";
+  if (f.residential) return "住宅 IP";
+  if (f.datacenter || f.hosting) return "商业机房";
+  if (f.proxy || f.vpn) return "住宅 IP";
+  return "未知网络";
+}
+
+function purityScore(exit) {
+  var flags = (exit && exit.flags) || {};
+  var kind = clean(exit && exit.kind);
+  var score;
+  if (kind === "住宅 IP") score = 92;
+  else if (kind === "移动网络") score = 92;
+  else if (kind === "教育网络" || kind === "企业网络") score = 88;
+  else if (kind === "商业机房") score = 78;
+  else score = 72;
+  // proxy/vpn 标记扣分（无 evidence 时用简单判断）
+  if (flags.tor) score -= 55;
+  if (flags.abuser) score -= 35;
+  var pv = (flags.proxy ? 1 : 0) + (flags.vpn ? 1 : 0);
+  if (pv >= 2) score -= 30;
+  else if (pv === 1) score -= 16;
+  if (kind === "商业机房" || flags.datacenter || flags.hosting) score -= 8;
+  if ((kind === "住宅 IP" || kind === "移动网络") && !flags.proxy && !flags.vpn && !flags.tor && !flags.abuser) score += 3;
+  return Math.max(0, Math.min(100, score));
+}
+
+function riskLevel(exit, purity) {
+  var flags = (exit && exit.flags) || {};
+  var score = Number(purity && purity.score);
+  if (flags.tor || flags.abuser || score < 45) return "高风险";
+  if (score < 75 || flags.datacenter || flags.hosting || flags.proxy || flags.vpn) return "中风险";
+  return "低风险";
 }
 
 async function getExit() {
   var urls = [
-    "http://ip-api.com/json/?lang=zh-CN&fields=status,message,query,country,countryCode,regionName,city,isp,org,as,asname&_=" + Date.now(),
+    "http://ip-api.com/json/?lang=zh-CN&fields=status,message,query,country,countryCode,regionName,city,isp,org,as,asname,proxy,hosting,mobile&_=" + Date.now(),
     "https://ipwho.is/?lang=zh-CN&_=" + Date.now(),
     "https://api.ipapi.is/?_=" + Date.now()
   ];
@@ -98,11 +143,14 @@ async function getExit() {
       var r = await httpGet(urls[i], { "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)" });
       if (r.status >= 200 && r.status < 400) {
         var parsed = parseExit(JSON.parse(r.data));
-        if (parsed && parsed.ip) return parsed;
+        if (parsed && parsed.ip) {
+          parsed.kind = classifyExitKind(parsed.flags);
+          return parsed;
+        }
       }
     } catch (e) {}
   }
-  return { ip: "", country: "", countryCode: "", city: "", region: "", isp: "", org: "", as: "" };
+  return { ip: "", country: "", countryCode: "", city: "", region: "", isp: "", org: "", as: "", kind: "未知网络", flags: {} };
 }
 
 // ==================== 延迟检测 ====================
@@ -191,6 +239,12 @@ async function testService(url) {
   else if (isPublicIPv4(localIP)) natLabel = "Open";
   else if (isPrivateIPv4(localIP)) natLabel = "NAT";
   lines.push("🛡️ NAT: " + natLabel + " | ☁️ DNS: " + (net.dns && net.dns.length ? net.dns.join(",") : "系统"));
+
+  // 节点纯净度（原脚本: purityGaugeSVG 圆形仪表 + 纯净评分 + 风险等级）
+  var purity = purityScore(exit);
+  var risk = riskLevel(exit, purity);
+  var purityEmoji = purity >= 75 ? "🟢" : purity >= 45 ? "🟡" : "🔴";
+  lines.push(purityEmoji + " 纯净度: " + purity + "分 (" + (exit.kind || "未知") + ") 风险:" + risk);
 
   // 流媒体解锁（原脚本 symbol: play.rectangle.fill）
   var media = [
