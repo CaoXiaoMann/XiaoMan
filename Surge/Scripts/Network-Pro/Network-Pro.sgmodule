@@ -5,20 +5,7 @@
 #!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Network-Pro/Network-Pro.sgmodule
 #!date=2026-11-05
 #!arguments=YS:0,POLICY:-,LMT:-,AI:-,XY:-
-#!arguments-desc=
-📌 参数说明
-
-1️⃣ YS：隐私打码，填 1 则出口/本机 IP 打码为 123.123.*.*（默认 0 不打码）
-
-2️⃣ POLICY：最高优先级策略组。指定后，出口、延迟、流媒体、AI 全部统一走该策略（留空=不指定）
-
-3️⃣ LMT：流媒体检测策略组。POLICY 为空时生效（留空=用默认）
-
-4️⃣ AI：AI 检测策略组。POLICY 为空时生效（留空=用默认）
-
-5️⃣ XY：手动指定代理协议，例如 VLESS / Trojan / HY2（留空=自动识别）
-
-⚠️ 填完参数后必须 Reload Profile（Surge 配置→Reload Profile）让脚本重新加载参数
+#!arguments-desc=YS:1打码IP; POLICY/LMT/AI:策略组(-不指定); XY:协议
 
 [Panel]
 NetworkPro = title="网络诊断雷达",content="正在检测...",style=info,script-name=network-pro,update-interval=60
