@@ -3,7 +3,7 @@
  * 移植自 Egern「网络诊断雷达」Widget，改用 Surge Panel + 文字/emoji 输出
  * 更新日期：2026-11-05
  *
- * 检测项：出口 IP/ISP/位置、代理延迟、DNS、NAT、节点纯净度、AI 解锁
+ * 检测项：本地网络、当前代理（出口/ISP/位置/纯净度/延迟/NAT）、DNS、IPv4/IPv6
  * 输出：Surge Panel（$done title/content/icon）
  */
 
@@ -11,7 +11,6 @@
 var ARG = parseArgs($argument || "");
 function argVal(k) { var v = clean(ARG[k]); return (v === "-" || v === "_") ? "" : v; }
 var POLICY = argVal("POLICY");           // 最高优先级策略
-var AI_POLICY = argVal("AI");            // AI 检测策略组
 var MASK_IP = argVal("YS") === "1";      // 打码 IP
 var FORCE_PROTOCOL = argVal("XY");       // 指定协议
 
@@ -213,61 +212,52 @@ async function testService(url) {
   var currentPolicy = "";
   try { if ($surge && $surge.getOutboundMode) currentPolicy = $surge.getOutboundMode(); } catch (e) {}
 
-  // ===== 标题（网络名）=====
-  lines.push("**" + (ssid || (cellular.radio ? "蜂窝数据" : "网络")) + "**");
-
-  // ===== 出口检测 =====
+  // ===== 出口检测（当前代理信息）=====
   var exit = await getExit();
-  lines.push("━━━━━━━━━━━━━━");
-  lines.push("**🌐 出口**  " + (exit.ip ? showIP(exit.ip) : "获取失败"));
-  lines.push("📍 位置   " + (exit.countryCode ? flag(exit.countryCode) + " " : "") + (exit.country || "未知") + (exit.city ? " - " + exit.city : ""));
-  lines.push("🏢 ISP    " + (exit.isp || exit.org || "未知"));
 
-  // 本地信息
-  if (localIP) lines.push("📱 本机   " + showIP(localIP) + (gateway ? " (网关 " + gateway + ")" : ""));
-
-  // ===== 延迟 =====
-  var proxyLat = await getProxyLatency();
+  // ===== 本地网络（原版左卡）=====
+  lines.push("**📶 本地网络**");
+  lines.push("  SSID   " + (ssid || (cellular.radio ? "蜂窝数据" : "网络")));
+  if (localIP) lines.push("  本机   " + showIP(localIP));
+  if (gateway) lines.push("  网关   " + gateway);
+  // 直连延迟
   var localLat = await getLocalLatency();
-  lines.push("⏱ 延迟   代理 " + (proxyLat.ok ? proxyLat.ms + "ms" : "失败") + " | 直连 " + (localLat.ok ? localLat.ms + "ms" : "失败"));
+  lines.push("  直连   " + (localLat.ok ? localLat.ms + "ms" : "失败"));
+  // IPv4/IPv6（原版 ✓/✓）
+  var hasV4 = !!(net.v4 && net.v4.primaryAddress);
+  var hasV6 = !!(net.v6 && net.v6.primaryAddress);
+  lines.push("  IP     " + (hasV4 ? "IPv4✓" : "IPv4✗") + " " + (hasV6 ? "IPv6✓" : "IPv6✗"));
+  // DNS
+  lines.push("  DNS    " + (net.dns && net.dns.length ? net.dns.join(",") : "系统"));
 
-  // ===== NAT + DNS =====
+  // ===== 当前代理（原版右卡）=====
+  lines.push("");
+  lines.push("**🌐 当前代理**");
+  lines.push("  出口IP " + (exit.ip ? showIP(exit.ip) : "获取失败"));
+  lines.push("  位置   " + (exit.countryCode ? flag(exit.countryCode) + " " : "") + (exit.country || "未知") + (exit.city ? " - " + exit.city : ""));
+  lines.push("  ISP    " + (exit.isp || exit.org || "未知"));
+  // 属性类型（原版 商业机房）
+  lines.push("  类型   " + (exit.kind || "未知"));
+  // 纯净度（原版圆形仪表 → 文字）
+  var purity = purityScore(exit);
+  var risk = riskLevel(exit, purity);
+  var puritySym = purity >= 75 ? "🟢" : purity >= 45 ? "🟡" : "🔴";
+  lines.push("  " + puritySym + " 纯净度 " + purity + "分");
+  // 代理延迟
+  var proxyLat = await getProxyLatency();
+  lines.push("  延迟   " + (proxyLat.ok ? proxyLat.ms + "ms" : "失败"));
+  // NAT
   var natLabel = "未知";
   if (isCGNATIPv4(localIP)) natLabel = "CGNAT";
   else if (isPrivateIPv4(localIP) && isPublicIPv4(exit.ip)) natLabel = "NAT/Open";
   else if (isPublicIPv4(localIP)) natLabel = "Open";
   else if (isPrivateIPv4(localIP)) natLabel = "NAT";
-  lines.push("🛡️ NAT   " + natLabel + " | ☁️ DNS " + (net.dns && net.dns.length ? net.dns.join(",") : "系统"));
+  lines.push("  NAT    " + natLabel);
 
-  // ===== 节点纯净度 =====
-  var purity = purityScore(exit);
-  var risk = riskLevel(exit, purity);
-  var puritySym = purity >= 75 ? "🟢" : purity >= 45 ? "🟡" : "🔴";
-  lines.push(puritySym + " 纯净度 " + purity + "分 (" + (exit.kind || "未知") + ") · " + risk);
-
-  // ===== AI 解锁（2×3 网格）=====
-  var ai = [
-    ["chatgpt", "ChatGPT", "https://chatgpt.com/"],
-    ["claude", "Claude", "https://claude.ai/"],
-    ["gemini", "Gemini", "https://gemini.google.com/"],
-    ["deepseek", "DeepSeek", "https://chat.deepseek.com/"],
-    ["grok", "Grok", "https://grok.com/"],
-    ["perplexity", "Perplexity", "https://www.perplexity.ai/"]
-  ];
-  var aiResults = await Promise.all(ai.map(function (a) { return testService(a[2]); }));
-  var aiOk = aiResults.filter(function (r) { return r.ok; }).length;
-  lines.push("**🤖 AI 解锁检测** (" + aiOk + "/" + ai.length + ")");
-  for (var ai2 = 0; ai2 < ai.length; ai2 += 2) {
-    var aa = ai[ai2], raa = aiResults[ai2];
-    var bb = ai[ai2 + 1], rbb = aiResults[ai2 + 1];
-    var sa2 = (raa.ok ? "✓" : "✗") + " " + aa[1];
-    var sb2 = bb ? (rbb.ok ? "✓" : "✗") + " " + bb[1] : "";
-    lines.push(sa2 + "   " + sb2);
-  }
-
-  // ===== 底部：协议/策略（原版 footerCell）=====
+  // ===== 底部状态（原版 footer）=====
   lines.push("━━━━━━━━━━━━━━");
-  lines.push("🔄 策略 " + (currentPolicy || "规则") + " · 更新时间 " + new Date().toTimeString().slice(0, 5));
+  lines.push("🏢 " + (exit.isp || "未知") + " · " + (exit.kind || "未知") + " · 纯净 " + purity + "分");
+  lines.push("🛡️ " + risk + " · " + (currentPolicy || "规则") + " · " + new Date().toTimeString().slice(0, 5));
 
   // 输出（顶层 icon 用原脚本核心 SF Symbol: network）
   var content = lines.join("\n");
