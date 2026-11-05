@@ -1,14 +1,14 @@
 #!name=网络诊断雷达
-#!desc=出口 IP/ISP/位置、代理延迟、DNS、NAT、流媒体解锁、AI 解锁检测面板（移植自 Egern Network-Pro）
+#!desc=出口 IP/ISP/位置、代理延迟、DNS、NAT、节点纯净度、AI 解锁检测面板（移植自 Egern Network-Pro）
 #!category=XiaoMan
 #!system=iOS
 #!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Network-Pro/Network-Pro.sgmodule
 #!date=2026-11-05
-#!arguments=YS:0,POLICY:-,LMT:-,AI:-,XY:-
-#!arguments-desc=YS:1打码IP; POLICY/LMT/AI:策略组(-不指定); XY:协议
+#!arguments=YS:0,POLICY:-,AI:-,XY:-
+#!arguments-desc=YS:1打码IP; POLICY/AI:策略组(-不指定); XY:协议
 
 [Panel]
 NetworkPro = title="网络诊断雷达",content="正在检测...",style=info,script-name=network-pro,update-interval=60
 
 [Script]
-network-pro = type=generic,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Network-Pro/Network-Pro.js,argument=YS={{{YS}}}&POLICY={{{POLICY}}}&LMT={{{LMT}}}&AI={{{AI}}}&XY={{{XY}}},timeout=30
+network-pro = type=generic,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Network-Pro/Network-Pro.js,argument=YS={{{YS}}}&POLICY={{{POLICY}}}&AI={{{AI}}}&XY={{{XY}}},timeout=30

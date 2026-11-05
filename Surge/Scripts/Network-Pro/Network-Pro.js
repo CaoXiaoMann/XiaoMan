@@ -3,7 +3,7 @@
  * 移植自 Egern「网络诊断雷达」Widget，改用 Surge Panel + 文字/emoji 输出
  * 更新日期：2026-11-05
  *
- * 检测项：出口 IP/ISP/位置、代理延迟、DNS、NAT、流媒体解锁、AI 解锁
+ * 检测项：出口 IP/ISP/位置、代理延迟、DNS、NAT、节点纯净度、AI 解锁
  * 输出：Surge Panel（$done title/content/icon）
  */
 
@@ -11,7 +11,6 @@
 var ARG = parseArgs($argument || "");
 function argVal(k) { var v = clean(ARG[k]); return (v === "-" || v === "_") ? "" : v; }
 var POLICY = argVal("POLICY");           // 最高优先级策略
-var LMT_POLICY = argVal("LMT");          // 流媒体检测策略组
 var AI_POLICY = argVal("AI");            // AI 检测策略组
 var MASK_IP = argVal("YS") === "1";      // 打码 IP
 var FORCE_PROTOCOL = argVal("XY");       // 指定协议
@@ -193,7 +192,7 @@ async function testService(url) {
   var start = Date.now();
   try {
     var r = await httpGet(url + sep + "_=" + Date.now());
-    // HTTP 状态 <500 且非超时 = 可访问（Netflix 返回 404/403 = 未屏蔽）
+    // HTTP 状态 <500 且非超时 = 可访问（服务未被屏蔽）
     return { ok: r.status >= 200 && r.status < 500, status: r.status, ms: Math.max(1, Date.now() - start) };
   } catch (e) {
     return { ok: false, status: 0, ms: TIMEOUT };
@@ -245,27 +244,6 @@ async function testService(url) {
   var risk = riskLevel(exit, purity);
   var puritySym = purity >= 75 ? "🟢" : purity >= 45 ? "🟡" : "🔴";
   lines.push(puritySym + " 纯净度 " + purity + "分 (" + (exit.kind || "未知") + ") · " + risk);
-
-  // ===== 流媒体解锁（2×3 网格，用文字符号避免大 emoji）=====
-  var media = [
-    ["netflix", "Netflix", "https://www.netflix.com/title/81215567"],
-    ["disney", "Disney+", "https://www.disneyplus.com/"],
-    ["spotify", "Spotify", "https://open.spotify.com/"],
-    ["tiktok", "TikTok", "https://www.tiktok.com/"],
-    ["youtube", "YouTube", "https://www.youtube.com/"],
-    ["prime", "Prime", "https://www.primevideo.com/"]
-  ];
-  var mediaResults = await Promise.all(media.map(function (m) { return testService(m[2]); }));
-  var mediaOk = mediaResults.filter(function (r) { return r.ok; }).length;
-  lines.push("━━━━━━━━━━━━━━");
-  lines.push("**📺 流媒体解锁** (" + mediaOk + "/" + media.length + ")");
-  for (var mi = 0; mi < media.length; mi += 2) {
-    var a = media[mi], ra = mediaResults[mi];
-    var b = media[mi + 1], rb = mediaResults[mi + 1];
-    var sa = (ra.ok ? "✓" : "✗") + " " + a[1];
-    var sb = b ? (rb.ok ? "✓" : "✗") + " " + b[1] : "";
-    lines.push(sa + "   " + sb);
-  }
 
   // ===== AI 解锁（2×3 网格）=====
   var ai = [
