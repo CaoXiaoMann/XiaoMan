@@ -256,8 +256,8 @@ async function testService(url) {
 
   // ===== 底部状态（原版 footer）=====
   lines.push("━━━━━━━━━━━━━━");
-  lines.push((exit.isp || "未知") + " · " + (exit.kind || "未知") + " · 🟢 纯净 " + purity + "分");
-  lines.push(risk + " · " + (currentPolicy || "规则") + " · " + new Date().toTimeString().slice(0, 5));
+  lines.push(puritySym + " 纯净 " + purity + "分 · " + risk);
+  lines.push((currentPolicy || "规则") + " · " + new Date().toTimeString().slice(0, 5));
 
   // 输出（顶层 icon 用原脚本核心 SF Symbol: network）
   var content = lines.join("\n");
