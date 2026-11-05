@@ -1,13 +1,12 @@
-#!name=黑料抓包临时
-#!desc=临时抓包黑料网页+App接口广告字段（定位后删除）
+#!name=黑料诊断修复
+#!desc=诊断黑料网页横幅并直接注入去横幅CSS（测试用）
 #!category=XiaoMan
 #!system=iOS
 #!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/HeiLiao-debug/HeiLiao-debug.sgmodule
 #!date=2026-11-05
 
 [MITM]
-hostname = %APPEND% heiliao.com, *.heiliao.com, 18hlw.com, *.18hlw.com, api*.hlwapi*.com
+hostname = %APPEND% heiliao.com, *.heiliao.com, 18hlw.com, *.18hlw.com
 
 [Script]
-网页抓包 = type=http-response,pattern=heiliao\.com|18hlw\.com,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/HeiLiao-debug/heiliao_web_debug-v3.js,requires-body=1,max-size=5242880,timeout=30
-App抓包 = type=http-response,pattern=hlwapi.*api\.php\/api\/index\/(config|userInfo|index|detail),script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/HeiLiao-debug/heiliao_debug-v2.js,requires-body=1,max-size=-1,timeout=30
+诊断修复 = type=http-response,pattern=heiliao\.com|18hlw\.com,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/HeiLiao-debug/heiliao_diag_fix.js,requires-body=1,max-size=5242880,timeout=30
