@@ -1,0 +1,76 @@
+#!name=拼多多去广告
+#!desc=移除开屏广告、底部多余页签、顶部频道推广、顶部图标、个人中心推广；保留首页推荐商品
+#!category=去广告
+#!system=iOS
+#!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Pinduoduo/Pinduoduo.sgmodule
+#
+# 来源：基于 fakeyou / kelee / RuCu6 上游版本整理
+# 说明：以下 body-rewrite 与 map-local 均放在本模块内，不依赖主 Profile
+#
+# 已知限制：
+#   1. 底栏/商品流/图标属于 App 本地缓存，冷启动生效、下拉刷新可能回滚
+#   2. 个人中心商品流、聊天页精选推荐由客户端本地渲染，网络层无法去除
+
+[Rule]
+AND,((URL-REGEX,^http:\/\/((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/d(\d)?),(USER-AGENT,*com.xunmeng.pinduoduo*)),REJECT
+AND,((URL-REGEX,^http:\/\/\[[0-9a-fA-F:]+\]\/d(\d)?\?),(USER-AGENT,*com.xunmeng.pinduoduo*)),REJECT
+AND,((DOMAIN,api.pinduoduo.com),(PROTOCOL,QUIC)),REJECT
+DOMAIN,titan.pinduoduo.com,REJECT
+DOMAIN,apm.pinduoduo.com,REJECT
+DOMAIN,th-b.pinduoduo.com,REJECT
+DOMAIN,ta.pinduoduo.com,REJECT
+DOMAIN,th.pinduoduo.com,REJECT
+DOMAIN,th-a.pinduoduo.com,REJECT
+DOMAIN,ta-a.pinduoduo.com,REJECT
+DOMAIN,apm-a.pinduoduo.com,REJECT
+
+[Map Local]
+(?i)^https:\/\/api\.pinduoduo\.com\/api\/aristotle\/unrated_order_for_unreceived_tab\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+(?i)^https:\/\/api\.pinduoduo\.com\/api\/aristotle\/query_order_list_tabs_element\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+(?i)^https:\/\/api\.pinduoduo\.com\/api\/aquarius\/hungary\/global\/homepage\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+(?i)^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/order_express_group\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+(?i)^https:\/\/api\.pinduoduo\.com\/search_hotquery\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+(?i)^https:\/\/api\.pinduoduo\.com\/api\/zaire_biz\/chat\/resource\/get_list_data\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+(?i)^https:\/\/api\.pinduoduo\.com\/api\/alexa\/goods\/back_up\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+(?i)^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/personal\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+(?i)^https:\/\/api\.pinduoduo\.com\/api\/brand-olay\/goods_detail\/bybt_guide\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+(?i)^https:\/\/api\.pinduoduo\.com\/api\/engels\/reviews\/require\/append\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+(?i)^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/my_order_group\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+(?i)^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/likes\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+(?i)^https:\/\/api\.pinduoduo\.com\/api\/manufacturer\/cross\/shortcut\/list\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+(?i)^https:\/\/api\.pinduoduo\.com\/api\/dunkirk\/liveactivity\/push\/create\/url\/report\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+(?i)^https:\/\/api\.pinduoduo\.com\/api\/growth\/nagato\/app\/index\/gather\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+(?i)^https:\/\/api\.pinduoduo\.com\/api\/engels\/wait\/receive\/review\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+(?i)^https:\/\/api\.pinduoduo\.com\/api\/buffon\/nasus\/recommend\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+(?i)^https:\/\/api\.(?:pinduoduo|yangkeduo)\.com\/api\/cappuccino\/splash\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+(?i)^https:\/\/api\.pinduoduo\.com\/api\/social\/mall\/follow\/hot\/recommend\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+(?i)^https:\/\/api\.pinduoduo\.com\/api\/leporis\/notification\/clear_tab_red_dot\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+
+[Body Rewrite]
+# 顶部图标（限时秒杀/充值中心等一排）
+http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? 'delpaths([["result","icon_set"], ["result","search_bar_hot_query"], ["result","dy_module","irregular_banner_dy"]])'
+# 底栏：只留首页/聊天/个人中心
+http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? '.result.bottom_tabs? |= map(select(.link | IN("index.html","chat_list.html","personal.html"))) | .result.buffer_bottom_tabs? |= map(select(.link | IN("index.html","chat_list.html","personal.html"))) | .result.selected_bottom_skin |= (if . then with_entries(select((.key != "9") and (.key != "14"))) else . end)'
+# 顶部频道：只留「推荐」和分类（tab_id 1/2），删最快明天达/政府补贴/11.11
+http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? '.result.all_top_opts |= map(select((.tab_id == 1) or (.tab_id == 2))) | .result.module_order |= map(select(.module_name != "community_goods")) | del(.result.home_screen_skin)'
+# 首页商品流
+# 个人中心
+http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'delpaths([["monthly_card_entrance"], ["personal_center_style_v2_vo"], ["icon_set","icons"], ["icon_set","top_personal_icons"], ["personal_banner"], ["wallet","entrance_text"]])'
+# 首页横向频道栏
+# 聊天精选推荐入口
+http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/api\/social\/timeline\/v4\/get\/entrance\? 'try (if .entrance then .entrance.status = 0 | .entrance.content = [] else . end | del(.entrance_icon_image)) catch .'
+# 搜索页推广
+http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/search\? 'delpaths([["expansion"]])'
+# 订单页
+http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/order\/ 'delpaths([["marketing_banner_vo"], ["shipping","banner_above_recommend"]])'
+http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/order_detail_group\? 'delpaths([["data","goods_list"]])'
+http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/api\/aristotle\/order_list_v4\? '.orders |= map(.order_buttons |= map(del(.order_growth_tip)))'
+# 各种页面底栏推荐
+http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/api\/oak\/integration\/render\? 'delpaths([["bottom_section_list"], ["ui","bottom_section"], ["ui","live_section","float_info"]])'
+
+[Script]
+移除扫码取件页面商品推荐及弹窗 = type=http-response,pattern=(?i)^https:\/\/m\.pinduoduo\.net\/mdkd\/package\?,script-path=https://raw.githubusercontent.com/fkingikelee/fkikelee/main/Resource/kelee/JavaScript/PinDuoDuo/PinDuoDuo_remove_ads.js,requires-body=true,max-size=5242880
+精简评价页 = type=http-response,pattern=(?i)^https:\/\/m\.pinduoduo\.net\/comment_result\.html\?,script-path=https://raw.githubusercontent.com/Yi-r8/Surge/refs/heads/main/Js/pinduoduo.js,requires-body=true,max-size=5242880
+
+[MITM]
+hostname = %APPEND% api.pinduoduo.com, api.yangkeduo.com, m.pinduoduo.net
