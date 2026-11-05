@@ -216,22 +216,12 @@ async function testService(url) {
   var exit = await getExit();
 
   // ===== 本地网络（原版左卡）=====
-  lines.push("📶 本地网络");
-  lines.push("  SSID " + (ssid || (cellular.radio ? "蜂窝数据" : "网络")));
-  if (localIP) lines.push("  本机 " + showIP(localIP));
-  if (gateway) lines.push("  网关 " + gateway);
   // 直连延迟
-  var localLat = await getLocalLatency();
-  lines.push("  直连 " + (localLat.ok ? localLat.ms + "ms" : "失败"));
   // IPv4/IPv6（原版 ✓/✓）
-  var hasV4 = !!(net.v4 && net.v4.primaryAddress);
   var hasV6 = !!(net.v6 && net.v6.primaryAddress);
-  lines.push("  " + (hasV4 ? "IPv4✓" : "IPv4✗") + " " + (hasV6 ? "IPv6✓" : "IPv6✗"));
   // DNS
-  lines.push("  DNS " + (net.dns && net.dns.length ? net.dns.join(",") : "系统"));
 
   // ===== 当前代理（原版右卡）=====
-  lines.push("");
   lines.push("🌐 当前代理");
   lines.push("  出口 " + (exit.ip ? showIP(exit.ip) : "获取失败"));
   lines.push("  位置 " + (exit.countryCode ? flag(exit.countryCode) + " " : "") + (exit.country || "未知") + (exit.city ? " - " + exit.city : ""));
