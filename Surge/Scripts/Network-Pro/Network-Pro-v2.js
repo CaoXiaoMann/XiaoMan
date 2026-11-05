@@ -217,27 +217,27 @@ async function testService(url) {
 
   // ===== 本地网络（原版左卡）=====
   lines.push("**📶 本地网络**");
-  lines.push("  SSID   " + (ssid || (cellular.radio ? "蜂窝数据" : "网络")));
-  if (localIP) lines.push("  本机   " + showIP(localIP));
-  if (gateway) lines.push("  网关   " + gateway);
+  lines.push("  🌐 " + (ssid || (cellular.radio ? "蜂窝数据" : "网络")));
+  if (localIP) lines.push("  📱 " + showIP(localIP));
+  if (gateway) lines.push("  🚪 " + gateway);
   // 直连延迟
   var localLat = await getLocalLatency();
-  lines.push("  直连   " + (localLat.ok ? localLat.ms + "ms" : "失败"));
+  lines.push("  ⏱ 直连 " + (localLat.ok ? localLat.ms + "ms" : "失败"));
   // IPv4/IPv6（原版 ✓/✓）
   var hasV4 = !!(net.v4 && net.v4.primaryAddress);
   var hasV6 = !!(net.v6 && net.v6.primaryAddress);
-  lines.push("  IP     " + (hasV4 ? "IPv4✓" : "IPv4✗") + " " + (hasV6 ? "IPv6✓" : "IPv6✗"));
+  lines.push("  📡 " + (hasV4 ? "IPv4✓" : "IPv4✗") + " " + (hasV6 ? "IPv6✓" : "IPv6✗"));
   // DNS
-  lines.push("  DNS    " + (net.dns && net.dns.length ? net.dns.join(",") : "系统"));
+  lines.push("  ☁️ " + (net.dns && net.dns.length ? net.dns.join(",") : "系统"));
 
   // ===== 当前代理（原版右卡）=====
   lines.push("");
   lines.push("**🌐 当前代理**");
-  lines.push("  出口IP " + (exit.ip ? showIP(exit.ip) : "获取失败"));
-  lines.push("  位置   " + (exit.countryCode ? flag(exit.countryCode) + " " : "") + (exit.country || "未知") + (exit.city ? " - " + exit.city : ""));
-  lines.push("  ISP    " + (exit.isp || exit.org || "未知"));
+  lines.push("  🛰️ " + (exit.ip ? showIP(exit.ip) : "获取失败"));
+  lines.push("  📍 " + (exit.countryCode ? flag(exit.countryCode) + " " : "") + (exit.country || "未知") + (exit.city ? " - " + exit.city : ""));
+  lines.push("  🏢 " + (exit.isp || exit.org || "未知"));
   // 属性类型（原版 商业机房）
-  lines.push("  类型   " + (exit.kind || "未知"));
+  lines.push("  🏷️ " + (exit.kind || "未知"));
   // 纯净度（原版圆形仪表 → 文字）
   var purity = purityScore(exit);
   var risk = riskLevel(exit, purity);
@@ -245,19 +245,19 @@ async function testService(url) {
   lines.push("  " + puritySym + " 纯净度 " + purity + "分");
   // 代理延迟
   var proxyLat = await getProxyLatency();
-  lines.push("  延迟   " + (proxyLat.ok ? proxyLat.ms + "ms" : "失败"));
+  lines.push("  ⏱ 延迟 " + (proxyLat.ok ? proxyLat.ms + "ms" : "失败"));
   // NAT
   var natLabel = "未知";
   if (isCGNATIPv4(localIP)) natLabel = "CGNAT";
   else if (isPrivateIPv4(localIP) && isPublicIPv4(exit.ip)) natLabel = "NAT/Open";
   else if (isPublicIPv4(localIP)) natLabel = "Open";
   else if (isPrivateIPv4(localIP)) natLabel = "NAT";
-  lines.push("  NAT    " + natLabel);
+  lines.push("  🛡️ " + natLabel);
 
   // ===== 底部状态（原版 footer）=====
   lines.push("━━━━━━━━━━━━━━");
-  lines.push("🏢 " + (exit.isp || "未知") + " · " + (exit.kind || "未知") + " · 纯净 " + purity + "分");
-  lines.push("🛡️ " + risk + " · " + (currentPolicy || "规则") + " · " + new Date().toTimeString().slice(0, 5));
+  lines.push("🏢 " + (exit.isp || "未知") + " · " + (exit.kind || "未知") + " · 🟢 纯净 " + purity + "分");
+  lines.push("🛡️ " + risk + " · " + (currentPolicy || "规则") + " · 🕐 " + new Date().toTimeString().slice(0, 5));
 
   // 输出（顶层 icon 用原脚本核心 SF Symbol: network）
   var content = lines.join("\n");
