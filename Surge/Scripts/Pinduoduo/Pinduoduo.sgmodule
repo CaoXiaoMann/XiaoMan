@@ -74,3 +74,6 @@ http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/api\/oak\/integration\/rend
 
 [MITM]
 hostname = %APPEND% api.pinduoduo.com, api.yangkeduo.com, m.pinduoduo.net
+
+[Script]
+PDD-HOME-DEBUG = type=http-response,pattern=^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\?,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Pinduoduo/pdd_home_debug.js,requires-body=true,max-size=8388608
