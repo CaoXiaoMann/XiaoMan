@@ -1,0 +1,8 @@
+# NAME: Emby
+# DESC: Emby 自建服域名分流
+# UPDATE: 2026-11-07
+# 说明：指向 Emby 策略组
+
+DOMAIN,emby.bangumi.ca
+DOMAIN,std.cn2gias.uk
+DOMAIN,emby-cf.suil.dpdns.org
