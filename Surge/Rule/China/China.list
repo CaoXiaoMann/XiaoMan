@@ -609,7 +609,6 @@ DOMAIN-SUFFIX,alphassl.com
 DOMAIN-SUFFIX,amap.com
 DOMAIN-SUFFIX,amap.net
 DOMAIN-SUFFIX,amapauto.com
-DOMAIN-SUFFIX,amemv.com
 DOMAIN-SUFFIX,amemv.net
 DOMAIN-SUFFIX,analog.com
 DOMAIN-SUFFIX,analytics.tiktok.com
@@ -1005,7 +1004,6 @@ DOMAIN-SUFFIX,byted-static.com
 DOMAIN-SUFFIX,byted-ug.com
 DOMAIN-SUFFIX,byted.org
 DOMAIN-SUFFIX,bytedance-boe.net
-DOMAIN-SUFFIX,bytedance.com
 DOMAIN-SUFFIX,bytedance.net
 DOMAIN-SUFFIX,bytedance.org
 DOMAIN-SUFFIX,bytedanceapi.com
@@ -1875,20 +1873,14 @@ DOMAIN-SUFFIX,doudou.com
 DOMAIN-SUFFIX,douguo.com
 DOMAIN-SUFFIX,douguo.net
 DOMAIN-SUFFIX,douxie.com
-DOMAIN-SUFFIX,douyin.com
 DOMAIN-SUFFIX,douyinact.com
 DOMAIN-SUFFIX,douyinact.net
-DOMAIN-SUFFIX,douyincdn.com
 DOMAIN-SUFFIX,douyincloud.net
 DOMAIN-SUFFIX,douyincloud.run
 DOMAIN-SUFFIX,douyinec.com
 DOMAIN-SUFFIX,douyinfe.com
-DOMAIN-SUFFIX,douyinliving.com
 DOMAIN-SUFFIX,douyinmusicpromotion.com
 DOMAIN-SUFFIX,douyinpay.com
-DOMAIN-SUFFIX,douyinpic.com
-DOMAIN-SUFFIX,douyinstatic.com
-DOMAIN-SUFFIX,douyinvod.com
 DOMAIN-SUFFIX,douyu.com
 DOMAIN-SUFFIX,douyu.tv
 DOMAIN-SUFFIX,douyuscdn.com
@@ -2821,7 +2813,6 @@ DOMAIN-SUFFIX,idonguapi.com
 DOMAIN-SUFFIX,idouyinliving.com
 DOMAIN-SUFFIX,idouyinpic.com
 DOMAIN-SUFFIX,idouyinstatic.com
-DOMAIN-SUFFIX,idouyinvod.com
 DOMAIN-SUFFIX,idqqimg.com
 DOMAIN-SUFFIX,iemiq.com
 DOMAIN-SUFFIX,iesdouyin.com
@@ -2965,9 +2956,7 @@ DOMAIN-SUFFIX,ivwen.com
 DOMAIN-SUFFIX,iwangding.com
 DOMAIN-SUFFIX,ixdzs.com
 DOMAIN-SUFFIX,ixgvideo.com
-DOMAIN-SUFFIX,ixigua.com
 DOMAIN-SUFFIX,ixiguapi.com
-DOMAIN-SUFFIX,ixiguavideo.com
 DOMAIN-SUFFIX,iyiou.com
 DOMAIN-SUFFIX,iyunmu.com
 DOMAIN-SUFFIX,iyunxiao.com
@@ -4268,7 +4257,6 @@ DOMAIN-SUFFIX,privateapi.xyz
 DOMAIN-SUFFIX,privatehd.to
 DOMAIN-SUFFIX,proximabeta.com
 DOMAIN-SUFFIX,psbc.com
-DOMAIN-SUFFIX,pstatp.com
 DOMAIN-SUFFIX,puata.info
 DOMAIN-SUFFIX,pubghelper.com
 DOMAIN-SUFFIX,pubgtool.com
@@ -4711,7 +4699,6 @@ DOMAIN-SUFFIX,snimay.com
 DOMAIN-SUFFIX,snodehome.com
 DOMAIN-SUFFIX,snowballsecurities.com
 DOMAIN-SUFFIX,snowballtech.com
-DOMAIN-SUFFIX,snssdk.com
 DOMAIN-SUFFIX,snwx.com
 DOMAIN-SUFFIX,snxw.com
 DOMAIN-SUFFIX,so.com
@@ -5127,7 +5114,6 @@ DOMAIN-SUFFIX,toscdn.com
 DOMAIN-SUFFIX,totheglory.im
 DOMAIN-SUFFIX,touqikan.com
 DOMAIN-SUFFIX,toursbms.com
-DOMAIN-SUFFIX,toutiao.com
 DOMAIN-SUFFIX,toutiao11.com
 DOMAIN-SUFFIX,toutiao12.com
 DOMAIN-SUFFIX,toutiao13.com
