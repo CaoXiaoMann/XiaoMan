@@ -1,0 +1,23 @@
+#!name=Surge 内存面板
+#!desc=在策略选择视图用一个面板显示 Surge 引擎内存：一条横线进度条，粗实线是当前占用、粗虚线延伸到峰值；iOS 需有效订阅
+#!author=小慧
+#!homepage=https://github.com/Yi-r8/Surge/blob/main/sgmodule/SurgeMemoryPanel.sgmodule
+#!category=XiaoMan
+#!system=ios
+#!version=2026-11-12-v7
+#!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Panel/SurgeMemoryPanel.sgmodule
+
+# ============ 说明 ============
+# 信息面板（Information Panel）显示在 iOS 的策略选择视图里。
+# 面板内容由 generic 脚本生成：脚本用 $httpAPI（无需鉴权）读
+# /v1/metrics 的 surge_memory_bytes，失败时改调 /v1/mcp 的
+# dump_runtime_data。update-interval=60：每次切到策略选择视图
+# 且超过 60 秒未更新时自动刷新；点面板刷新按钮立即刷新。
+# 注意：手册说 iOS 上信息面板需要有效订阅（2021-09-22 之后到期），
+# 订阅过期时面板不显示，不影响其他功能。
+
+[Panel]
+Surge 内存 = title="Surge 内存",content="加载中…",script-name=surge-memory-panel,update-interval=60
+
+[Script]
+surge-memory-panel = type=generic,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Panel/surge-memory-panel.js
