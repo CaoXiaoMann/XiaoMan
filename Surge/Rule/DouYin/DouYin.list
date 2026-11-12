@@ -1,11 +1,11 @@
 # NAME: DouYin
 # AUTHOR: blackmatrix7 + XiaoMan
 # REPO: https://github.com/blackmatrix7/ios_rule_script
-# UPDATED: 2025-11-11
-# DESC: 抖音/头条系直连（避免被 TikTok 规则抢走走代理）
+# UPDATED: 2026-11-12
+# DESC: 抖音/头条系直连（补充字节 CDN，避免走代理卡顿）
 # DOMAIN: 2
-# DOMAIN-SUFFIX: 14
-# TOTAL: 16
+# DOMAIN-SUFFIX: 22
+# TOTAL: 24
 
 # > 原始 blackmatrix7 规则
 DOMAIN,lf3-static.bytednsdoc.com
@@ -25,3 +25,11 @@ DOMAIN-SUFFIX,toutiao.com
 DOMAIN-SUFFIX,douyin.com
 DOMAIN-SUFFIX,douyinliving.com
 DOMAIN-SUFFIX,bytedance.com
+# > 补充（XiaoMan）：字节图片/视频/静态 CDN（2026-11-12 修复卡顿）
+DOMAIN-SUFFIX,ibyteimg.com
+DOMAIN-SUFFIX,i8458.com
+DOMAIN-SUFFIX,byteimg.com
+DOMAIN-SUFFIX,bytecdn.cn
+DOMAIN-SUFFIX,ibytedtos.com
+DOMAIN-SUFFIX,lfstatic.com
+DOMAIN-SUFFIX,bytegoofy.com
