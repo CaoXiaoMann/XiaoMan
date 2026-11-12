@@ -20,4 +20,4 @@
 Surge 内存 = title="Surge 内存",content="加载中…",script-name=surge-memory-panel,update-interval=60
 
 [Script]
-surge-memory-panel = type=generic,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Panel/surge-memory-panel.js
+surge-memory-panel = type=generic,script-path=https://cdn.jsdelivr.net/gh/CaoXiaoMann/XiaoMan@main/Surge/Scripts/Panel/surge-memory-panel.js
