@@ -23,8 +23,9 @@ function fmtUptime(sec) {
 // 双段进度条：直接用原始占用比例算格数，不要先把百分比四舍五入
 // 成整数再算——两次取整会把峰值和当前的差距吃掉（比如 23.3 和
 // 23.7 都变成 47%，虚线段就画不出来了）。
-// 0→当前画 ━，当前→峰值画 ┅，其余画 ─；峰值高于当前时至少留一格
-// 虚线段，保证差距可见。
+// 0→当前画 ▬（粗横条），当前→峰值画 ┅（细虚线，半透明感），
+// 其余画 ─（细实线轨道）；峰值高于当前时至少留一格虚线段，
+// 保证差距可见。
 function dualBar(curFrac, peakFrac, curMB, peakMB) {
   var cur = Math.round(curFrac * BAR_WIDTH);
   var peak = Math.round(peakFrac * BAR_WIDTH);
@@ -36,7 +37,7 @@ function dualBar(curFrac, peakFrac, curMB, peakMB) {
   if (peakMB > curMB && peak === cur && peak < BAR_WIDTH) peak = cur + 1;
   var s = "";
   for (var i = 0; i < BAR_WIDTH; i++) {
-    if (i < cur) s += "━";
+    if (i < cur) s += "▬";
     else if (i < peak) s += "┅";
     else s += "─";
   }
@@ -77,7 +78,7 @@ function render(memBytes, uptimeSec, activeReq, dnsCache) {
   var pct = ((mb / LIMIT_MB) * 100).toFixed(1);
   var peakPct = ((peak / LIMIT_MB) * 100).toFixed(1);
   var lines = [
-    "━━━ 当前 " + mb.toFixed(1) + " MB (" + pct + "%)",
+    "▬▬▬ 当前 " + mb.toFixed(1) + " MB (" + pct + "%)",
     "┅┅┅ 峰值 " + peak.toFixed(1) + " MB (" + peakPct + "%)",
     dualBar(mb / LIMIT_MB, peak / LIMIT_MB, mb, peak),
   ];
@@ -89,9 +90,9 @@ function render(memBytes, uptimeSec, activeReq, dnsCache) {
   $done({
     title: "Surge 内存",
     content: lines.join("\n"),
-    // 面板图标只能用 SF Symbol 名称，没有 Surge 标志这个符号；
-    // waveform.path 是连贯的波形线，和 Surge 的波浪标志最接近。
-    icon: "waveform.path",
+    // 面板图标只能用 SF Symbol 名称；internaldrive.fill 是硬盘图标，
+    // 表明存储（waveform.path 波形线不像存储，已换掉）。
+    icon: "internaldrive.fill",
     "icon-color": colorFor(mb),
   });
 }
