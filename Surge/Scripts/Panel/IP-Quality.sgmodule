@@ -1,0 +1,17 @@
+#!name=IP 纯净度检测
+#!desc=多源并发检测指定策略组节点的出口 IP 纯净度（规则法，RULE-SET 控制检测域名走指定策略组）。Scamalytics 真实评分+黑名单/代理检测，参数填 key 启用，无 key 降级 ip-api 估算。
+#!author=mickeu
+#!category=XiaoMan
+#!icon=https://raw.githubusercontent.com/Limexm/ClashXiOn/master/icons/Checkmark.png
+#!homepage=https://github.com/mickeu/surge
+#!arguments=GROUP:PROXY,SCAMUSER:选填,SCAMKEY:选填
+#!arguments-desc=\n📌 参数说明\n\n1️⃣ GROUP 策略组名称（默认 PROXY）\n输入目标策略组名（如 PROXY、AIGC、Netflix 等），所有 IP 检测域名走你填的策略组\n\n2️⃣ SCAMUSER Scamalytics 用户名（选填）\n注册 scamalytics.com 时用的用户名/账号\n填了才启用真实评分，不填则用 ip-api 估算\n\n3️⃣ SCAMKEY Scamalytics API Key（选填）\n填了启用真实评分（Fraud Score + 黑名单 + 代理/VPN 检测），不填则用 ip-api 估算\n\n📝 如何获取免费 API Key\n注册页：https://scamalytics.com/ip/api/signup?monthly_api_calls=5000\n免费 5000 次/月，填名字、邮箱、公司（随便填），选 5000 那档\n提交后人工审核（24小时内发 API Key 到邮箱），拿到后填进 SCAMUSER 和 SCAMKEY\n\n⚠️ 参数传入说明\n三个参数会以 & 连接传入脚本（group=xxx&user=xxx&key=xxx），脚本按 & 拆分解析。填完后必须 reload（Surge 配置→Reload Profile）让脚本重新加载参数；否则面板仍用旧参数。
+
+[Rule]
+RULE-SET,https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Rule/IPCheck/IPCheck.list,{{{GROUP}}}
+
+[Script]
+IP-Quality = type=generic,timeout=20,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Panel/IP-Quality.js?v=12,script-update-interval=-1,argument=group={{{GROUP}}}&user={{{SCAMUSER}}}&key={{{SCAMKEY}}}
+
+[Panel]
+IP-Quality = script-name=IP-Quality,title="IP 纯净度",content="点击刷新",style=info,update-interval=0
