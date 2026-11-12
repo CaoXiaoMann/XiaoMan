@@ -1,5 +1,5 @@
 #!name=内存和流量实时监控
-#!raw-url=https://cdn.jsdelivr.net/gh/CaoXiaoMann/XiaoMan@main/Surge/Scripts/Panel/panel_monitor.sgmodule
+#!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Panel/panel_monitor.sgmodule
 #!desc=内存/流量实时监控面板：显示 Surge 内存占用、运行时长、HTTP 请求/DNS 缓存/封禁数、本机流量、版本信息
 #!author=XiaoMan (panel by 脱敏包)
 #!category=XiaoMan
