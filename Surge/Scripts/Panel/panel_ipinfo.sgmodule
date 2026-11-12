@@ -1,0 +1,12 @@
+#!name=IP 纯净度
+#!raw-url=https://cdn.jsdelivr.net/gh/CaoXiaoMann/XiaoMan@main/Surge/Scripts/Panel/panel_ipinfo.sgmodule
+#!desc=IP 纯净度面板：显示出口 IP 归属、ISP、ASN、机房/住宅类型、Scamalytics 风险分、代理/VPN 检测、黑名单状态
+#!author=XiaoMan (panel by 脱敏包)
+#!category=XiaoMan
+#!date=2026-11-12
+
+[Panel]
+IPInfo = title="IP 纯净度",content="正在获取数据...",style=info,script-name=panel-ipinfo,update-interval=60
+
+[Script]
+panel-ipinfo = type=generic,script-path=https://cdn.jsdelivr.net/gh/CaoXiaoMann/XiaoMan@main/Surge/Scripts/Panel/panel_ipinfo.js
