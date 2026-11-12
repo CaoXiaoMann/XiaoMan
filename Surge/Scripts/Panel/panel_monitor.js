@@ -1,6 +1,6 @@
 // 内存和流量实时监控
-var KEY = "xiaoMan1997";
-var base = 'http://127.0.0.1:6171';
+var KEY = "YOUR_SURGE_API_KEY";
+var base = 'https://127.0.0.1:6171';
 function field(text, name) {
   var m = text.match(new RegExp('^' + name + '\\s+([0-9.]+)', 'm'));
   return m ? parseFloat(m[1]) : 0;
