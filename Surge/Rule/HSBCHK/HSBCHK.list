@@ -1,8 +1,0 @@
-# NAME: HSBCHK
-# MAINTAINER: XiaoMan
-# UPDATED: 2026-11-13T22:04:04+08:00
-# Hong Kong HSBC: service domains and observed dedicated dependencies
-
-DOMAIN-SUFFIX,hsbc.com.hk
-DOMAIN,hsbc.edge.sdk.awswaf.com
-DOMAIN,c-hsbc.lytics.io
