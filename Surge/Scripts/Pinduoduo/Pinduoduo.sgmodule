@@ -1,79 +1,93 @@
-#!name=拼多多去广告
-#!desc=移除开屏广告、底部多余页签、顶部频道推广、顶部图标、个人中心推广；保留首页推荐商品
-#!category=去广告
-#!system=iOS
 #!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Pinduoduo/Pinduoduo.sgmodule
-#
-# 来源：基于 fakeyou / kelee / RuCu6 上游版本整理
-# 说明：以下 body-rewrite 与 map-local 均放在本模块内，不依赖主 Profile
-#
-# 已知限制：
-#   1. 底栏/商品流/图标属于 App 本地缓存，冷启动生效、下拉刷新可能回滚
-#   2. 个人中心商品流、聊天页精选推荐由客户端本地渲染，网络层无法去除
+#!name=拼多多去广告
+#!desc=移除开屏广告、底栏多多视频、会场入口、聊天页面精选推荐及推广，精简首页和个人中心。
+#!author=小慧 (魔改自 QingRex 的 LoonKissSurge 拼多多 Beta 模块，原作者 ZenmoFeiShi、可莉)
+#!homepage=https://hub.kelee.one
+#!category=XiaoMan
+#!version=2026-11-14-v16
+#!openUrl=https://apps.apple.com/app/id1044283059
 
 [Rule]
-AND,((URL-REGEX,^http:\/\/((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/d(\d)?),(USER-AGENT,*com.xunmeng.pinduoduo*)),REJECT
-AND,((URL-REGEX,^http:\/\/\[[0-9a-fA-F:]+\]\/d(\d)?\?),(USER-AGENT,*com.xunmeng.pinduoduo*)),REJECT
-AND,((DOMAIN,api.pinduoduo.com),(PROTOCOL,QUIC)),REJECT
-DOMAIN,titan.pinduoduo.com,REJECT
-DOMAIN,apm.pinduoduo.com,REJECT
-DOMAIN,th-b.pinduoduo.com,REJECT
-DOMAIN,ta.pinduoduo.com,REJECT
-DOMAIN,th.pinduoduo.com,REJECT
-DOMAIN,th-a.pinduoduo.com,REJECT
-DOMAIN,ta-a.pinduoduo.com,REJECT
-DOMAIN,apm-a.pinduoduo.com,REJECT
-
-[Map Local]
-(?i)^https:\/\/api\.pinduoduo\.com\/api\/aristotle\/unrated_order_for_unreceived_tab\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
-(?i)^https:\/\/api\.pinduoduo\.com\/api\/aristotle\/query_order_list_tabs_element\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
-(?i)^https:\/\/api\.pinduoduo\.com\/api\/aquarius\/hungary\/global\/homepage\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
-(?i)^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/order_express_group\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
-(?i)^https:\/\/api\.pinduoduo\.com\/search_hotquery\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
-(?i)^https:\/\/api\.pinduoduo\.com\/api\/zaire_biz\/chat\/resource\/get_list_data\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
-(?i)^https:\/\/api\.pinduoduo\.com\/api\/alexa\/goods\/back_up\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
-(?i)^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/personal\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
-(?i)^https:\/\/api\.pinduoduo\.com\/api\/brand-olay\/goods_detail\/bybt_guide\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
-(?i)^https:\/\/api\.pinduoduo\.com\/api\/engels\/reviews\/require\/append\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
-(?i)^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/my_order_group\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
-(?i)^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/likes\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
-(?i)^https:\/\/api\.pinduoduo\.com\/api\/manufacturer\/cross\/shortcut\/list\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
-(?i)^https:\/\/api\.pinduoduo\.com\/api\/dunkirk\/liveactivity\/push\/create\/url\/report\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
-(?i)^https:\/\/api\.pinduoduo\.com\/api\/growth\/nagato\/app\/index\/gather\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
-(?i)^https:\/\/api\.pinduoduo\.com\/api\/engels\/wait\/receive\/review\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
-(?i)^https:\/\/api\.pinduoduo\.com\/api\/buffon\/nasus\/recommend\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
-(?i)^https:\/\/api\.(?:pinduoduo|yangkeduo)\.com\/api\/cappuccino\/splash\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
-(?i)^https:\/\/api\.pinduoduo\.com\/api\/social\/mall\/follow\/hot\/recommend\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
-(?i)^https:\/\/api\.pinduoduo\.com\/api\/leporis\/notification\/clear_tab_red_dot\? data-type=text data="{}" status-code=200 header="Content-Type: application/json"
+AND,((URL-REGEX,"^http:\/\/((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/d(\d)?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT
+AND,((URL-REGEX,"^http:\/\/\[[0-9a-fA-F:]+\]\/d(\d)?\?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT
+AND,((DOMAIN,api.pinduoduo.com,extended-matching),(PROTOCOL,QUIC)),REJECT
+DOMAIN,titan.pinduoduo.com,REJECT-NO-DROP,extended-matching,pre-matching
+DOMAIN,xg.pinduoduo.com,REJECT,extended-matching,pre-matching
+DOMAIN,cdl-1.pddpic.com,REJECT,extended-matching,pre-matching
+DOMAIN,titan.pinduoduo.com,REJECT,extended-matching,pre-matching
+DOMAIN,cdl-p2.pddpic.com,REJECT,extended-matching,pre-matching
+DOMAIN,cd-1.pddpic.com,REJECT,extended-matching,pre-matching
+DOMAIN,apm.pinduoduo.com,REJECT,extended-matching,pre-matching
+DOMAIN,th-b.pinduoduo.com,REJECT,extended-matching,pre-matching
+DOMAIN,ta.pinduoduo.com,REJECT,extended-matching,pre-matching
+DOMAIN,th.pinduoduo.com,REJECT,extended-matching,pre-matching
+DOMAIN,th-a.pinduoduo.com,REJECT,extended-matching,pre-matching
+DOMAIN,ta-a.pinduoduo.com,REJECT,extended-matching,pre-matching
+DOMAIN,meta.pinduoduo.com,REJECT,extended-matching,pre-matching
+DOMAIN,apm-a.pinduoduo.com,REJECT,extended-matching,pre-matching
 
 [Body Rewrite]
-# 顶部图标（限时秒杀/充值中心等一排）
-http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? 'delpaths([["result","icon_set"], ["result","search_bar_hot_query"], ["result","dy_module","irregular_banner_dy"]])'
-# 底栏：只留首页/聊天/个人中心
-http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? '.result.bottom_tabs? |= map(select(.link | IN("index.html","chat_list.html","personal.html"))) | .result.buffer_bottom_tabs? |= map(select(.link | IN("index.html","chat_list.html","personal.html"))) | .result.selected_bottom_skin |= (if . then with_entries(select((.key != "9") and (.key != "14"))) else . end)'
-# 顶部频道：只留「推荐」和分类（tab_id 1/2），删最快明天达/政府补贴/11.11
-http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? '.result.all_top_opts |= map(select((.tab_id == 1) or (.tab_id == 2))) | .result.module_order |= map(select(.module_name != "community_goods")) | del(.result.home_screen_skin)'
-# 首页商品流
-# 个人中心
-http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'delpaths([["monthly_card_entrance"], ["personal_center_style_v2_vo"], ["icon_set","icons"], ["icon_set","top_personal_icons"], ["personal_banner"], ["wallet","entrance_text"]])'
-# 首页横向频道栏
-# 聊天精选推荐入口
-http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/api\/social\/timeline\/v4\/get\/entrance\? 'try (if .entrance then .entrance.status = 0 | .entrance.content = [] else . end | del(.entrance_icon_image)) catch .'
-# 搜索页推广
-http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/search\? 'delpaths([["expansion"]])'
-# 订单页
-http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/order\/ 'delpaths([["marketing_banner_vo"], ["shipping","banner_above_recommend"]])'
-http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/order_detail_group\? 'delpaths([["data","goods_list"]])'
-http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/api\/aristotle\/order_list_v4\? '.orders |= map(.order_buttons |= map(del(.order_growth_tip)))'
-# 各种页面底栏推荐
-http-response-jq (?i)^https:\/\/api\.pinduoduo\.com\/api\/oak\/integration\/render\? 'delpaths([["bottom_section_list"], ["ui","bottom_section"], ["ui","live_section","float_info"]])'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? 'delpaths([["result","dy_module","irregular_banner_dy"]])'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? 'delpaths([["result","icon_set"]])'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? 'delpaths([["result","search_bar_hot_query"]])'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? 'delpaths([["result","dy_module","irregular_banner_dy"]])'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? '.result.bottom_tabs? |= map(select(.link | IN("index.html", "chat_list.html", "personal.html"))) | .result.buffer_bottom_tabs? |= map(select(.link | IN("index.html", "chat_list.html", "personal.html"))) | .result.all_top_opts |= map(del(.selected_image, .image, .height, .width))'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? 'if (type == "object" and (.result | type) == "object") then .result.timeline_visible = false | del(.result.home_screen_skin.timeline) | if (.result.module_order | type) == "array" then .result.module_order |= map(select(if type == "object" then .module_name != "timeline" else . != "timeline" end)) else . end else . end'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? 'if (type == "object" and (.result | type) == "object") then if (.result.all_top_opts | type) == "array" then .result.all_top_opts |= map(select((.opt_name // "") | test("最快明天达|政府补贴") | not)) else . end else . end'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/search\? 'delpaths([["expansion"]])'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'delpaths([["monthly_card_entrance"]])'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'delpaths([["personal_center_style_v2_vo"]])'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'delpaths([["icon_set","icons"]])'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'delpaths([["icon_set","top_personal_icons"]])'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'if type == "object" then del(.icon_set.other_icon_set.show_all_order.desc_text_list, .icon_set.other_icon_set.show_all_order.desc_text_list_v2) else . end'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'if (type == "object" and (.wallet | type) == "object") then .wallet.entrance_text = "" else . end'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/oak\/integration\/render\? 'delpaths([["bottom_section_list"]])'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/oak\/integration\/render\? 'delpaths([["ui","bottom_section"]])'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/oak\/integration\/render\? 'delpaths([["ui","live_section","float_info"]])'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/order_detail_group\? 'delpaths([["data","goods_list"]])'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/order\/ 'delpaths([["marketing_banner_vo"]])'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/order\/ 'delpaths([["shipping","banner_above_recommend"]])'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/aristotle\/order_list_v4\? '.orders |= map(.order_buttons |= map(del(.order_growth_tip)))'
 
-[Script]
-移除扫码取件页面商品推荐及弹窗 = type=http-response,pattern=(?i)^https:\/\/m\.pinduoduo\.net\/mdkd\/package\?,script-path=https://raw.githubusercontent.com/fkingikelee/fkikelee/main/Resource/kelee/JavaScript/PinDuoDuo/PinDuoDuo_remove_ads.js,requires-body=true,max-size=5242880
-精简评价页 = type=http-response,pattern=(?i)^https:\/\/m\.pinduoduo\.net\/comment_result\.html\?,script-path=https://raw.githubusercontent.com/Yi-r8/Surge/refs/heads/main/Js/pinduoduo.js,requires-body=true,max-size=5242880
+[Map Local]
+^https:\/\/api\.pinduoduo\.com\/api\/aristotle\/unrated_order_for_unreceived_tab\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+
+^https:\/\/api\.pinduoduo\.com\/api\/aristotle\/query_order_list_tabs_element\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+
+^https:\/\/api\.pinduoduo\.com\/api\/aquarius\/hungary\/global\/homepage\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+
+^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/order_express_group\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+
+^https:\/\/api\.pinduoduo\.com\/search_hotquery\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+
+^https:\/\/api\.pinduoduo\.com\/api\/zaire_biz\/chat\/resource\/get_list_data\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+
+^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/new_chat_group\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+
+^https:\/\/api\.pinduoduo\.com\/api\/alexa\/goods\/back_up\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+
+^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/personal\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+
+^https:\/\/api\.pinduoduo\.com\/api\/brand-olay\/goods_detail\/bybt_guide\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+
+^https:\/\/api\.pinduoduo\.com\/api\/engels\/reviews\/require\/append\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+
+^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/my_order_group\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+
+^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/likes\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+
+^https:\/\/api\.pinduoduo\.com\/api\/phantom\/gbdbpdv\/extra\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+
+^https:\/\/api\.pinduoduo\.com\/api\/manufacturer\/cross\/shortcut\/list\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+
+^https:\/\/api\.pinduoduo\.com\/api\/dunkirk\/liveactivity\/push\/create\/url\/report\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+
+^https:\/\/api\.pinduoduo\.com\/api\/growth\/nagato\/app\/index\/gather\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+
+^https:\/\/api\.pinduoduo\.com\/api\/engels\/wait\/receive\/review\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+
+^https:\/\/api\.pinduoduo\.com\/api\/buffon\/nasus\/recommend\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
 
 [MITM]
-hostname = %APPEND% api.pinduoduo.com, api.yangkeduo.com, m.pinduoduo.net
+hostname = %APPEND% api.pinduoduo.com
 
-[Script]
-PDD-HOME-DEBUG = type=http-response,pattern=^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\?,script-path=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Scripts/Pinduoduo/pdd_top_capture.js,requires-body=true,max-size=8388608
