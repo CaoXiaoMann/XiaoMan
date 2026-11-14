@@ -4,17 +4,17 @@
 # UPDATED: 2026-11-12
 # DESC: 抖音/头条系直连（补充字节 CDN，避免走代理卡顿）
 # DOMAIN: 2
-# DOMAIN-SUFFIX: 22
+# DOMAIN-SUFFIX: 23
 # TOTAL: 24
 
 # > 原始 blackmatrix7 规则
 DOMAIN,lf3-static.bytednsdoc.com
-DOMAIN,v5-dy-o-abtest.zjcdn.com
 DOMAIN-SUFFIX,amemv.com
 DOMAIN-SUFFIX,douyincdn.com
 DOMAIN-SUFFIX,douyinpic.com
 DOMAIN-SUFFIX,douyinstatic.com
 DOMAIN-SUFFIX,douyinvod.com
+DOMAIN-SUFFIX,zjcdn.com
 DOMAIN-SUFFIX,idouyinvod.com
 DOMAIN-SUFFIX,ixigua.com
 DOMAIN-SUFFIX,ixiguavideo.com
