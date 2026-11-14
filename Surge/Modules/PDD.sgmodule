@@ -51,7 +51,7 @@ http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? 'if
 # > ★ 删首页「多多买菜 + 百亿补贴」两栏（本定制版新增，文件名"去买菜补贴栏"的由来）
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? 'delpaths([["result","dy_module","recommend_fresh_info"],["result","dy_module","billion_subsidy_entrance_dy"]])'
 # > 首页：递归剥掉所有含买菜/补贴/fresh/subsidy/billion 字样的节点（8.25.0 可能改名/换层级，递归兜底）
-http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? 'walk(if type == "object" then with_entries(select((.value|tostring|test("买菜|补贴|fresh|subsidy|billion"))|not)) else . end)'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? 'walk(if type == "array" then map(select((tostring | test("买菜|补贴|fresh|subsidy|billion|送货上门|明天达")) | not)) else . end)'
 # > 搜索页：删底部扩展推广
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/search\? 'delpaths([["expansion"]])'
 # > 个人中心 hub：删省钱月卡入口、个人中心样式、图标集、顶部图标
@@ -63,7 +63,7 @@ http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'if
 # > 个人中心：清空多多钱包入口文案（未整块删，红点/图标可能仍在）
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'if (type == "object" and (.wallet | type) == "object") then .wallet.entrance_text = "" else . end'
 # > 个人中心：递归剥掉所有含补贴/大放送/惊喜/领取/福利字样的推广节点（如「惊喜大放送:200元补贴」横幅）
-http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'walk(if type == "object" then with_entries(select((.value|tostring|test("补贴|大放送|惊喜|立即领取|专享福利"))|not)) else . end)'
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'walk(if type == "array" then map(select((tostring | test("补贴|大放送|惊喜|立即领取|专享福利|福利")) | not)) else . end)'
 # > 集成页 render：删底部/直播悬浮
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/oak\/integration\/render\? 'delpaths([["bottom_section_list"]])'
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/oak\/integration\/render\? 'delpaths([["ui","bottom_section"]])'
