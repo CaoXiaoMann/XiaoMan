@@ -1,21 +1,14 @@
-// 极简抓包：dump 拼多多首页 hub 的 result 顶层 keys + dy_module keys
-if (typeof $response !== 'undefined' && $response.body) {
+// 诊断脚本：记录所有 api.pinduoduo.com 响应的 URL，确认脚本机制是否工作
+if (typeof $response !== 'undefined') {
   var url = $request.url || '';
-  if (url.indexOf('alexa/homepage/hub') !== -1) {
-    console.log('=== HOME START ===');
+  console.log('PDD_URL: ' + url.slice(0, 120));
+  if (url.indexOf('alexa/homepage/hub') !== -1 && $response.body) {
     try {
       var j = JSON.parse($response.body);
       var r = j.result || j.data || j;
       console.log('RESULT_KEYS: ' + Object.keys(r).join(','));
-      if (r.dy_module) {
-        console.log('DY_KEYS: ' + Object.keys(r.dy_module).join(','));
-      } else {
-        console.log('DY_KEYS: (no dy_module)');
-      }
-    } catch (e) {
-      console.log('ERR: ' + e);
-    }
-    console.log('=== HOME END ===');
+      if (r.dy_module) console.log('DY_KEYS: ' + Object.keys(r.dy_module).join(','));
+    } catch (e) { console.log('ERR: ' + e); }
   }
 }
 $done({});
