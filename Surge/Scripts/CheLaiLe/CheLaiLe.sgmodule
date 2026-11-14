@@ -79,13 +79,9 @@ DOMAIN,gd-stats.jpush.cn,REJECT
 # DOMAIN-SUFFIX,image3.chelaile.net.cn,REJECT
 
 # 首页 banner 走裸 IP 直连（SNI 为空，域名/URL 规则拦不到），只能按 IP 拦
-# 8.134.241.x = 杭州阿里巴巴广告(AS37963)，首页横幅广告投放源（会轮换 IP，故拦整段）
-IP-CIDR,8.134.241.0/24,REJECT,no-resolve
-# 其余抓包确认的广告回源 IP（逐个单拦，避免误伤云商其他业务）
+# 8.134.241.67 = 杭州阿里巴巴广告(AS37963)，首页横幅广告投放源
+# 注意：不能用 8.134.241.0/24 整段拦，会误伤京东支付等阿里云段内其他业务 IP
 IP-CIDR,8.134.241.67/32,REJECT,no-resolve
-IP-CIDR,124.70.194.16/32,REJECT,no-resolve
-IP-CIDR,124.70.151.239/32,REJECT,no-resolve
-IP-CIDR,218.61.211.192/32,REJECT,no-resolve
 
 [URL Rewrite]
 # 车来了广告配置、广告任务、开屏资源
