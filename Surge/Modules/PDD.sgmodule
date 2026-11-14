@@ -60,6 +60,8 @@ http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'de
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'if type == "object" then del(.icon_set.other_icon_set.show_all_order.desc_text_list, .icon_set.other_icon_set.show_all_order.desc_text_list_v2) else . end'
 # > 个人中心：清空多多钱包入口文案（未整块删，红点/图标可能仍在）
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'if (type == "object" and (.wallet | type) == "object") then .wallet.entrance_text = "" else . end'
+# > 个人中心：递归剥掉所有含补贴/大放送/惊喜/领取/福利字样的推广节点（如「惊喜大放送:200元补贴」横幅）
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'walk(if type == "object" then with_entries(select((.value|tostring|test("补贴|大放送|惊喜|立即领取|专享福利"))|not)) else . end)'
 # > 集成页 render：删底部/直播悬浮
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/oak\/integration\/render\? 'delpaths([["bottom_section_list"]])'
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/oak\/integration\/render\? 'delpaths([["ui","bottom_section"]])'
