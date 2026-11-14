@@ -1,15 +1,26 @@
-#!name=拼多多去广告（去买菜补贴栏）
-#!desc=移除开屏广告、底栏多多视频、会场入口、聊天页面精选推荐及推广，精简首页和个人中心；另去掉首页多多买菜与百亿补贴两栏。
-#!author=小慧 (魔改自 QingRex 的 LoonKissSurge 拼多多 Beta 模块，原作者 ZenmoFeiShi、可莉)
-#!homepage=https://hub.kelee.one
-#!category=去广告
-#!version=2026-11-14-v1
-#!openUrl=https://apps.apple.com/app/id1044283059
+#!name=拼多多去广告
+#!desc=拼多多去广告（XiaoMan 定制版）。移除开屏广告、底栏多多视频、会场入口、聊天页精选推荐及推广，精简首页和个人中心；另去掉首页多多买菜与百亿补贴两栏。零 JS，纯 jq 删节点 + Map Local 置空。
+#!author=CaoXiaoMann (魔改自 Yi-r8 / QingRex 的 LoonKissSurge 拼多多 Beta，原作者 ZenmoFeiShi、可莉)
+#!category=XiaoMan
+#!homepage=https://github.com/CaoXiaoMann/XiaoMan
+#!raw-url=https://raw.githubusercontent.com/CaoXiaoMann/XiaoMan/main/Surge/Modules/PDD.sgmodule
+#!last-updated=2026-11-14
+#!date=2026-11-14 18:12:00
+
+# > XiaoMan 拼多多去广告（以实际参数为准）
+# > 维护：CaoXiaoMann；基础来源：Yi-r8/Surge PDD.sgmodule v16
+# > 机制：零 JS。靠 [MITM] 解密 api.pinduoduo.com → [Body Rewrite] 用 jq 删响应 JSON 里的广告节点
+# >       → [Map Local] 把纯广告接口整个置空 {} → [Rule] 拦埋点/监控/QUIC/开屏素材域名
+# > 注意：MITM 只覆盖 api.pinduoduo.com 一个域，yangkeduo.com 等其它域的推广改不了
+# >       模块正文 Surge 只认「App 内更新」，CLI 刷不动缓存，改完须在 App 里手动更新
 
 [Rule]
+# > 开屏广告：IP 直连形式 + PDD UA（extended/pre-matching 提升命中，避免漏拦）
 AND,((URL-REGEX,"^http:\/\/((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/d(\d)?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT
 AND,((URL-REGEX,"^http:\/\/\[[0-9a-fA-F:]+\]\/d(\d)?\?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT
+# > 拒绝 QUIC：强制 PDD 走 HTTP/2，否则加密后 Body Rewrite 解不了
 AND,((DOMAIN,api.pinduoduo.com,extended-matching),(PROTOCOL,QUIC)),REJECT
+# > 埋点 / 监控 / 数据上报（REJECT-NO-DROP 防止 App 重试卡顿）
 DOMAIN,titan.pinduoduo.com,REJECT-NO-DROP,extended-matching,pre-matching
 DOMAIN,xg.pinduoduo.com,REJECT,extended-matching,pre-matching
 DOMAIN,cdl-1.pddpic.com,REJECT,extended-matching,pre-matching
@@ -26,30 +37,43 @@ DOMAIN,meta.pinduoduo.com,REJECT,extended-matching,pre-matching
 DOMAIN,apm-a.pinduoduo.com,REJECT,extended-matching,pre-matching
 
 [Body Rewrite]
+# > 首页 hub：删底部视频/不规则 banner、图标集、热搜词
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? 'delpaths([["result","dy_module","irregular_banner_dy"]])'
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? 'delpaths([["result","icon_set"]])'
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? 'delpaths([["result","search_bar_hot_query"]])'
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? 'delpaths([["result","dy_module","irregular_banner_dy"]])'
+# > 底部 tab 只留 首页/聊天/个人中心，删多余 tab 图标资源
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? '.result.bottom_tabs? |= map(select(.link | IN("index.html", "chat_list.html", "personal.html"))) | .result.buffer_bottom_tabs? |= map(select(.link | IN("index.html", "chat_list.html", "personal.html"))) | .result.all_top_opts |= map(del(.selected_image, .image, .height, .width))'
+# > 关闭首页信息流 timeline、删 timeline 模块
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? 'if (type == "object" and (.result | type) == "object") then .result.timeline_visible = false | del(.result.home_screen_skin.timeline) | if (.result.module_order | type) == "array" then .result.module_order |= map(select(if type == "object" then .module_name != "timeline" else . != "timeline" end)) else . end else . end'
+# > 顶部入口删「最快明天达/政府补贴」
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? 'if (type == "object" and (.result | type) == "object") then if (.result.all_top_opts | type) == "array" then .result.all_top_opts |= map(select((.opt_name // "") | test("最快明天达|政府补贴") | not)) else . end else . end'
+# > ★ 删首页「多多买菜 + 百亿补贴」两栏（本定制版新增，文件名"去买菜补贴栏"的由来）
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? 'delpaths([["result","dy_module","recommend_fresh_info"],["result","dy_module","billion_subsidy_entrance_dy"]])'
+# > 搜索页：删底部扩展推广
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/search\? 'delpaths([["expansion"]])'
+# > 个人中心 hub：删省钱月卡入口、个人中心样式、图标集、顶部图标
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'delpaths([["monthly_card_entrance"]])'
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'delpaths([["personal_center_style_v2_vo"]])'
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'delpaths([["icon_set","icons"]])'
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'delpaths([["icon_set","top_personal_icons"]])'
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'if type == "object" then del(.icon_set.other_icon_set.show_all_order.desc_text_list, .icon_set.other_icon_set.show_all_order.desc_text_list_v2) else . end'
+# > 个人中心：清空多多钱包入口文案（未整块删，红点/图标可能仍在）
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'if (type == "object" and (.wallet | type) == "object") then .wallet.entrance_text = "" else . end'
+# > 集成页 render：删底部/直播悬浮
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/oak\/integration\/render\? 'delpaths([["bottom_section_list"]])'
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/oak\/integration\/render\? 'delpaths([["ui","bottom_section"]])'
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/oak\/integration\/render\? 'delpaths([["ui","live_section","float_info"]])'
+# > 订单详情：删商品推荐列表
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/order_detail_group\? 'delpaths([["data","goods_list"]])'
+# > 订单页：删营销 banner、推荐上方 banner
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/order\/ 'delpaths([["marketing_banner_vo"]])'
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/order\/ 'delpaths([["shipping","banner_above_recommend"]])'
+# > 订单列表：删订单按钮上的成长值提示
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/aristotle\/order_list_v4\? '.orders |= map(.order_buttons |= map(del(.order_growth_tip)))'
 
 [Map Local]
+# > 纯广告/推荐接口直接返回空 {}，断供广告数据源（个人中心、订单 tab、搜索热词、聊天推荐等）
 ^https:\/\/api\.pinduoduo\.com\/api\/aristotle\/unrated_order_for_unreceived_tab\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
 
 ^https:\/\/api\.pinduoduo\.com\/api\/aristotle\/query_order_list_tabs_element\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
@@ -89,5 +113,5 @@ http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/aristotle\/order_list_v4\?
 ^https:\/\/api\.pinduoduo\.com\/api\/buffon\/nasus\/recommend\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
 
 [MITM]
+# > 仅解密 api.pinduoduo.com（Body Rewrite 的前提）；其它域不在覆盖范围
 hostname = %APPEND% api.pinduoduo.com
-
