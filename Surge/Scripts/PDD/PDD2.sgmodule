@@ -5,7 +5,6 @@
 #!category=去广告
 #!version=2026-11-15-v17
 #!openUrl=https://apps.apple.com/app/id1044283059
-#!openUrl=https://apps.apple.com/app/id1044283059
 
 [Rule]
 AND,((URL-REGEX,"^http:\/\/((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/d(\d)?",extended-matching),(USER-AGENT,"*com.xunmeng.pinduoduo*")),REJECT

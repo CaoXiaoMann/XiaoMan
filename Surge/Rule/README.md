@@ -8,10 +8,19 @@
 
 ```
 Rule/
-├─ Apple/Apple.list        # Apple 分流
-├─ Google/Google.list      # Google 分流
-├─ YouTube/YouTube.list    # YouTube 分流
-└─ ...（共 17 个，与 Egern/Rule 对齐）
+├─ Apple/Apple.list          # Apple 生态（直连）
+├─ Apple-AI/Apple-AI.list    # Apple 智能/Relay（走代理）
+├─ Google/Google.list        # Google 分流
+├─ YouTube/YouTube.list      # YouTube 分流
+├─ GlobalMedia/GlobalMedia.list  # 全球流媒体（Disney+/HBO/Hulu/Prime Video…）
+├─ ChinaMedia/ChinaMedia.list    # 国内媒体
+├─ China/China.list          # 中国国内（直连）
+├─ ChinaIPs/ChinaIPs.list    # 中国 IP / ASN（直连）
+├─ LAN/LAN.list              # 局域网（直连）
+├─ DouYin/DouYin.list        # 抖音（直连）
+├─ WeChat/WeChat.list        # 微信（直连）
+├─ TikTok/TikTok.list        # TikTok 分流（含 TikTokPriority.list 优先规则）
+└─ ...（共 25 个规则集，与 Egern/Rule 对齐）
 ```
 
 ## 在 Surge 配置中引用
