@@ -49,6 +49,9 @@ http-response-jq ^https:\/\/api\.pinduoduo\.com\/order\/ 'delpaths([["marketing_
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/order\/ 'delpaths([["shipping","banner_above_recommend"]])'
 http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/aristotle\/order_list_v4\? '.orders |= map(.order_buttons |= map(del(.order_growth_tip)))'
 
+# 个人中心：精准移除 personal_banner 中的「惊喜大放送」补贴横幅，其余入口保留
+http-response-jq ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\? 'if (.personal_banner | type) == "array" then .personal_banner |= map(select((tostring | contains("惊喜大放送")) | not)) else . end'
+
 [Map Local]
 ^https:\/\/api\.pinduoduo\.com\/api\/aristotle\/unrated_order_for_unreceived_tab\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
 
