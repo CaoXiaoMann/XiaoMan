@@ -1,0 +1,16 @@
+#!name=侧载签名回环
+#!desc=surge版LocalDevVPN：接管 10.7.0.1 供 SideStore 侧载/续签，无需切换 VPN
+#!author=XiaoMan
+#!category=XiaoMan
+#!tag=开发者工具
+#!date=2026-11-28
+
+[General]
+# 禁用 IPv6 VIF：SideStore 找回环接口时若有 IPv6 地址会放弃连接
+ipv6-vif = disabled
+# 把 10.7.0.1 捕获进 Surge 虚拟网卡
+tun-included-routes = %INSERT% 10.7.0.1/32
+
+[IP Rewrite]
+# reflect：IP 层将发往 10.7.0.1 的数据包源/目标地址互换并原路弹回，模拟设备"自己连自己"
+10.7.0.1 = reflect
